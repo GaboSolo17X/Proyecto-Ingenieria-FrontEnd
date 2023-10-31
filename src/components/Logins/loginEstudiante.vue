@@ -17,10 +17,10 @@
           <v-col class="left-side">
             <v-row class="row-logo mr-auto ml-auto">
               <v-col class="pumImg" cols="12" lg="12" md="12">
-                <img src="./assets/puma.png">
+                <img src="./assets/estudiante.png">
               </v-col>
               <v-col cols="12" lg="12" md="12">
-                <h1 class="bien text-center">¡Bienvenido Puma {{puesto}}!</h1>
+                <h1 class="bien text-center">¡Bienvenidos, Pumitas!</h1>
               </v-col>
               <v-col cols="12" lg="12" md="12">
                 <router-link to="/"
@@ -49,7 +49,7 @@
                   class="numeritos shrink round"
                   dense
                   light
-                  label="Numero de Empleado"
+                  label="Numero de cuenta"
                   variant="outlined"
                   type="number"
                   rounded
@@ -89,6 +89,7 @@
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
+import { required, minLength, maxLength } from 'vuelidate/lib/validators';
 
 
 export default {
@@ -115,7 +116,7 @@ export default {
       const puestos = {
         '/estudiantes': 'Hola estudiantes',
         '/login-docentes': 'Docentes',
-        '/login-coordinador': 'Coordinadores',
+        '/login-coordinador': 'Coordinadors',
         '/login-administrador': 'Administradores',
         '/login-jefeDep': '  Jefe de Departamentos',
       };
