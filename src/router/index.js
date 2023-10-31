@@ -35,6 +35,13 @@ const routes = [
     name: 'jefe',
     component: () => import(/* webpackChunkName: "about" */ '../views/LandingViews/Jefe.vue')
   },
+   {
+        path:'/estudiantes',
+        name: 'estudiantes',
+        component: () => import(/* webpackChunkName: "counter" */ '../components/Logins/loginEstudiante.vue'),
+        meta:{title:'Estudiante'}
+
+      },
   {
     path: '/login-docentes',
     name: 'login-docentes',
