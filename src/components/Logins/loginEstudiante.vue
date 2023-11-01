@@ -17,7 +17,7 @@
           <v-col class="left-side">
             <v-row class="row-logo mr-auto ml-auto">
               <v-col class="pumImg" cols="12" lg="12" md="12">
-                <img src="./assets/estudiante.png">
+                <img src="./assets/estudiante.png" />
               </v-col>
               <v-col cols="12" lg="12" md="12">
                 <h1 class="bien text-center">¡Bienvenidos, Pumitas!</h1>
@@ -44,7 +44,7 @@
             <v-row justify="center">
               <v-col lg="8" md="8" cols="12" class="pb-0">
                 <v-text-field
-                v-model="number"
+                  v-model="numeroCuenta"
                   :rules="[rules.required]"
                   class="numeritos shrink round"
                   dense
@@ -59,7 +59,7 @@
             <v-row justify="center">
               <v-col lg="8" md="8" cols="12" class="py-0">
                 <v-text-field
-                  v-model="password"
+                  v-model="claveEstudiante"
                   :rules="[rules.required]"
                   class="shrink round"
                   dense
@@ -74,9 +74,9 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <router-link :to="dir"><v-btn large rounded color="blue" dark @click="login"
+                <v-btn large rounded color="blue" dark @click="login(this.numeroCuenta, this.claveEstudiante)"
                   >Ingresar</v-btn
-                ></router-link>
+                >
               </v-col>
             </v-row>
           </v-col>
@@ -87,76 +87,98 @@
 </template>
 
 <script>
-import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
-import { required, minLength, maxLength } from 'vuelidate/lib/validators';
-
+import { ref, onMounted } from "vue";
+import { useRoute } from "vue-router";
+import { required, minLength, maxLength } from "vuelidate/lib/validators";
 
 export default {
-  data(){
-    return{
-      password:'',
-      number:''
-    }
+  data() {
+    return {
+      password: "",
+      number: "",
+      
+    };
   },
 
   setup() {
-
+    const numeroCuenta = ref("");
+    const claveEstudiante = ref("");
     const route = useRoute();
-    const puesto = ref('');
-    const dir=ref('');
-    const icon=ref('');
+    const puesto = ref("");
+    const dir = ref("");
+    const icon = ref("");
     const rules = ref({
-    required: (value) => !!value || 'Llenar campo vacio',
+      required: (value) => !!value || "Llenar campo vacio",
     });
-    // const 
+    // const
 
     onMounted(() => {
       // Mapea las rutas a los saludos correspondientes
       const puestos = {
-        '/estudiantes': 'Hola estudiantes',
-        '/login-docentes': 'Docentes',
-        '/login-coordinador': 'Coordinadors',
-        '/login-administrador': 'Administradores',
-        '/login-jefeDep': '  Jefe de Departamentos',
+        "/estudiantes": "Hola estudiantes",
+        "/login-docentes": "Docentes",
+        "/login-coordinador": "Coordinadors",
+        "/login-administrador": "Administradores",
+        "/login-jefeDep": "  Jefe de Departamentos",
       };
 
-      const direcciones={
-        '/estudiantes': '/docentes',
-        '/login-docentes': '/docentes',
-        '/login-coordinador': '/coordinador',
-        '/login-administrador': '/administrador',
-        '/login-jefeDep': '/jefe'
-      }
+      const direcciones = {
+        "/estudiantes": "/docentes",
+        "/login-docentes": "/docentes",
+        "/login-coordinador": "/coordinador",
+        "/login-administrador": "/administrador",
+        "/login-jefeDep": "/jefe",
+      };
 
-      const icons={
-        '/estudiantes': 'fa-solid fa-user',
-        '/login-docentes': 'fa-solid fa-user-graduate',
-        '/login-coordinador': 'fa-solid fa-user-shield',
-        '/login-administrador': 'fa-solid fa-user-gear',
-        '/login-jefeDep': 'fa-solid fa-user-tie'
-      }
+      const icons = {
+        "/estudiantes": "fa-solid fa-user",
+        "/login-docentes": "fa-solid fa-user-graduate",
+        "/login-coordinador": "fa-solid fa-user-shield",
+        "/login-administrador": "fa-solid fa-user-gear",
+        "/login-jefeDep": "fa-solid fa-user-tie",
+      };
 
       // /docentes
       // Asigna el saludo correspondiente
-      puesto.value = puestos[route.path] || 'Hola'; // Saludo por defecto
+      puesto.value = puestos[route.path] || "Hola"; // Saludo por defecto
 
-      dir.value= direcciones[route.path] || ''
+      dir.value = direcciones[route.path] || "";
 
-      icon.value= icons[route.path] || ''
-
-
+      icon.value = icons[route.path] || "";
     });
 
     return {
       puesto,
       dir,
       icon,
-      rules
+      rules,
+      numeroCuenta,
+      claveEstudiante,
     };
   },
+  methods: {
+    login: async (numeroCuenta, claveEstudiante) => {
+      console.log(numeroCuenta, claveEstudiante)
+      try { 
+        const res = await fetch("http://localhost:3000/estudiante/login", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            numeroCuenta: numeroCuenta,
+            claveEstudiante: claveEstudiante,
+          }),
+        });
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error)
+      }
+    },
+  },
 };
-
 </script>
 
 <style scoped>
@@ -218,10 +240,9 @@ img {
 /* .round{
   background-color: white;
 } */
-.icono{
+.icono {
   color: rgb(5, 39, 103);
 }
-
 
 .numeritos >>> input::-webkit-outer-spin-button,
 .numeritos >>> input::-webkit-inner-spin-button {
