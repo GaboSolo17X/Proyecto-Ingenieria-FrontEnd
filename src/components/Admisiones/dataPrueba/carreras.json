@@ -1,0 +1,6 @@
+[
+    { "nombreCarrera": "Arquitectura", "tipoExamen": "PNNSA" },
+    { "nombreCarrera": "Medicina", "tipoExamen": "PCCNS" },
+    { "nombreCarrera": "Ingenieria en Sistemas", "tipoExamen": "PAM" },
+    { "nombreCarrera": "Periodismo", "tipoExamen": "" }
+  ]
