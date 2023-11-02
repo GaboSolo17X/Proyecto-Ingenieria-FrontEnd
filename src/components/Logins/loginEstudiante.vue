@@ -74,7 +74,7 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <v-btn large rounded color="blue" dark @click="login(this.numeroCuenta, this.claveEstudiante)"
+                <v-btn large rounded color="blue" dark @click="login(this.numeroCuenta, this.claveEstudiante, this.nombre)"
                   >Ingresar</v-btn
                 >
               </v-col>
@@ -101,6 +101,7 @@ export default {
   },
 
   setup() {
+    const nombre = ref("");
     const numeroCuenta = ref("");
     const claveEstudiante = ref("");
     const route = useRoute();
@@ -145,6 +146,8 @@ export default {
       dir.value = direcciones[route.path] || "";
 
       icon.value = icons[route.path] || "";
+
+      nombre.value="estudiante";
     });
 
     return {
@@ -154,13 +157,14 @@ export default {
       rules,
       numeroCuenta,
       claveEstudiante,
+      nombre
     };
   },
   methods: {
-    login: async (numeroCuenta, claveEstudiante) => {
+    login: async (numeroCuenta, claveEstudiante, nombre) => {
       console.log(numeroCuenta, claveEstudiante)
       try { 
-        const res = await fetch("http://localhost:3000/estudiante/login", {
+        const res = await fetch('http://localhost:3000/'+nombre+'/login', {
           method: "POST",
           credentials: "include",
           headers: {

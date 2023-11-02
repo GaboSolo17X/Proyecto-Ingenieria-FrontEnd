@@ -44,7 +44,7 @@
             <v-row justify="center">
               <v-col lg="8" md="8" cols="12" class="pb-0">
                 <v-text-field
-                v-model="number"
+                v-model="numeroEmp"
                   :rules="[rules.required]"
                   class="numeritos shrink round"
                   dense
@@ -59,7 +59,7 @@
             <v-row justify="center">
               <v-col lg="8" md="8" cols="12" class="py-0">
                 <v-text-field
-                  v-model="password"
+                  v-model="claveEmp"
                   :rules="[rules.required]"
                   class="shrink round"
                   dense
@@ -74,9 +74,9 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <router-link :to="dir"><v-btn large rounded color="blue" dark @click="login"
+                <v-btn large rounded color="blue" dark @click="login(this.numeroEmp, this.claveEmp, this.nombre)"
                   >Ingresar</v-btn
-                ></router-link>
+                >
               </v-col>
             </v-row>
           </v-col>
@@ -96,15 +96,18 @@ export default {
     return{
       password:'',
       number:''
-    }
+    };
   },
 
   setup() {
-
+    
     const route = useRoute();
     const puesto = ref('');
     const dir=ref('');
     const icon=ref('');
+    const numeroEmp = ref('');
+    const claveEmp = ref('');
+    const nombre = ref('');
     const rules = ref({
     required: (value) => !!value || 'Llenar campo vacio',
     });
@@ -113,7 +116,6 @@ export default {
     onMounted(() => {
       // Mapea las rutas a los saludos correspondientes
       const puestos = {
-        '/estudiantes': 'Hola estudiantes',
         '/login-docentes': 'Docentes',
         '/login-coordinador': 'Coordinadores',
         '/login-administrador': 'Administradores',
@@ -121,7 +123,6 @@ export default {
       };
 
       const direcciones={
-        '/estudiantes': '/docentes',
         '/login-docentes': '/docentes',
         '/login-coordinador': '/coordinador',
         '/login-administrador': '/administrador',
@@ -129,13 +130,32 @@ export default {
       }
 
       const icons={
-        '/estudiantes': 'fa-solid fa-user',
         '/login-docentes': 'fa-solid fa-user-graduate',
         '/login-coordinador': 'fa-solid fa-user-shield',
         '/login-administrador': 'fa-solid fa-user-gear',
         '/login-jefeDep': 'fa-solid fa-user-tie'
       }
 
+      const numeroEmps = {
+        '/login-docentes': 'numeroEmpleadoDocente',
+        '/login-coordinador': 'numeroEmpleadoDocente',
+        '/login-administrador': 'numeroEmpleadoAdministrador',
+        '/login-jefeDep': 'numeroEmpleadoDocente',
+      };
+
+      const claveEmps = {
+        '/login-docentes': 'claveDocente',
+        '/login-coordinador': 'claveCoordinador',
+        '/login-administrador': 'claveAdministrador',
+        '/login-jefeDep': 'claveJefe',
+      };
+
+      const nombres = {
+        '/login-docentes': '/docente',
+        '/login-coordinador': 'coordinador',
+        '/login-administrador': 'administrador',
+        '/login-jefeDep': 'jefeDepartamento',
+      };
       // /docentes
       // Asigna el saludo correspondiente
       puesto.value = puestos[route.path] || 'Hola'; // Saludo por defecto
@@ -144,6 +164,12 @@ export default {
 
       icon.value= icons[route.path] || ''
 
+      numeroEmp.value= numeroEmps[route.path] || ''
+
+      claveEmp.value = claveEmps[route.path] ||''
+
+      nombre.value = nombres[route.path] ||''
+
 
     });
 
@@ -151,8 +177,34 @@ export default {
       puesto,
       dir,
       icon,
-      rules
+      rules,
+      numeroEmp,
+      claveEmp,
+      nombre
     };
+  },
+
+   methods: {
+    login: async (numeroEmp, claveEmp, nombre) => {
+      console.log(numeroEmp, claveEmp)
+      try { 
+        const res = await fetch('http://localhost:3000/'+nombre+'/login', {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            numeroEmp: numeroEmp,
+            claveEmp: claveEmp,
+          }),
+        });
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error)
+      }
+    },
   },
 };
 
