@@ -10,7 +10,7 @@
                 <div class="text-overline ">
                   Muy bien preparate para tus examenes: 
                 <div> PAA </div>
-                <div v-show="mensaje">{{ mensaje }}</div>
+                <div >{{ mensaje }}</div>
                 </div>
                 
             </v-card-item>

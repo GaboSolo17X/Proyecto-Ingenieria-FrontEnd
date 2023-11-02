@@ -116,14 +116,16 @@
     </v-card>
   </v-sheet>
 
+  <CardEx v-show="isCardExVisible" :mensaje="mensaje"/>
  
 </template>
 
 <script>
-import { ref, onMounted, defineEmits} from 'vue';
-export default {
+import { ref, onMounted} from 'vue';
+import CardEx from '../components/cardExamen.vue'
 
-  props:{tipo:String},
+export default {
+  components: {CardEx},
 setup(){
     const form = ref({
      name: '',
@@ -141,63 +143,86 @@ setup(){
 
    const carreras = ref([])
    const carrerasSec= ref([])
-   const examen =ref()
+   const carrerasTot= ref([])
+   const tipExamen = ref([])
 
    
    onMounted(async () => {
       try {
         const response = await import('../dataPrueba/carreras.json');
-        const data = response.default;
+        const data1=response.default;
+     
 
         // Divide los datos en carreras y carrerasSec
-        carreras.value = data.map(carrera => carrera.nombreCarrera);
-        carrerasSec.value = data.filter(carrera => !carrera.tipoExamen).map(carrera => carrera.nombreCarrera);
+        carreras.value = data1.map(carrera => carrera.nombreCarrera);
+        carrerasTot.value = data1.map(carrera => carrera);
+        carrerasSec.value = data1.filter(carrera => !carrera.tipoExamen).map(carrera => carrera.nombreCarrera);
+        tipExamen.value = data1.map(carrera => carrera.tipoExamen);
 
-        console.log(carreras,carrerasSec)
+        console.log(response.default)
+        console.log(carreras,carrerasSec,carrerasTot,tipExamen)
+
+        
+   
+
+    
+
       } catch (error) {
         console.error('Error al cargar los datos desde el archivo JSON:', error);
       }
 
-    //   const getTipoExamen = () => {
-    //   const selectedCarrera = form.value.carrPri;
-    //   const selectedCarreraData = data.find((carrera) => carrera.nombreCarrera === selectedCarrera);
-
-    //   if (selectedCarreraData) {
-    //     tipoExamen.value = selectedCarreraData.tipoExamen;
-    //   } else {
-    //     tipoExamen.value = ''; // Limpiar el tipo de examen si no se encuentra la carrera
-    //   }
-    // };
+    
 
     // examen=getTipoExamen();
 
     });
 
 
-    const emit=defineEmits(['tipoExamen'])
-    const tipoExamen="PAM"
 
+    const exad=ref()
+
+    const getTipoExamen = () => {
+      const selectedCarrera = form.value.carrPri;
+      const selectedCarreraData = carrerasTot.value.find((carrera) => carrera.nombreCarrera === "selectedCarrera");
+
+      console.log(selectedCarreraData)
+      if (selectedCarreraData) {
+        exad.value = JSON.stringify(selectedCarreraData.tipoExamen);
+      } else {
+        exad.value = "Solo debes hacer PAA"; // Limpiar el tipo de examen si no se encuentra la carrera
+      }
+    };
+    
+    getTipoExamen()
+
+    const mensaje = ref('Por detallar Examen')
     const enviarExamen=()=>{
-      emit('tipoExamen',tipoExamen)
-
+      mensaje.value= exad
     }
     
+    const isCardExVisible=ref(false)
+    const showCardEx = () => {
+      isCardExVisible.value = true;
+      console.log(isCardExVisible)
+    };
 
-    // Llamar a getTipoExamen cuando cambie la selección de la carrera
-    // getTipoExamen();
-    // // watch(form.carrPri, getTipoExamen);
+ 
 
    return {
         form,
         carreras,
         carrerasSec,
         centros,
+        isCardExVisible,
+        mensaje,
           
 
       
-        onSubmit: async()=>{
+            onSubmit: async()=>{
             console.log(form.value)
-            enviarExamen
+            console.log(enviarExamen)
+            enviarExamen()
+            showCardEx()
         },
 
     }
