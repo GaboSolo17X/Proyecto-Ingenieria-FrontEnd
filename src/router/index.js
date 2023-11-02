@@ -1,7 +1,27 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
+import adminRouter from "../components/Admisiones/routes/admin-router";
 
 
 const routes = [
+  {
+    path: '/admision',
+    name: 'admision',
+    component: () => import(/* webpackChunkName: "about" */ '../components/Admisiones/views/admisiones.vue'),
+    // children:[
+    //   {
+    //     path:'/formulario',
+    //     name: 'formulario',
+    //     component: () => import(/* webpackChunkName: "counter" */ '../components/Admisiones/components/formulario.vue'),
+
+    //   },
+    // ]
+  },
+  // {
+  //       path:'/formulario',
+  //       name: 'formulario',
+  //       component: () => import(/* webpackChunkName: "counter" */ '../components/Admisiones/components/formulario.vue'),
+
+  //     },
   {
     path: '/',
     name: 'Registro-UNAH',
@@ -16,9 +36,7 @@ const routes = [
     path: '/docentes',
     name: 'docentes',
     component: () => import(/* webpackChunkName: "about" */ '../views/LandingViews/Docentes.vue'),
-    children:[
-      
-    ]
+   
   },
   {
     path: '/coordinador',
@@ -63,7 +81,8 @@ const routes = [
 
       },
     ]
-  }
+  },
+  ...adminRouter.options.routes
 ]
 
 const router = createRouter({
