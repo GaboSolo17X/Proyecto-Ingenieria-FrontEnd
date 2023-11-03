@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import adminRouter from "../components/Admisiones/routes/admin-router";
+import admisionRouter from "../components/Admisiones/routes/admin-router";
+import adminRouter from "../components/Administrador/routes/administrador-router";
 
 
 const routes = [
@@ -53,13 +54,13 @@ const routes = [
     name: 'jefe',
     component: () => import(/* webpackChunkName: "about" */ '../views/LandingViews/Jefe.vue')
   },
-   {
-        path:'/estudiantes',
-        name: 'estudiantes',
-        component: () => import(/* webpackChunkName: "counter" */ '../components/Logins/loginEstudiante.vue'),
-        meta:{title:'Estudiante'}
+ {
+      path:'/estudiantes',
+     name: 'estudiantes',
+     component: () => import(/* webpackChunkName: "counter" */ '../components/Logins/loginEstudiante.vue'),
+     meta:{title:'Estudiante'}
 
-      },
+   },
   {
     path: '/login-docentes',
     name: 'login-docentes',
@@ -89,7 +90,9 @@ const routes = [
       },
     ]
   },
+  ...admisionRouter.options.routes,
   ...adminRouter.options.routes
+
 ]
 
 const router = createRouter({
