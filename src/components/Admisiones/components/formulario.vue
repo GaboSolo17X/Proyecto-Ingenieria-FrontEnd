@@ -1,12 +1,12 @@
 <template>
-  <v-sheet class="pa-12" rounded>
-    <v-card class= "mx-auto px-6 py-8 rounded-xl " max-width="700" >
+  <v-sheet v-show="isFormVisible" class="pa-12" rounded>
+    <v-card class= "mx-auto px-6 py-8 rounded-xl bg-color" max-width="700" >
         <v-card-text class="pa-0 text-center">
         <h1 class="mb-5">A un paso para llegar a ser PUMA</h1>
          <p >Porfavor llena todos los campos para que sea admitida tu solicitud</p>
       </v-card-text>
     </v-card>
-    <v-card class="mx-auto px-6 py-8 mt-10 rounded-xl " max-width="700 " >
+    <v-card class="mx-auto px-6 py-8 mt-10 rounded-xl bg-color" max-width="700 " >
       <v-form class="pa-9"  @submit.prevent="onSubmit">
         <v-text-field 
           v-model="form.name"
@@ -14,7 +14,7 @@
           class="mb-5" 
           label="Nombres" 
           hide-details="auto"
-          variant="outlined"
+          variant="solo-filled"
           rounded>
        </v-text-field>
 
@@ -24,7 +24,7 @@
           class="mb-5" 
           label="Apellidos" 
           hide-details="auto"
-          variant="outlined"
+          variant="solo-filled"
           rounded>
        </v-text-field>
 
@@ -34,49 +34,52 @@
           :rules="[(v) => !!v || 'Seleccione una carrera',(v) => true]"
           label="Carrera Principal"
           required
-          variant="outlined"
+          variant="solo-filled"
           rounded
         ></v-select>
 
         <v-select
           v-model="form.carrSec"
           :items="carrerasSec"
+          
           :rules="[(v) => !!v || 'Seleccione una carrera', (v) => true]"
           label="Carrera Secundaria"
           required
-          variant="outlined"
+          variant="solo-filled"
           rounded
         ></v-select>
 
         <v-text-field 
          v-model="form.identidad"
-         :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
-          class="mb-5"
+         :rules="[(v) => /^[0-9-]+$/.test(v) || 'Solo se permiten números y guiones', (v) => v.length <= 15 || 'Máximo 15 caracteres']"
+          class="mb-5 numeritos"
           label="Identidad" 
           hide-details="auto"
-          variant="outlined"
+          variant="solo-filled"
+          type="text"
           rounded>
           
         </v-text-field>
 
         <v-text-field 
         v-model="form.telefono"
-        :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
-          class="mb-5"
+          class="mb-5 numeritos"
+          :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos']"
           label="Telefono" 
           hide-details="auto"
-          variant="outlined"
+          variant="solo-filled"
+          type="text"
           rounded>
         </v-text-field>
 
         <v-text-field
           v-model="form.email"
           
-          :rules="[(v) => /^[a-z.-]+@[a-z.-]+\.[a-z]+$/i.test(v) || 'Ingrese un correo electrónico válido', (v) => true]"
+          :rules="[(v) => /^[a-z0-9+.-]+@[a-z.-]+\.[a-z]+$/i.test(v) || 'Ingrese un correo electrónico válido', (v) => true]"
           class="mb-2"
           clearable
           label="Correo Personal"
-          variant="outlined"
+          variant="solo-filled"
           rounded
         ></v-text-field>
 
@@ -86,26 +89,27 @@
           :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
           label="Centro Regional"
           required
-          variant="outlined"
+          variant="solo-filled"
           rounded
         ></v-select>
-
 
         <v-file-input 
            v-model="form.certificado"
            show-size 
+           :rules="[(v) => !!v || 'Se requiere una imagen',(v) => true]"
            label="Certificado de Secundaria"
-           variant="outlined"
+           variant="solo-filled"
            rounded
-           prepend-icon="fa-solid fa-file-pdf"
+           prepend-icon="fa-solid fa-image"
            inner-append-icon="fa-solid fa-circle-xmark"
+           @change="handleFileChange"
         ></v-file-input>
 
         <br />
         <v-btn
           block
           rounded
-          color="success"
+          color="#282832"
           size="large"
           type="submit"
           variant="elevated"
@@ -116,13 +120,14 @@
     </v-card>
   </v-sheet>
 
-  <CardEx v-show="isCardExVisible" :mensaje="mensaje"/>
+  <CardEx class="card" v-show="isCardExVisible" :mensaje="mensaje.value"/>
  
 </template>
 
 <script>
 import { ref, onMounted} from 'vue';
 import CardEx from '../components/cardExamen.vue'
+
 
 export default {
   components: {CardEx},
@@ -139,74 +144,154 @@ setup(){
      certificado: null,
    });
 
-   const centros = ['UNAH-VS', 'UNAH-CU', 'UNAH-CURLA'];
+   const centros = ['UNAH-VS', 'UNAH-CU', 'CURLA'];
 
    const carreras = ref([])
    const carrerasSec= ref([])
    const carrerasTot= ref([])
    const tipExamen = ref([])
-
+  
    
    onMounted(async () => {
       try {
-        const response = await import('../dataPrueba/carreras.json');
-        const data1=response.default;
-     
+        const res = await fetch('http://localhost:3000/carreras',{
+          method:'GET',
+          headers:{
+            'Content-Type':'application/json'
+          }
+        });
+        const data = await res.json();
+        console.log(data)
 
         // Divide los datos en carreras y carrerasSec
-        carreras.value = data1.map(carrera => carrera.nombreCarrera);
-        carrerasTot.value = data1.map(carrera => carrera);
-        carrerasSec.value = data1.filter(carrera => !carrera.tipoExamen).map(carrera => carrera.nombreCarrera);
-        tipExamen.value = data1.map(carrera => carrera.tipoExamen);
+        console.log("cargando nombre carreras")
+        carreras.value = data.map(carrera => carrera.nombreCarrera);
+        console.log("cargando toda carreras")
+        carrerasTot.value = data.map(carrera => carrera);
+        console.log("cargando carreras sin examen ")
+        carrerasSec.value = data.filter(carrera => !carrera.examen).map(carrera => carrera.nombreCarrera);
+        console.log("cargando examenes carreras")
+        tipExamen.value = data.map(carrera => carrera.examen);
 
-        console.log(response.default)
         console.log(carreras,carrerasSec,carrerasTot,tipExamen)
-
-        
-   
-
-    
 
       } catch (error) {
         console.error('Error al cargar los datos desde el archivo JSON:', error);
       }
 
-    
-
-    // examen=getTipoExamen();
-
+  
     });
 
+  
+ /*************************************************************************************************************************/
 
+
+  //   const handleCarrPriChange = () => {
+  //   // Verificar si la carrera principal seleccionada está en la lista de carreras secundarias
+  //   const selectedCarrPri = form.value.carrPri;
+  //   if (selectedCarrPri && form.value.carrSec.includes(selectedCarrPri)) {
+  //     // Eliminar la carrera secundaria seleccionada
+  //     form.value.carrSec = form.value.carrSec.filter(carrera => carrera !== selectedCarrPri);
+  //   }
+  // };
+
+  // console.log(handleCarrPrichange());
+
+
+  
 
     const exad=ref()
-
     const getTipoExamen = () => {
-      const selectedCarrera = form.value.carrPri;
-      const selectedCarreraData = carrerasTot.value.find((carrera) => carrera.nombreCarrera === "selectedCarrera");
+      const selectedCarreraData = carrerasTot.value.find((carrera) => carrera.nombreCarrera === form.value.carrPri);
 
       console.log(selectedCarreraData)
       if (selectedCarreraData) {
-        exad.value = JSON.stringify(selectedCarreraData.tipoExamen);
+        exad.value = selectedCarreraData.examen;
       } else {
         exad.value = "Solo debes hacer PAA"; // Limpiar el tipo de examen si no se encuentra la carrera
       }
     };
     
-    getTipoExamen()
-
     const mensaje = ref('Por detallar Examen')
     const enviarExamen=()=>{
       mensaje.value= exad
     }
     
+const isFormValid = ref(false);
+
+const validateForm = () => {
+  if (
+    form.value.name &&
+    form.value.lastName &&
+    form.value.carrPri &&
+    form.value.carrSec &&
+    form.value.identidad &&
+    form.value.telefono &&
+    form.value.email &&
+    form.value.centroRe &&
+    form.value.certificado
+  ) {
+    isFormValid.value = true;
+  } else {
+    isFormValid.value = false;
+  }
+};
+
+console.log(form.value.identidad)
+/*************************************************************************************************************************/
+ //Mandando a la base de datos el formulario
+
+ const handleFileChange=(e)=>{
+  const file = e.target.files[0];
+  form.value.certificado=file
+  console.log(file)
+ }
+ const pruebaRegistro=async()=>{
+  try {
+    const formData=new FormData();
+    formData.append('nombres',form.value.name);
+    formData.append('apellidos',form.value.lastName);
+    formData.append('carreraPrincipal',form.value.carrPri);
+    formData.append('carreraSecundaria',form.value.carrSec);
+    formData.append('centroRegional',form.value.centroRe);
+    formData.append('correoPersonal',form.value.email);
+    formData.append('identidad',form.value.identidad);
+    formData.append('telefono',form.value.telefono);
+    formData.append('fotoCertificado',form.value.certificado);
+    const res=await fetch('http://localhost:3000/aspirante/create',{
+      method:'POST',
+      body: formData
+    });
+    const data=await res.json();
+    console.log(data)
+  } catch (error) {
+    console.log(error)
+    
+  }
+ }
+
+const onSubmit = async () => {
+  validateForm(); // Validar el formulario antes de enviar
+
+  if (isFormValid.value) {
+    // Realizar el envío del formulario si es válido
+    console.log(form.value);
+    getTipoExamen();
+    enviarExamen();
+    showCardEx();
+    pruebaRegistro();
+  }
+};
+
     const isCardExVisible=ref(false)
+    const isFormVisible=ref(true)
     const showCardEx = () => {
       isCardExVisible.value = true;
-      console.log(isCardExVisible)
+      isFormVisible.value=false;
     };
 
  
+
 
    return {
         form,
@@ -214,16 +299,11 @@ setup(){
         carrerasSec,
         centros,
         isCardExVisible,
+        isFormVisible,
         mensaje,
-          
-
-      
-            onSubmit: async()=>{
-            console.log(form.value)
-            console.log(enviarExamen)
-            enviarExamen()
-            showCardEx()
-        },
+        handleFileChange,
+        onSubmit
+        
 
     }
 
@@ -240,5 +320,31 @@ setup(){
     font-family: 'Rubik', sans-serif;
 }
 
+.bg-color{
+  background-color:  #a92727;
+  color: white;
+}
+
+/* .v-messages{
+  color: white !important;
+  font-family: 'Rubik', sans-serif;
+} */
+
+.numeritos >>> input::-webkit-outer-spin-button,
+.numeritos >>> input::-webkit-inner-spin-button {
+  appearance: none;
+  -webkit-appearance: none;
+  -moz-appearance: none;
+}
+
+.card{
+  margin-top: 100px;
+}
+
+.v-input--error:not(.v-input--disabled) .v-input__details .v-messages{
+  color: white;
+  font-family: 'Rubik', sans-serif;
+
+}
 
 </style>

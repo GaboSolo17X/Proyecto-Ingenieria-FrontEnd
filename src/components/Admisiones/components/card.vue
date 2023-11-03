@@ -13,9 +13,11 @@
           </v-card-item>
 
           <v-card-actions>
-            <v-btn class="btn" rounded>
+            <router-link to="/formulario">
+              <v-btn class="btn" rounded>
               Inscribite Aqui
             </v-btn>
+            </router-link>
           </v-card-actions>
         </v-card>
 
@@ -46,14 +48,14 @@ export default {
     font-family: 'Rubik', sans-serif !important;
     text-transform: uppercase !important;
     text-align: center;
-    color: #052767;
+    color: #77181E;
     margin-bottom: 150px;
     height: 100px;
     line-height: 50px;
 }
 
 .btn{
-    background-color: #052767;
+    background-color: #77181E;
     color: white;
     width: 300px;
     font-weight: 800;

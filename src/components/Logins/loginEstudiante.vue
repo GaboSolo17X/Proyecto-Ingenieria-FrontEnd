@@ -45,13 +45,13 @@
               <v-col lg="8" md="8" cols="12" class="pb-0">
                 <v-text-field
                   v-model="numeroCuenta"
-                  :rules="[rules.required]"
-                  class="numeritos shrink round"
+                  :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',required]"
+                  class="shrink round"
                   dense
                   light
                   label="Numero de cuenta"
                   variant="outlined"
-                  type="number"
+                  type="text"
                   rounded
                 ></v-text-field>
               </v-col>
@@ -89,7 +89,7 @@
 <script>
 import { ref, onMounted } from "vue";
 import { useRoute } from "vue-router";
-import { required, minLength, maxLength } from "vuelidate/lib/validators";
+
 
 export default {
   data() {
@@ -117,27 +117,17 @@ export default {
       // Mapea las rutas a los saludos correspondientes
       const puestos = {
         "/estudiantes": "Hola estudiantes",
-        "/login-docentes": "Docentes",
-        "/login-coordinador": "Coordinadors",
-        "/login-administrador": "Administradores",
-        "/login-jefeDep": "  Jefe de Departamentos",
-      };
+      }
+ 
 
       const direcciones = {
-        "/estudiantes": "/docentes",
-        "/login-docentes": "/docentes",
-        "/login-coordinador": "/coordinador",
-        "/login-administrador": "/administrador",
-        "/login-jefeDep": "/jefe",
-      };
+        "/estudiantes": "/estudiantes",
+      }
+
 
       const icons = {
         "/estudiantes": "fa-solid fa-user",
-        "/login-docentes": "fa-solid fa-user-graduate",
-        "/login-coordinador": "fa-solid fa-user-shield",
-        "/login-administrador": "fa-solid fa-user-gear",
-        "/login-jefeDep": "fa-solid fa-user-tie",
-      };
+      }
 
       // /docentes
       // Asigna el saludo correspondiente
@@ -164,7 +154,7 @@ export default {
     login: async (numeroCuenta, claveEstudiante, nombre) => {
       console.log(numeroCuenta, claveEstudiante)
       try { 
-        const res = await fetch('http://localhost:3000/'+nombre+'/login', {
+        const res = await fetch('http://localhost:3000/estudiante/login', {
           method: "POST",
           credentials: "include",
           headers: {

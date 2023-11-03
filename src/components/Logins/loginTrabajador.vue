@@ -45,13 +45,13 @@
               <v-col lg="8" md="8" cols="12" class="pb-0">
                 <v-text-field
                 v-model="numeroEmp"
-                  :rules="[rules.required]"
-                  class="numeritos shrink round"
+                 :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',required]"
+                  class="shrink round"
                   dense
                   light
                   label="Numero de Empleado"
                   variant="outlined"
-                  type="number"
+                  type="text"
                   rounded
                 ></v-text-field>
               </v-col>
@@ -86,16 +86,19 @@
   </body>
 </template>
 
+
 <script>
 import { ref, onMounted } from 'vue';
 import { useRoute } from 'vue-router';
 
 
+
 export default {
+
   data(){
     return{
       password:'',
-      number:''
+      number:'',
     };
   },
 
@@ -114,6 +117,7 @@ export default {
     // const 
 
     onMounted(() => {
+      
       // Mapea las rutas a los saludos correspondientes
       const puestos = {
         '/login-docentes': 'Docentes',
@@ -136,39 +140,26 @@ export default {
         '/login-jefeDep': 'fa-solid fa-user-tie'
       }
 
-      const numeroEmps = {
-        '/login-docentes': 'numeroEmpleadoDocente',
-        '/login-coordinador': 'numeroEmpleadoDocente',
-        '/login-administrador': 'numeroEmpleadoAdministrador',
-        '/login-jefeDep': 'numeroEmpleadoDocente',
-      };
-
-      const claveEmps = {
-        '/login-docentes': 'claveDocente',
-        '/login-coordinador': 'claveCoordinador',
-        '/login-administrador': 'claveAdministrador',
-        '/login-jefeDep': 'claveJefe',
-      };
-
+      
       const nombres = {
-        '/login-docentes': '/docente',
+        '/login-docentes': 'docente',
         '/login-coordinador': 'coordinador',
         '/login-administrador': 'administrador',
         '/login-jefeDep': 'jefeDepartamento',
       };
       // /docentes
       // Asigna el saludo correspondiente
-      puesto.value = puestos[route.path] || 'Hola'; // Saludo por defecto
+      puesto.value = puestos[route.path] || ''; 
 
       dir.value= direcciones[route.path] || ''
 
       icon.value= icons[route.path] || ''
 
-      numeroEmp.value= numeroEmps[route.path] || ''
+      // numeroEmp.value= numeroEmps[route.path] || ''
 
-      claveEmp.value = claveEmps[route.path] ||''
+      // claveEmp.value = claveEmps[route.path] || ''
 
-      nombre.value = nombres[route.path] ||''
+      nombre.value = nombres[route.path] || ''
 
 
     });
@@ -186,7 +177,7 @@ export default {
 
    methods: {
     login: async (numeroEmp, claveEmp, nombre) => {
-      console.log(numeroEmp, claveEmp)
+      console.log(numeroEmp, claveEmp, nombre)
       try { 
         const res = await fetch('http://localhost:3000/'+nombre+'/login', {
           method: "POST",
@@ -195,12 +186,16 @@ export default {
             "Content-Type": "application/json",
           },
           body: JSON.stringify({
-            numeroEmp: numeroEmp,
-            claveEmp: claveEmp,
+            id: numeroEmp,
+            clave: claveEmp,
           }),
         });
         const data = await res.json();
         console.log(data);
+        if (data.message=="Login Exitoso") {
+
+        router.push(dir.value); 
+      }
       } catch (error) {
         console.log(error)
       }

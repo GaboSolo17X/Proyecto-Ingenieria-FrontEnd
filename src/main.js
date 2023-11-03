@@ -14,11 +14,26 @@ import * as components from 'vuetify/components'
 import * as directives from 'vuetify/directives'
 
 
-const vuetify = createVuetify({
+// const vuetify = createVuetify({
+//   components,
+//   directives,
+// })
+
+
+const vuetify = new createVuetify({
   components,
   directives,
+  theme: {
+    themes: {
+      light: {
+        primary: '#3f51b5',
+        secondary: '#b0bec5',
+        accent: '#8c9eff',
+        error: '#E8EAF6',
+      },
+    },
+  },
 })
-
 //fontawesome
 export default createVuetify({
   icons: {
@@ -29,5 +44,6 @@ export default createVuetify({
     },
   },
 })
+
 
 createApp(App).use(store).use(router).use(vuetify).mount('#app')
