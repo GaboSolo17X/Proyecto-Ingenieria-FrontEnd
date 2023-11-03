@@ -1,5 +1,6 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
-import adminRouter from "../components/Admisiones/routes/admin-router";
+import admisionRouter from "../components/Admisiones/routes/admin-router";
+import adminRouter from "../components/Administrador/routes/administrador-router";
 
 
 const routes = [
@@ -34,6 +35,7 @@ const routes = [
     name: 'jefe',
     component: () => import(/* webpackChunkName: "about" */ '../views/LandingViews/Jefe.vue')
   },
+
   {
     path:'/login-estudiantes',
     name: 'login-estudiantes',
@@ -41,6 +43,7 @@ const routes = [
     meta:{title:'Coordinador'}
 
   },
+
   {
     path: '/login-docentes',
     name: 'login-docentes',
@@ -71,12 +74,17 @@ const routes = [
       
     ]
   },
+  ...admisionRouter.options.routes,
   ...adminRouter.options.routes
+
 ]
 
 const router = createRouter({
   history: createWebHashHistory(),
   routes
 })
+
+
+
 
 export default router
