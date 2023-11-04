@@ -1,14 +1,17 @@
 <template>
-  <div   >
-    <v-row >
+  <div >
+    <v-row>
       <v-col cols="4">
         <Lateral/>
       </v-col>
       <v-col cols="8">
-        <div class="contenido , rubik">
-          <Encabezado title="Activación de Proceso de Matrícula" />
+        <div class="contenido">
+          <Encabezado title="Activación de proceso de Matrícula" />
         </div>
-        <h1 class="componentesDocentes">Cargar interfaz de activacion de matricula</h1>
+        <div class="componentesDocentes">
+          <CardMatricula />
+        </div>
+        
       </v-col>
     </v-row>
   </div>
@@ -18,21 +21,16 @@
 <script>
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
+import CardMatricula from '../components/cardMatricula.vue'
 
 export default {
-components: {Lateral,Encabezado},
+components: {Lateral,Encabezado,CardMatricula},
 }
 </script>
 
 <style scoped>
-
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
-.rubik{
-  font-family: 'Rubik';
-}
-
 .componentesDocentes{
-margin-top: 100px;
+margin-top: 180px;
 left: 230px !important;
 width: calc((100% - 230px) - 0px);
 }
@@ -49,6 +47,6 @@ transform: translateY(0%);
 position: fixed;
 left: 230px;
 width: calc((100% - 230px) - 0px);
-font-family: 'Rubik', sans-serif;
+
 }
 </style>

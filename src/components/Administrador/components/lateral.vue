@@ -85,7 +85,7 @@ export default {
 }
 .enlace{
   color: white;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .amarillo{

@@ -8,7 +8,10 @@
         <div class="contenido">
           <Encabezado title="Archivo CSV de Resultados" />
         </div>
-        <h1 class="componentesDocentes">Cargar interfaz de archivo csv</h1>
+        <div class="componentesDocentes">
+          <CardSubido />
+        </div>
+        
       </v-col>
     </v-row>
   </div>
@@ -18,15 +21,16 @@
 <script>
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
+import CardSubido from '../components/cardSubido.vue'
 
 export default {
-components: {Lateral,Encabezado},
+components: {Lateral,Encabezado,CardSubido},
 }
 </script>
 
 <style scoped>
 .componentesDocentes{
-margin-top: 100px;
+margin-top: 180px;
 left: 230px !important;
 width: calc((100% - 230px) - 0px);
 }

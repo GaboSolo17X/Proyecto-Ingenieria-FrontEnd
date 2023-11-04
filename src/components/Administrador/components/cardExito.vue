@@ -3,12 +3,15 @@
       class="mx-auto, tarjeta"
       width="90%">
     <div class="titulo">
-        ¿Desea habilitar el proceso de matrícula? esto permitirá a los estudiante la adición de asignaturas para el periodo actual
+        Se ha cargado el archivo CSV con éxito
     </div>
     <div class="archivo">
+       <v-icon class="icono" icon="fa:fas fa-solid fa-circle-check"></v-icon>
         <div class="divBoton">
-                <v-btn block rounded="xl"  class="botones" >Habilitar</v-btn>
-                <v-btn block rounded="xl"  class="botones" >Deshabilitar</v-btn>
+            <router-link to="/adminDocentes">
+                <v-btn block rounded="xl"  class="botones" >Volver</v-btn>
+            </router-link>
+        
         </div>
     </div>
 
@@ -18,13 +21,6 @@
 
 <script>
   export default {
-    data: () => ({
-      rules: [
-        value => {
-          return !value || !value.length || value[0].size < 2000000 || 'Avatar size should be less than 2 MB!'
-        },
-      ],
-    }),
   }
 
 
@@ -34,7 +30,12 @@
 
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
 
-
+.icono{
+    color: #53be4e;
+    font-size: 100px;
+    width: 103%;
+    
+}
 .divBoton{
     width: 90%; 
     display: flex;
@@ -48,7 +49,7 @@
     color: white;
     font-family: 'Rubik';
     text-align: center;
-    width: 50%;
+    width: 200px;
 }
 .titulo{
     color: white;
