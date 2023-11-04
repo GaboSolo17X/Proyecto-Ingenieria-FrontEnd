@@ -246,6 +246,7 @@ console.log(form.value.identidad)
   form.value.certificado=file
   console.log(file)
  }
+ 
  const pruebaRegistro=async()=>{
   try {
     const formData=new FormData();

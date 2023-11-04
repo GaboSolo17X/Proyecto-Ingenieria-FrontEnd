@@ -74,7 +74,7 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <v-btn large rounded color="blue" dark @click="login(this.numeroEmp, this.claveEmp, this.nombre)"
+                <v-btn large rounded color="blue" dark @click="login(this.numeroEmp, this.claveEmp, this.router, this.nombre, this.dir)"
                   >Ingresar</v-btn
                 >
               </v-col>
@@ -89,7 +89,7 @@
 
 <script>
 import { ref, onMounted } from 'vue';
-import { useRoute } from 'vue-router';
+import { useRoute,useRouter } from 'vue-router';
 
 
 
@@ -103,7 +103,7 @@ export default {
   },
 
   setup() {
-    
+    const router=useRouter();
     const route = useRoute();
     const puesto = ref('');
     const dir=ref('');
@@ -171,13 +171,14 @@ export default {
       rules,
       numeroEmp,
       claveEmp,
-      nombre
+      nombre,
+      router
     };
   },
 
    methods: {
-    login: async (numeroEmp, claveEmp, nombre) => {
-      console.log(numeroEmp, claveEmp, nombre)
+    login: async (numeroEmp, claveEmp,router, nombre,dir) => {
+      console.log(numeroEmp, claveEmp, nombre,dir)
       try { 
         const res = await fetch('http://localhost:3000/'+nombre+'/login', {
           method: "POST",
@@ -191,11 +192,11 @@ export default {
           }),
         });
         const data = await res.json();
-        console.log(data);
-        if (data.message=="Login Exitoso") {
+        console.log(data.message);
 
-        router.push(dir.value); 
-      }
+        if(data.message=="Login exitoso"){
+          router.push(dir); 
+        }
       } catch (error) {
         console.log(error)
       }
