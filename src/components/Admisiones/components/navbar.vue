@@ -5,7 +5,7 @@
   >
     <v-layout>
       <v-app-bar
-       color="#052767"
+       color="#282832"
         density="compact"
         class="nav"
       >

@@ -5,25 +5,6 @@ import adminRouter from "../components/Administrador/routes/administrador-router
 
 const routes = [
   {
-    path: '/admision',
-    name: 'admision',
-    component: () => import(/* webpackChunkName: "about" */ '../components/Admisiones/views/admisiones.vue'),
-    // children:[
-    //   {
-    //     path:'/formulario',
-    //     name: 'formulario',
-    //     component: () => import(/* webpackChunkName: "counter" */ '../components/Admisiones/components/formulario.vue'),
-
-    //   },
-    // ]
-  },
-  // {
-  //       path:'/formulario',
-  //       name: 'formulario',
-  //       component: () => import(/* webpackChunkName: "counter" */ '../components/Admisiones/components/formulario.vue'),
-
-  //     },
-  {
     path: '/',
     name: 'Registro-UNAH',
     component: () => import(/* webpackChunkName: "about" */ '../components/landingPage/landingPage.vue')
@@ -54,13 +35,15 @@ const routes = [
     name: 'jefe',
     component: () => import(/* webpackChunkName: "about" */ '../views/LandingViews/Jefe.vue')
   },
- {
-      path:'/estudiantes',
-     name: 'estudiantes',
-     component: () => import(/* webpackChunkName: "counter" */ '../components/Logins/loginEstudiante.vue'),
-     meta:{title:'Estudiante'}
 
-   },
+  {
+    path:'/login-estudiantes',
+    name: 'login-estudiantes',
+    component: () => import(/* webpackChunkName: "counter" */ '../components/Logins/loginEstudiante.vue'),
+    meta:{title:'Coordinador'}
+
+  },
+
   {
     path: '/login-docentes',
     name: 'login-docentes',
@@ -88,6 +71,7 @@ const routes = [
         meta:{title:'Coordinador'}
 
       },
+      
     ]
   },
   ...admisionRouter.options.routes,

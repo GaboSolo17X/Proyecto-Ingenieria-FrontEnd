@@ -4,10 +4,10 @@
     </header>
     <main>
       <nav class="menu">
-      <router-link to="/estudiantes"><div class="enlace">Estudiantes</div>
+      <router-link to="/login-estudiantes"><div class="enlace">Estudiantes</div>
       </router-link> |
       <router-link to="/login-docentes"><div class="enlace">Docentes</div></router-link>|
-      <router-link to="/login-coordinador" :params="{ selectedUserType: 'Coordinador' }"><div class="enlace">Coordinador</div></router-link>|
+      <router-link to="/login-coordinador" ><div class="enlace">Coordinador</div></router-link>|
       <router-link to="/login-administrador"><div class="enlace">Administrador</div></router-link>|
       <router-link to="/login-jefeDep"><div class="enlace">Jefe de departamento</div></router-link>
       </nav>
