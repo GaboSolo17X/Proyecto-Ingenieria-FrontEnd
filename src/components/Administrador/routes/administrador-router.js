@@ -15,6 +15,12 @@ const administradorRoutes = [
   
   },
   {
+    path: '/adminCSVestudents',
+    name: 'adminCSVestudents',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminCSVestudents.vue'),
+  
+  },
+  {
     path: '/adminExcepcionales',
     name: 'adminExcepcionales',
     component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminExcepcionales.vue'),

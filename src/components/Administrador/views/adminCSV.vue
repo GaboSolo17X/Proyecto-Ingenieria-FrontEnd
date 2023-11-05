@@ -6,9 +6,14 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado title="Archivo CSV de Resultados" />
+          <Encabezado title="Archivo CSV de Admisión" />
         </div>
-        <h1 class="componentesDocentes">Cargar interfaz de archivo csv</h1>
+        <div class="componentesDocentes">
+          <CardSubido subida="Seleccione su archivo .csv para 
+                              hacer el cargado de los resultados 
+                                de las pruebas de admisión."/>
+        </div>
+        
       </v-col>
     </v-row>
   </div>
@@ -18,15 +23,16 @@
 <script>
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
+import CardSubido from '../components/cardSubido.vue'
 
 export default {
-components: {Lateral,Encabezado},
+components: {Lateral,Encabezado,CardSubido,},
 }
 </script>
 
 <style scoped>
 .componentesDocentes{
-margin-top: 100px;
+margin-top: 110px;
 left: 230px !important;
 width: calc((100% - 230px) - 0px);
 }
