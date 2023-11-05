@@ -74,7 +74,7 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <v-btn large rounded color="blue" dark @click="login(this.numeroCuenta, this.claveEstudiante, this.nombre)"
+                <v-btn large rounded color="blue" dark @click="login(this.numeroCuenta, this.claveEstudiante, this.router, this.nombre )"
                   >Ingresar</v-btn
                 >
               </v-col>
@@ -88,11 +88,12 @@
 
 <script>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter} from "vue-router";
 
 
 export default {
   data() {
+  
     return {
       password: "",
       number: "",
@@ -101,6 +102,7 @@ export default {
   },
 
   setup() {
+    const router=useRouter();
     const nombre = ref("");
     const numeroCuenta = ref("");
     const claveEstudiante = ref("");
@@ -112,6 +114,7 @@ export default {
       required: (value) => !!value || "Llenar campo vacio",
     });
     // const
+
 
     onMounted(() => {
       // Mapea las rutas a los saludos correspondientes
@@ -147,11 +150,13 @@ export default {
       rules,
       numeroCuenta,
       claveEstudiante,
-      nombre
+      nombre,
+      router
+    
     };
   },
   methods: {
-    login: async (numeroCuenta, claveEstudiante, nombre) => {
+    login: async (numeroCuenta, claveEstudiante,router,nombre) => {
       console.log(numeroCuenta, claveEstudiante)
       try { 
         const res = await fetch('http://localhost:3000/estudiante/login', {
@@ -167,6 +172,13 @@ export default {
         });
         const data = await res.json();
         console.log(data);
+        console.log(data.message)
+
+        if(data.message=='Login exitoso'){
+          router.push('/estudiantes')
+      }
+
+               
       } catch (error) {
         console.log(error)
       }
