@@ -3,12 +3,16 @@
       class="mx-auto, tarjeta"
       width="90%">
     <div class="titulo">
-        ¿Desea habilitar el proceso de matrícula? esto permitirá a los estudiante la adición de asignaturas para el periodo actual
+        {{pregunta}}
     </div>
     <div class="archivo">
         <div class="divBoton">
-                <v-btn block rounded="xl"  class="botones" >Habilitar</v-btn>
-                <v-btn block rounded="xl"  class="botones" >Deshabilitar</v-btn>
+            <div class="botonIzquierda" >
+              <v-btn block rounded="xl" class="botones" style="background-color: #53be4e;" @click="habilitarProcesoMatricula">Habilitar</v-btn>
+            </div>
+          <div class="botonDerecha">
+            <v-btn block rounded="xl" class="botones" style="background-color: #A92727" @click="deshabilitarProcesoMatricula">Deshabilitar</v-btn>
+          </div>
         </div>
     </div>
 
@@ -17,15 +21,30 @@
   </template>
 
 <script>
+import { useRoute } from "vue-router";
   export default {
-    data: () => ({
-      rules: [
-        value => {
-          return !value || !value.length || value[0].size < 2000000 || 'Avatar size should be less than 2 MB!'
-        },
-      ],
-    }),
+    props:{pregunta:String},
+    methods: {
+    habilitarProcesoMatricula() {
+      // Lógica para habilitar el proceso de matrícula
+      window.alert('Se ha habilitado correctamente el proceso de matrícula.');
+      this.navegarAAdminDocentes();
+    },
+    deshabilitarProcesoMatricula() {
+      // Lógica para deshabilitar el proceso de matrícula
+      window.alert('Se ha deshabilitado correctamente el proceso de matrícula.');
+      this.navegarAAdminDocentes();
+    },
+    navegarAAdminDocentes() {
+      // Verifica si la ruta actual ya es adminDocentes antes de navegar
+      if (this.$route.name !== "adminDocentes") {
+        this.$router.push({ name: "adminDocentes" });
+      }
+    },
+
   }
+}
+
 
 
 </script>
@@ -38,17 +57,24 @@
 .divBoton{
     width: 90%; 
     display: flex;
-    flex-direction: column;
-    justify-content: center; 
+    flex-direction: row; 
+    justify-content: space-between; 
     margin: 30px;
     align-items: center;
 }
 .botones{
-    background-color: #77181E;
     color: white;
     font-family: 'Rubik';
     text-align: center;
     width: 50%;
+}
+.botonIzquierda{
+  width: 40%; /* Divide el espacio en dos partes iguales */
+  text-align: center;
+}
+.botonDerecha {
+  width: 40%; /* Divide el espacio en dos partes iguales */
+  text-align: center;
 }
 .titulo{
     color: white;

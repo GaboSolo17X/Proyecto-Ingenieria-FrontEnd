@@ -8,7 +8,12 @@
         <div class="contenido">
           <Encabezado title="Activación de Cancelaciones Excepcionales" />
         </div>
-        <h1 class="componentesDocentes">Cargar interfaz de Cancelaciones Excepcionales</h1>
+        <div class="componentesDocentes">
+          <CardCancelacion 
+          pregunta="¿Desea habilitar el proceso de cancelaciones excepcionales? esto permitirá a los estudiantes la creación y envio de solicitudes de cancelación" 
+          />
+        </div>
+        
       </v-col>
     </v-row>
   </div>
@@ -18,15 +23,16 @@
 <script>
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
+import CardCancelacion from '../components/cardCancelacion.vue'
 
 export default {
-components: {Lateral,Encabezado},
+components: {Lateral,Encabezado,CardCancelacion},
 }
 </script>
 
 <style scoped>
 .componentesDocentes{
-margin-top: 100px;
+margin-top: 180px;
 left: 230px !important;
 width: calc((100% - 230px) - 0px);
 }
@@ -43,5 +49,6 @@ transform: translateY(0%);
 position: fixed;
 left: 230px;
 width: calc((100% - 230px) - 0px);
+
 }
 </style>

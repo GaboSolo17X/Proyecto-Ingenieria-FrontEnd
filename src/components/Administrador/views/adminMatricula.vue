@@ -9,7 +9,9 @@
           <Encabezado title="Activación de proceso de Matrícula" />
         </div>
         <div class="componentesDocentes">
-          <CardMatricula />
+          <CardMatricula 
+          pregunta="¿Desea habilitar el proceso de matrícula? esto permitirá a los estudiante la adición de asignaturas para el periodo actual" 
+          />
         </div>
         
       </v-col>
