@@ -81,7 +81,7 @@ export default {
       ruta.value = rutas[route.path] || ''; 
 
     });
-    
+
     const validateForm = () => {
       if (form.value.csv) {
         isFormValid.value = true;
@@ -126,6 +126,10 @@ export default {
     console.log(error)
   }
  }*/
+
+
+
+ //.....
 
     return {
       form,
