@@ -37,9 +37,9 @@
   .ImgUser{
     background-image: url("../assets/usuarioPic.png");
     width: 38.5px;
-height: 40px;
-border-radius: 360px;
-margin-right: 10px;
+  height: 40px;
+  border-radius: 360px;
+  margin-right: 10px;
   }
   
   .nombreUser{

@@ -13,7 +13,7 @@
       </nav>
       <router-view/>
 
-      <v-carousel hide-delimiters next-icon="fa-solid fa-chevron-right" prev-icon="fa-solid fa-chevron-left" >
+      <v-carousel hide-delimiters next-icon="fa-solid fa-chevron-right" prev-icon="fa-solid fa-chevron-left" class="borde" >
         <v-carousel-item
           src="../../assets/c1.jpeg"
           cover
@@ -33,7 +33,6 @@
           cover
         ></v-carousel-item>
       </v-carousel>
-
     </main>
     <footer id="pie">
     </footer>
@@ -52,6 +51,9 @@ export default {
 <style scoped>
  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300&display=swap');
 
+ .borde{
+  margin-bottom: 5px;
+ }
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
@@ -65,7 +67,7 @@ body {
     flex-direction: column;
     margin: 0px;
     min-height: 100vh;
-    background-color: #052767; 
+    background-color: #A92727; 
     width: 100%;
     height: 100vh;
 }
@@ -73,11 +75,11 @@ body {
 
 .enlace{
   padding: 30px 80px;
-  border: 2px solid #FBD411;
+  border: 2px solid #FFFFFF;
   font-family: 'Rubik', sans-serif;
 }
 .menu{
-  background-color: #052767;
+  background-color: #A92727;
   display: flex;
   /*font-family: ; meter el tipo de letra rubik*/
 	flex-direction: row;
@@ -110,7 +112,7 @@ body {
 
 nav a {
   font-weight: bold;
-  color: #FBD411;
+  color: #FFFFFF;
 }
 
 nav a.router-link-exact-active {

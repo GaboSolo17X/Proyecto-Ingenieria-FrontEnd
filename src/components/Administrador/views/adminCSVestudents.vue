@@ -9,7 +9,7 @@
           <Encabezado title="Archivo CSV de Estudiantes" />
         </div>
         <div class="componentes" >
-          <CardSubido 
+          <CardSubidoEstudents
             subida="Seleccione su archivo .csv para hacer el cargado de los estudiantes existentes."
           />
         </div>
@@ -21,11 +21,11 @@
 <script>
 import Lateral from '../components/lateral.vue';
 import Encabezado from '../components/encabezado.vue';
-import CardSubido from '../components/cardSubido.vue';
+import CardSubidoEstudents from '../components/cardSubidoEstudents.vue';
 
 
 export default {
-  components: { Lateral, Encabezado, CardSubido },
+  components: { Lateral, Encabezado, CardSubidoEstudents },
   setup() {
 
     return {

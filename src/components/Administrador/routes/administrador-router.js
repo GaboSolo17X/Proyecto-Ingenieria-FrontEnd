@@ -37,7 +37,22 @@ const administradorRoutes = [
     name: 'adminPlanificacion',
     component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminPlanificacion.vue'),
   
+  },
+  {
+    path: '/adminAspirantes',
+    name: 'adminAspirantes',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminAspirantes.vue'),
+  
+  },
+  {
+    path: '/adminEstudiantes',
+    name: 'adminEstudiantes',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminEstudiantes.vue'),
+  
   }
+  
+
+  
   
 ]
 
