@@ -9,6 +9,7 @@
         </v-col>
       </v-row>
       <v-card
+      style="background-color: #77181E!important;"
         class="mt-n12 pa-5 rounded-xl"
         color="blue-lighten-5"
         width="100%"
@@ -43,17 +44,20 @@
             </v-row>
             <v-row justify="center">
               <v-col lg="8" md="8" cols="12" class="pb-0">
-                <v-text-field
+                <div class="fieldRound">
+                  <v-text-field
+                  base-color="white"
+                  class="shrink round"
+                  variant="outlined"
                   v-model="numeroCuenta"
                   :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',required]"
-                  class="shrink round"
                   dense
                   light
                   label="Numero de cuenta"
-                  variant="outlined"
                   type="text"
                   rounded
                 ></v-text-field>
+                </div>
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -74,7 +78,7 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <v-btn large rounded color="blue" dark @click="login(this.numeroCuenta, this.claveEstudiante, this.nombre)"
+                <v-btn class="boton" large rounded  dark @click="login(this.numeroCuenta, this.claveEstudiante, this.router, this.nombre )"
                   >Ingresar</v-btn
                 >
               </v-col>
@@ -88,11 +92,12 @@
 
 <script>
 import { ref, onMounted } from "vue";
-import { useRoute } from "vue-router";
+import { useRoute, useRouter} from "vue-router";
 
 
 export default {
   data() {
+  
     return {
       password: "",
       number: "",
@@ -101,6 +106,7 @@ export default {
   },
 
   setup() {
+    const router=useRouter();
     const nombre = ref("");
     const numeroCuenta = ref("");
     const claveEstudiante = ref("");
@@ -112,6 +118,7 @@ export default {
       required: (value) => !!value || "Llenar campo vacio",
     });
     // const
+
 
     onMounted(() => {
       // Mapea las rutas a los saludos correspondientes
@@ -147,14 +154,16 @@ export default {
       rules,
       numeroCuenta,
       claveEstudiante,
-      nombre
+      nombre,
+      router
+    
     };
   },
   methods: {
-    login: async (numeroCuenta, claveEstudiante, nombre) => {
+    login: async (numeroCuenta, claveEstudiante,router,nombre) => {
       console.log(numeroCuenta, claveEstudiante)
       try { 
-        const res = await fetch('http://localhost:3000/estudiante/login', {
+        const res = await fetch('http://localhost:3030/estudiante/login', {
           method: "POST",
           credentials: "include",
           headers: {
@@ -167,6 +176,13 @@ export default {
         });
         const data = await res.json();
         console.log(data);
+        console.log(data.message)
+
+        if(data.message=='Login exitoso'){
+          router.push('/estudiantes')
+      }
+
+               
       } catch (error) {
         console.log(error)
       }
@@ -176,18 +192,23 @@ export default {
 </script>
 
 <style scoped>
+.boton{
+  background-color: #282832;
+  color:white;
+}
 body {
   display: flex;
   flex-direction: column;
   margin: 0px;
   min-height: 100vh;
-  background-color: #e7f2ff;
+  background-color: #77181E;
   width: 100%;
   height: 100vh;
 }
 .unah {
   font-size: 60px;
-  color: rgb(5, 39, 103);
+  color: rgb(255, 255, 255);
+  background-color: #77181E;
   margin-bottom: 40px;
 }
 
@@ -195,26 +216,26 @@ body {
   color: white;
 }
 h3 {
-  color: rgb(251, 212, 17);
+  color: rgb(255, 255, 255);
 }
 .titulo {
-  background-color: #e7f2ff;
+  background-color: #77181E;
 }
 .left-side {
-  background-color: rgb(5, 39, 103);
+  background-color: #A92727;
   flex: 1;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
 .right-side {
-  background-color: #a8cfff;
+  background-color: #FFFFFF;
   flex: 1;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
 }
 
 a {
-  border-bottom: 2px solid rgb(251, 212, 17);
+  border-bottom: 2px solid rgb(255, 255, 255);
 }
 
 img {
