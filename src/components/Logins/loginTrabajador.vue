@@ -162,7 +162,7 @@ export default {
 
       icon.value= icons[route.path] || ''
 
-      // numeroEmp.value= numeroEmps[route.path] || ''
+      
 
       // claveEmp.value = claveEmps[route.path] || ''
 
@@ -258,6 +258,7 @@ h3 {
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
 }
+
 
 a {
   border-bottom: 2px solid rgb(255, 255, 255);
