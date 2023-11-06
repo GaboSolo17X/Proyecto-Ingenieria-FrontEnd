@@ -8,7 +8,10 @@
         <div class="contenido">
           <Encabezado  title="Docentes"/>
         </div>
-        <h1 class="componentesDocentes">Cargar tabla docentes aqui</h1>
+        <div class="componentesDocentes">
+          <TablaDocentes />
+        </div>
+        
       </v-col>
     </v-row>
   </div>
@@ -18,9 +21,10 @@
 <script>
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
+import TablaDocentes from '../components/tablaDocentes.vue'
 
 export default {
-components: {Lateral,Encabezado},
+components: {Lateral,Encabezado,TablaDocentes},
 }
 </script>
 

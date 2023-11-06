@@ -45,11 +45,29 @@
             <div class="texto">
               <div class="iconos"><v-icon  icon="fa:fas fa-solid fa-file" ></v-icon></div>
               <router-link to="/adminCSV" active-class="amarillo" class="enlace">
-              <v-list-item  title="Archivos " class="abajo"></v-list-item>
-              <v-list-item  title="de admisión" class="arriba"></v-list-item>
+              <v-list-item  title="Archivos de " class="abajo"></v-list-item>
+              <v-list-item  title=" admisión" class="arriba"></v-list-item>
             </router-link>
             </div>
-            
+            <div class="texto">
+              <div class="iconos"><v-icon  icon="fa:fas fa-solid fa-file" ></v-icon></div>
+              <router-link to="/adminCSVestudents" active-class="amarillo" class="enlace">
+              <v-list-item  title="Archivos de" class="abajo"></v-list-item>
+              <v-list-item  title=" estudiantes" class="arriba"></v-list-item>
+            </router-link>
+            </div>
+            <div class="texto">
+              <div class="iconos"><v-icon  icon="fa:fas fa-solid fa-user" ></v-icon></div>
+              <router-link to="/adminAspirantes" active-class="amarillo" class="enlace">
+              <v-list-item  title="Aspirantes" class="abajo"></v-list-item>
+            </router-link>
+            </div>
+            <div class="texto">
+              <div class="iconos"><v-icon  icon="fa:fas fa-solid fa-graduation-cap" ></v-icon></div>
+              <router-link to="/adminEstudiantes" active-class="amarillo" class="enlace">
+              <v-list-item  title="Estudiantes" class="abajo"></v-list-item>
+            </router-link>
+            </div>
            
           </v-list>
   
@@ -85,7 +103,7 @@ export default {
 }
 .enlace{
   color: white;
-  text-decoration: none;
+  text-decoration: none !important;
 }
 
 .amarillo{
@@ -124,8 +142,8 @@ export default {
 }
 .logo{
   background-image: url('../assets/pumaAdmin.png');
-  height: 200px;
-  width: 200px;
+  height: 160px;
+  width: 160px;
 }
 
 .logo_center{

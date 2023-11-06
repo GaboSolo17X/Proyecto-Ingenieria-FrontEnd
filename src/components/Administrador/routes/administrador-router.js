@@ -15,6 +15,12 @@ const administradorRoutes = [
   
   },
   {
+    path: '/adminCSVestudents',
+    name: 'adminCSVestudents',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminCSVestudents.vue'),
+  
+  },
+  {
     path: '/adminExcepcionales',
     name: 'adminExcepcionales',
     component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminExcepcionales.vue'),
@@ -31,7 +37,22 @@ const administradorRoutes = [
     name: 'adminPlanificacion',
     component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminPlanificacion.vue'),
   
+  },
+  {
+    path: '/adminAspirantes',
+    name: 'adminAspirantes',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminAspirantes.vue'),
+  
+  },
+  {
+    path: '/adminEstudiantes',
+    name: 'adminEstudiantes',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminEstudiantes.vue'),
+  
   }
+  
+
+  
   
 ]
 
