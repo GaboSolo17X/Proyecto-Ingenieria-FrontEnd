@@ -9,6 +9,7 @@
         </v-col>
       </v-row>
       <v-card
+      style="background-color: #77181E!important;"
         class="mt-n12 pa-5 rounded-xl"
         color="blue-lighten-5"
         width="100%"
@@ -17,7 +18,13 @@
           <v-col class="left-side">
             <v-row class="row-logo mr-auto ml-auto">
               <v-col class="pumImg" cols="12" lg="12" md="12">
-                <img src="./assets/puma.png">
+                <v-img 
+                class="imgMargin"
+                 width="150px"
+                 height="150px"
+                :aspect-ratio="1"
+                src="../../assets/pumaTrabajador.png">
+                </v-img>
               </v-col>
               <v-col cols="12" lg="12" md="12">
                 <h1 class="bien text-center">¡Bienvenido Puma {{puesto}}!</h1>
@@ -74,7 +81,7 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <v-btn large rounded color="blue" dark @click="login(this.numeroEmp, this.claveEmp, this.router, this.nombre, this.dir)"
+                <v-btn class="boton" large rounded   @click="login(this.numeroEmp, this.claveEmp, this.router, this.nombre, this.dir)"
                   >Ingresar</v-btn
                 >
               </v-col>
@@ -155,7 +162,7 @@ export default {
 
       icon.value= icons[route.path] || ''
 
-      // numeroEmp.value= numeroEmps[route.path] || ''
+      
 
       // claveEmp.value = claveEmps[route.path] || ''
 
@@ -180,7 +187,7 @@ export default {
     login: async (numeroEmp, claveEmp,router, nombre,dir) => {
       console.log(numeroEmp, claveEmp, nombre,dir)
       try { 
-        const res = await fetch('http://localhost:3000/'+nombre+'/login', {
+        const res = await fetch('http://localhost:3030/'+nombre+'/login', {
           method: "POST",
           credentials: "include",
           headers: {
@@ -207,18 +214,26 @@ export default {
 </script>
 
 <style scoped>
+.imgMargin{
+  margin-top: 30px;
+}
+.boton{
+  background-color: #282832;
+  color:white;
+}
 body {
   display: flex;
   flex-direction: column;
   margin: 0px;
   min-height: 100vh;
-  background-color: #e7f2ff;
+  background-color: #77181E;
   width: 100%;
   height: 100vh;
 }
 .unah {
   font-size: 60px;
-  color: rgb(5, 39, 103);
+  color: rgb(255, 255, 255);
+  background-color: #77181E;
   margin-bottom: 40px;
 }
 
@@ -226,31 +241,33 @@ body {
   color: white;
 }
 h3 {
-  color: rgb(251, 212, 17);
+  color: rgb(255, 255, 255);
 }
 .titulo {
-  background-color: #e7f2ff;
+  background-color: #77181E;
 }
 .left-side {
-  background-color: rgb(5, 39, 103);
+  background-color: #A92727;
   flex: 1;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
 .right-side {
-  background-color: #a8cfff;
+  background-color: #FFFFFF;
   flex: 1;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
 }
 
+
 a {
-  border-bottom: 2px solid rgb(251, 212, 17);
+  border-bottom: 2px solid rgb(255, 255, 255);
 }
 
 img {
   max-height: 100%;
   max-width: 25%;
+
 }
 
 .pumImg {
@@ -265,10 +282,9 @@ img {
 /* .round{
   background-color: white;
 } */
-.icono{
-  color: rgb(5, 39, 103);
+.icono {
+  color: #282832;
 }
-
 
 .numeritos >>> input::-webkit-outer-spin-button,
 .numeritos >>> input::-webkit-inner-spin-button {

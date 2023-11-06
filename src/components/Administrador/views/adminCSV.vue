@@ -12,6 +12,7 @@
           <CardSubido subida="Seleccione su archivo .csv para 
                               hacer el cargado de los resultados 
                                 de las pruebas de admisión."/>
+
         </div>
         
       </v-col>
@@ -25,8 +26,16 @@ import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
 import CardSubido from '../components/cardSubido.vue'
 
+
 export default {
-components: {Lateral,Encabezado,CardSubido,},
+components: {Lateral,Encabezado,CardSubido},
+setup(){
+
+
+  return{
+  }
+
+}
 }
 </script>
 

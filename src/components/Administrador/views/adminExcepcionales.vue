@@ -32,7 +32,7 @@ components: {Lateral,Encabezado,CardCancelacion},
 
 <style scoped>
 .componentesDocentes{
-margin-top: 180px;
+margin-top: 110px;
 left: 230px !important;
 width: calc((100% - 230px) - 0px);
 }
