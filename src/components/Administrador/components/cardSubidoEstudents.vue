@@ -120,26 +120,6 @@ export default {
 
     };
 
-    /*const pruebaRegistro=async()=>{
-  try {
-    const formData=new FormData();
-    formData.append('usrfile',form.value.name);
-    const res=await fetch('http://localhost:3000/upload/'+ link,{
-      method:'POST',
-      body: formData
-    });
-    const data=await res.json();
-    console.log(data)
-    console.log(message)
-  } catch (error) {
-    console.log(error)
-  }
- }*/
-
-
-
- //.....
-
     return {
       form,
       nombre,
