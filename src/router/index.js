@@ -1,6 +1,7 @@
 import { createRouter, createWebHashHistory } from 'vue-router'
 import admisionRouter from "../components/Admisiones/routes/admin-router";
 import adminRouter from "../components/Administrador/routes/administrador-router";
+import docenteRouter from "../components/Docente/routes/docente-router";
 
 
 const routes = [
@@ -75,7 +76,8 @@ const routes = [
     ]
   },
   ...admisionRouter.options.routes,
-  ...adminRouter.options.routes
+  ...adminRouter.options.routes,
+  ...docenteRouter.options.routes
 
 ]
 
