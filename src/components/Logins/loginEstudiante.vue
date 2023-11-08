@@ -9,7 +9,7 @@
         </v-col>
       </v-row>
       <v-card
-      style="background-color: #77181E!important;"
+        style="background-color: #77181e !important"
         class="mt-n12 pa-5 rounded-xl"
         color="blue-lighten-5"
         width="100%"
@@ -46,17 +46,20 @@
               <v-col lg="8" md="8" cols="12" class="pb-0">
                 <div class="fieldRound">
                   <v-text-field
-                  base-color="white"
-                  class="shrink round"
-                  variant="outlined"
-                  v-model="numeroCuenta"
-                  :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',required]"
-                  dense
-                  light
-                  label="Numero de cuenta"
-                  type="text"
-                  rounded
-                ></v-text-field>
+                    base-color="white"
+                    class="shrink round"
+                    variant="outlined"
+                    v-model="numeroCuenta"
+                    :rules="[
+                      (v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',
+                      required,
+                    ]"
+                    dense
+                    light
+                    label="Numero de cuenta"
+                    type="text"
+                    rounded
+                  ></v-text-field>
                 </div>
               </v-col>
             </v-row>
@@ -78,7 +81,19 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <v-btn class="boton" large rounded  dark @click="login(this.numeroCuenta, this.claveEstudiante, this.router, this.nombre )"
+                <v-btn
+                  class="boton"
+                  large
+                  rounded
+                  dark
+                  @click="
+                    login(
+                      this.numeroCuenta,
+                      this.claveEstudiante,
+                      this.router,
+                      this.nombre,
+                    )
+                  "
                   >Ingresar</v-btn
                 >
               </v-col>
@@ -87,26 +102,45 @@
         </v-row>
       </v-card>
     </v-container>
+    <template>
+      <div >
+        <v-dialog v-model="dialog" width="auto">
+          <v-card class="PopPup">
+            <v-card-text class="textoPop">
+              ¡FELICIDADES!, <br>
+              su puntaje ha sido admitido para ambas carreras, <br>
+              por favor seleccione una: 
+            </v-card-text>
+            <v-btn @click="actualizarCarrera(carreraPrincipalBoton)" class="botones">{{  carreraPrincipalBoton}}</v-btn>
+            <v-btn @click="actualizarCarrera(carreraSecundariaBoton)" class="botones">{{  carreraSecundariaBoton}}</v-btn>
+          </v-card>
+        </v-dialog>
+      </div>
+    </template>
   </body>
 </template>
 
 <script>
 import { ref, onMounted } from "vue";
-import { useRoute, useRouter} from "vue-router";
-
+import { useRoute, useRouter } from "vue-router";
+//  import EleccionCarrera from './components/eleccionCarrera.vue'
 
 export default {
   data() {
-  
     return {
       password: "",
       number: "",
-      
     };
   },
 
+  ///...
+
   setup() {
-    const router=useRouter();
+    const dialog = ref(false);
+    const userNumeroCuenta = ref("");
+    const carreraPrincipalBoton = ref("");
+    const carreraSecundariaBoton = ref("");
+    const router = useRouter();
     const nombre = ref("");
     const numeroCuenta = ref("");
     const claveEstudiante = ref("");
@@ -117,24 +151,72 @@ export default {
     const rules = ref({
       required: (value) => !!value || "Llenar campo vacio",
     });
+    const login = async (numeroCuenta, claveEstudiante, router, nombre) => {
+      
+      try {
+        const res = await fetch('http://localhost:3030/estudiante/login', {
+                 method: "POST",
+                 credentials: "include",
+                 headers: {
+                   "Content-Type": "application/json",
+                 },
+                 body: JSON.stringify({
+                   numeroCuenta: numeroCuenta,
+                   claveEstudiante: claveEstudiante,
+                 }),
+               });
+        const data =  await res.json()
+        let { carreraSecundaria, carrera,  } = data.estudianteLogin
+        
+        carreraPrincipalBoton.value = carrera
+        carreraSecundariaBoton.value = carreraSecundaria
+        userNumeroCuenta.value = data.estudianteLogin.numeroCuenta
+        
+
+        if(!(carreraSecundaria == null)){
+          dialog.value = true
+        }else{
+          //AQUI TAMBIEN SE VA A REDIRIGIR A LA PAGINA DEL ESTUDIANTE
+        }
+
+        
+      } catch (error) {
+        
+      }
+    }
     // const
 
+    const actualizarCarrera = async(nombreCarrera) => {
+      const res = await fetch('http://localhost:3030/estudiante/actualizarCarrera', {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          numeroCuenta : userNumeroCuenta.value,
+          carrera: nombreCarrera
+
+        })
+      })
+      
+      if(res.status === 200){
+        //AQUI SE VA A REDIRIGIR A LA PAGINA DEL ESTUDIANTE
+      }
+    }
 
     onMounted(() => {
       // Mapea las rutas a los saludos correspondientes
       const puestos = {
         "/estudiantes": "Hola estudiantes",
-      }
- 
+      };
 
       const direcciones = {
         "/estudiantes": "/estudiantes",
-      }
-
+      };
 
       const icons = {
         "/estudiantes": "fa-solid fa-user",
-      }
+      };
 
       // /docentes
       // Asigna el saludo correspondiente
@@ -144,10 +226,12 @@ export default {
 
       icon.value = icons[route.path] || "";
 
-      nombre.value="estudiante";
+      nombre.value = "estudiante";
     });
 
     return {
+      login,
+      dialog,
       puesto,
       dir,
       icon,
@@ -155,60 +239,58 @@ export default {
       numeroCuenta,
       claveEstudiante,
       nombre,
-      router
-    
+      router,
+      carreraPrincipalBoton,
+      carreraSecundariaBoton,
+      actualizarCarrera,
+      userNumeroCuenta
     };
-  },
-  methods: {
-    login: async (numeroCuenta, claveEstudiante,router,nombre) => {
-      console.log(numeroCuenta, claveEstudiante)
-      try { 
-        const res = await fetch('http://localhost:3030/estudiante/login', {
-          method: "POST",
-          credentials: "include",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({
-            numeroCuenta: numeroCuenta,
-            claveEstudiante: claveEstudiante,
-          }),
-        });
-        const data = await res.json();
-        console.log(data);
-        console.log(data.message)
-
-        if(data.message=='Login exitoso'){
-          router.push('/estudiantes')
-      }
-
-               
-      } catch (error) {
-        console.log(error)
-      }
-    },
   },
 };
 </script>
 
 <style scoped>
-.boton{
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
+.PopPup{
   background-color: #282832;
-  color:white;
+  border-radius:20px !important;
+
+}
+
+.textoPop{
+  color: white;
+  font-family: 'Rubik';
+  font-size: 20px!important;
+  text-align: center!important;
+}
+.botones {
+  width: 50%;
+  color: white;
+  font-family: 'Rubik';
+  display: flex;
+  text-align: center;
+  background-color: #77181e;
+  margin: 15px 25%;
+  border-radius:20px !important;
+
+}
+.boton {
+  background-color: #282832;
+  color: white;
 }
 body {
   display: flex;
   flex-direction: column;
   margin: 0px;
   min-height: 100vh;
-  background-color: #77181E;
+  background-color: #77181e;
   width: 100%;
   height: 100vh;
 }
 .unah {
   font-size: 60px;
   color: rgb(255, 255, 255);
-  background-color: #77181E;
+  background-color: #77181e;
   margin-bottom: 40px;
 }
 
@@ -219,16 +301,16 @@ h3 {
   color: rgb(255, 255, 255);
 }
 .titulo {
-  background-color: #77181E;
+  background-color: #77181e;
 }
 .left-side {
-  background-color: #A92727;
+  background-color: #a92727;
   flex: 1;
   border-top-left-radius: 15px;
   border-bottom-left-radius: 15px;
 }
 .right-side {
-  background-color: #FFFFFF;
+  background-color: #ffffff;
   flex: 1;
   border-top-right-radius: 15px;
   border-bottom-right-radius: 15px;
