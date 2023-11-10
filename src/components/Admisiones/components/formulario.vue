@@ -36,6 +36,7 @@
           required
           variant="solo-filled"
           rounded
+         
         ></v-select>
 
         <v-select
@@ -47,6 +48,7 @@
           required
           variant="solo-filled"
           rounded
+          @click="carreraPri"
         ></v-select>
 
         <v-text-field 
@@ -109,7 +111,7 @@
         <v-btn
           block
           rounded
-          color="#282832"
+          color="#a92727"
           size="large"
           type="submit"
           variant="elevated"
@@ -210,8 +212,22 @@ setup(){
       } else {
         exad.value = "Solo debes hacer PAA"; // Limpiar el tipo de examen si no se encuentra la carrera
       }
+
     };
     
+    const carreraPri = () => {
+      // Filtrar las carreras secundarias según la condición y la selección del primer v-select
+      console.log('Entrando al cambio de carrera' );
+      const selectedCarrera = form.value.carrPri
+      carrerasSec.value = carrerasTot.value
+        .filter(carrera => !carrera.examen && carrera.nombreCarrera !== selectedCarrera)
+        .map(carrera => carrera.nombreCarrera);
+
+      // console.log(carrerasSec);
+    };
+
+ 
+
     const mensaje = ref('Por detallar Examen')
     const enviarExamen=()=>{
       mensaje.value= exad
@@ -302,6 +318,7 @@ const onSubmit = async () => {
         isCardExVisible,
         isFormVisible,
         mensaje,
+        carreraPri,
         handleFileChange,
         onSubmit
         
@@ -322,7 +339,7 @@ const onSubmit = async () => {
 }
 
 .bg-color{
-  background-color:  #a92727;
+  background-color: #282832;
   color: white;
 }
 

@@ -5,10 +5,10 @@
     <main>
       <nav class="menu">
       <router-link to="/login-estudiantes"><div class="enlace">Estudiantes</div>
-      </router-link> |
-      <router-link to="/login-docentes"><div class="enlace">Docentes</div></router-link>|
-      <router-link to="/login-coordinador" ><div class="enlace">Coordinador</div></router-link>|
-      <router-link to="/login-administrador"><div class="enlace">Administrador</div></router-link>|
+      </router-link> 
+      <router-link to="/login-docentes"><div class="enlace">Docentes</div></router-link>
+      <router-link to="/login-coordinador" ><div class="enlace">Coordinador</div></router-link>
+      <router-link to="/login-administrador"><div class="enlace">Administrador</div></router-link>
       <router-link to="/login-jefeDep"><div class="enlace">Jefe de departamento</div></router-link>
       </nav>
       <router-view/>
@@ -83,10 +83,7 @@ body {
   display: flex;
   /*font-family: ; meter el tipo de letra rubik*/
 	flex-direction: row;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: stretch;
-	align-content: space-between;
+    justify-content: space-between
 }
 
 #encabezado{

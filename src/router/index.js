@@ -29,7 +29,7 @@ const routes = [
   {
     path: '/administrador',
     name: 'administrador',
-    component: () => import(/* webpackChunkName: "about" */ '../views/LandingViews/Administrador.vue')
+    component: () => import(/* webpackChunkName: "about" */ '../components/Administrador/views/adminDocentes')
   },
   {
     path: '/jefe',

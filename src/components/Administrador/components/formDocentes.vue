@@ -130,7 +130,7 @@ export default {
 
     const getCarreras =async()=>{
       try {
-        const res =await fetch ('http://localhost:3030/carreras/',{
+        const res =await fetch ('http://localhost:3000/carreras/',{
           method: 'GET',
           headers:{
           'Content-Type':'application/json'
@@ -179,7 +179,7 @@ export default {
     formData.append('centroRegional',form.value.centroRe);
     formData.append('correo',form.value.email);
     formData.append('fotoDocente',form.value.imagen);
-    const res=await fetch('http://localhost:3030/docente/register',{
+    const res=await fetch('http://localhost:3000/docente/register',{
       method:'POST',
       body: formData
     });
