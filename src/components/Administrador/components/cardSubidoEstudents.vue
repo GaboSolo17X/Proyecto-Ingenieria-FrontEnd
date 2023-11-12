@@ -106,10 +106,6 @@ export default {
       
       if (isFormValid.value) {
         showAlertSuccess();
-        if (nombre.value==='admisiones') {
-        }
-        if (nombre.value==='estudiantes') {
-        }
   
       }
     };

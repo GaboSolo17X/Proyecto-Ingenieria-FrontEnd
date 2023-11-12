@@ -6,7 +6,7 @@
          <p >Porfavor llena todos los campos para que sea admitida tu solicitud</p>
       </v-card-text>
     </v-card>
-    <v-card class="mx-auto px-6 py-8 mt-10 rounded-xl bg-color" max-width="700 " >
+    <v-card class="mx-auto px-6 py-8 mt-10 rounded-xl bg-color-body" max-width="700 " >
       <v-form class="pa-9"  @submit.prevent="onSubmit">
         <v-text-field 
           v-model="form.name"
@@ -340,6 +340,10 @@ const onSubmit = async () => {
 
 .bg-color{
   background-color: #282832;
+  color: white;
+}
+.bg-color-body{
+  background-color:  #C6D6D6;
   color: white;
 }
 

@@ -97,6 +97,13 @@
                 >
               </v-col>
             </v-row>
+            <v-row justify="center">
+              <v-col lg="8" md="8" cols="12" class="py-0">
+                <router-link to="/reinicioClaveEstudiantes" class="enlaceContrasenia mb-5"> 
+                  ¿Olvidaste tu contraseña?
+                </router-link>
+              </v-col>
+            </v-row>
           </v-col>
         </v-row>
       </v-card>
@@ -266,8 +273,14 @@ export default {
 </script>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
-.PopPup {
+@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
+.enlaceContrasenia{
+  text-decoration-color: #282832;
+  color: #282832;
+  display: flex;
+  justify-content: flex-end;
+}
+.PopPup{
   background-color: #282832;
   border-radius: 20px !important;
 }
