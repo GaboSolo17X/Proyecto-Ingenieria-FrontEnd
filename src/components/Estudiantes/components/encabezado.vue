@@ -7,8 +7,10 @@
           <v-app-bar-title >{{ title}}</v-app-bar-title>
   
           <template v-slot:append>
-            <p class="nombreUser">Paco Mariachi</p>
-            <div class="ImgUser"></div>  
+            <router-link to="/perfilEstudiante" active-class="amarillo" class="enlace">
+              <p class="nombreUser">Paco Mariachi</p>
+              <div class="ImgUser"></div>  
+            </router-link>
           </template>
         </v-app-bar>
       </v-layout>
@@ -27,6 +29,17 @@
   <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;800&display=swap');
 
+  .enlace{
+  padding: left 2px, !important;
+  color: white;
+  text-decoration: none !important;
+  display: flex;
+  flex-wrap: nowrap;
+}
+
+.amarillo{
+  color: #FBD411;
+}
 .contenidoNav{
     width: 50%;
 }
@@ -46,6 +59,7 @@
   .nombreUser{
     font-family: 'Rubik', sans-serif;
     margin-right: 30px;
+    padding-top: 6px;
     color: white;
   }
   </style>

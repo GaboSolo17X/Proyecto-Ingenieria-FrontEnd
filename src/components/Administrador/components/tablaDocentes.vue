@@ -55,7 +55,7 @@
 
     export default {
       components:{FormDocentes},
-
+      emits:[],
       setup(){
         const isFormVisible=ref(false);
         const isDocentesVisible=ref(true);

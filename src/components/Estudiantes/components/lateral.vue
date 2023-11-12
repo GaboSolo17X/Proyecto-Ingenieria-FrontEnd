@@ -67,7 +67,7 @@
   
           <template v-slot:append>
             <div class="pa-2">
-              <router-link to="/">
+              <router-link to="/" class="enlace">
                 <v-btn block class="enlace">
                   Salir
               </v-btn>

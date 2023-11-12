@@ -61,7 +61,20 @@ const estudianteRoutes = [
     name: 'calificacionesEstudiantes',
     component: () => import(/* webpackChunkName: "about" */ '../../../components/Estudiantes/views/calificacionesEstudiantes.vue'),
     
-  }
+  },
+  {
+    path: '/notasPeriodoEstudiantes',
+    name: 'notasPeriodoEstudiantes',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Estudiantes/views/notasPeriodoEstudiantes.vue'),
+    
+  },
+  {
+    path: '/perfilEstudiante',
+    name: 'perfilEstudiante',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Estudiantes/views/perfilEstudiante.vue'),
+    
+  },
+  
   
 ]
 

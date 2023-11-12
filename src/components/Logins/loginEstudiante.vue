@@ -273,7 +273,6 @@ export default {
 </script>
 
 <style scoped>
-<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
 .enlaceContrasenia{
   text-decoration-color: #282832;
@@ -282,10 +281,6 @@ export default {
   justify-content: flex-end;
 }
 .PopPup{
-=======
-@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
-.PopPup {
->>>>>>> 67466ab284ef535b431eef8bef732156ac3c104a
   background-color: #282832;
   border-radius: 20px !important;
 }

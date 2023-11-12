@@ -20,12 +20,6 @@
         </div>
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
           <p>Seleccione las clases que desea cancelar</p>
-
-          <!-- <v-list v-model="clasesSeleccionadas" class="checkboxs elevation-3 mb-3">
-              <v-list-item v-for="(clase, index) in clases" :key="index">
-                  <checkbox :label="clase.text">Hola</checkbox>
-                </v-list-item>
-            </v-list> -->
           <v-list
             v-model="clasesSeleccionadas"
             class="checkboxs elevation-3 mb-3"
@@ -42,7 +36,6 @@
           <p>Suba aquí su formato pdf de cancelación de clases:</p>
           <v-file-input
             v-model="form.pdf"
-            @change="handleFileChange"
             show-size
             accept=".pdf"
             :rules="[(v) => !!v || 'Se requiere un archivo ', (v) => true]"
@@ -123,11 +116,7 @@ export default {
       }
     };
 
-    const handleFileChange = (e) => {
-      const file = e.target.files[0];
-      form.value.pdf = file;
-      console.log(file);
-    };
+  
 
     const showAlertSuccess = () => {
       window.alert("Se ha enviado la solictud correctamente.");
@@ -144,7 +133,6 @@ export default {
     return {
       form,
       clases,
-      handleFileChange,
       showAlertSuccess,
       onSubmit,
     };
