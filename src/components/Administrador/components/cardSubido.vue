@@ -81,7 +81,7 @@ export default {
       try {
         const formData = new FormData();
         formData.append("usrfile", usrfile.value);
-        const res = await fetch("http://localhost:3030/upload/subircsv", {
+        const res = await fetch("http://localhost:3000/upload/subircsv", {
           method: "POST",
           body: formData,
         });
@@ -99,7 +99,7 @@ export default {
 
     const descargarCSV = async () => {
       try {
-        const res = await fetch("http://localhost:3030/upload/descargarcsv", {
+        const res = await fetch("http://localhost:3000/upload/descargarcsv", {
           method: "POST",
           headers: {
             "Content-Type": "application/json",

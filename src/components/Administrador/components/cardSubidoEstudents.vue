@@ -57,7 +57,7 @@ export default {
       try {
         const formData = new FormData();//cuando se envia algo :D
         formData.append("usrfile",usrfile.value);
-        const res = await fetch ("http://localhost:3030/upload/creacion",{
+        const res = await fetch ("http://localhost:3000/upload/creacion",{
           method: "POST",
           body: formData,
         })

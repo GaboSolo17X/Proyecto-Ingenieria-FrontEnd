@@ -49,7 +49,7 @@ import {ref,onMounted} from 'vue';
   
     onMounted(async () => {
         try {
-        const res = await fetch('http://localhost:3030/estudiante/getestudiantes',{
+        const res = await fetch('http://localhost:3000/estudiante/getestudiantes',{
           method:'GET',
           headers:{
             'Content-Type':'application/json'
@@ -61,6 +61,7 @@ import {ref,onMounted} from 'vue';
         for (let index = 0; index < estudiante.length; index++) {
           let EstudianteGuardar ={
             nombre: estudiante[index].nombres+ ' '+estudiante[index].apellidos,
+
             cuenta: estudiante[index].numeroCuenta,
             carrera: estudiante[index].carrera,
             correo: estudiante[index].correoPersonal,

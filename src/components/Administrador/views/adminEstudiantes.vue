@@ -32,8 +32,8 @@
     @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
   .componentesDocentes{
   margin-top: 100px;
-  left: 230px !important;
-  width: calc((100% - 230px) - 0px);
+  width: calc((100% - 120px) - 0px);
+  margin-left: -150px;
   }
   
   .rubik{

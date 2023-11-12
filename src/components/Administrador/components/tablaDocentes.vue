@@ -71,7 +71,7 @@
         const docentes =ref([])
         onMounted(async () => {
             try {
-              const res = await fetch('http://localhost:3030/docente/getdocentes',{
+              const res = await fetch('http://localhost:3000/docente/getdocentes',{
                 method:'GET',
                 headers:{
                   'Content-Type':'application/json'

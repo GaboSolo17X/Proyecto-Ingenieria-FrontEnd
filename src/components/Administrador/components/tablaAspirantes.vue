@@ -55,7 +55,7 @@ import {ref,onMounted} from 'vue';
       const alumnos = ref([])
       onMounted(async () => {
         try {
-        const res = await fetch('http://localhost:3030/aspirante/get/prueba',{
+        const res = await fetch('http://localhost:3000/aspirante/get/prueba',{
           method:'GET',
           headers:{
             'Content-Type':'application/json'

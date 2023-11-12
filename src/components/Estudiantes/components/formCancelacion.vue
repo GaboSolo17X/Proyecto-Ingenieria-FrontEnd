@@ -131,13 +131,13 @@ export default {
 
     const showAlertSuccess = () => {
       window.alert("Se ha enviado la solictud correctamente.");
+      window.history.back();
     };
 
     const onSubmit = async () => {
       validateForm();
       if (isFormValid.value) {
-        showAlertSuccess();
-        window.history.back(); //te regresa a la pagina principal de solicitudes
+         //te regresa a la pagina principal de solicitudes
       }
     };
 

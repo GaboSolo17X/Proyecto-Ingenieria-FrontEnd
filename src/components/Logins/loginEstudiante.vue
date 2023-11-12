@@ -34,7 +34,7 @@
           <v-col class="right-side text-center">
             <v-row justify="center">
               <v-col class="pb-0">
-                <v-icon :icon="icon" class="icono"></v-icon>
+                <v-icon icon="fa-solid fa-user" base-color="red" class="icono"></v-icon>
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -46,9 +46,7 @@
               <v-col lg="8" md="8" cols="12" class="pb-0">
                 <div class="fieldRound">
                   <v-text-field
-                    base-color="white"
                     class="shrink round"
-                    variant="outlined"
                     v-model="numeroCuenta"
                     :rules="[
                       (v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',
@@ -59,6 +57,7 @@
                     label="Numero de cuenta"
                     type="text"
                     rounded
+                    variant="outlined"
                   ></v-text-field>
                 </div>
               </v-col>
@@ -91,7 +90,7 @@
                       this.numeroCuenta,
                       this.claveEstudiante,
                       this.router,
-                      this.nombre,
+                      this.nombre
                     )
                   "
                   >Ingresar</v-btn
@@ -110,16 +109,24 @@
       </v-card>
     </v-container>
     <template>
-      <div >
+      <div>
         <v-dialog v-model="dialog" width="auto">
           <v-card class="PopPup">
             <v-card-text class="textoPop">
-              ¡FELICIDADES!, <br>
-              su puntaje ha sido admitido para ambas carreras, <br>
-              por favor seleccione una: 
+              ¡FELICIDADES!, <br />
+              su puntaje ha sido admitido para ambas carreras, <br />
+              por favor seleccione una:
             </v-card-text>
-            <v-btn @click="actualizarCarrera(carreraPrincipalBoton)" class="botones">{{  carreraPrincipalBoton}}</v-btn>
-            <v-btn @click="actualizarCarrera(carreraSecundariaBoton)" class="botones">{{  carreraSecundariaBoton}}</v-btn>
+            <v-btn
+              @click="actualizarCarrera(carreraPrincipalBoton)"
+              class="botones"
+              >{{ carreraPrincipalBoton }}</v-btn
+            >
+            <v-btn
+              @click="actualizarCarrera(carreraSecundariaBoton)"
+              class="botones"
+              >{{ carreraSecundariaBoton }}</v-btn
+            >
           </v-card>
         </v-dialog>
       </div>
@@ -159,57 +166,66 @@ export default {
       required: (value) => !!value || "Llenar campo vacio",
     });
     const login = async (numeroCuenta, claveEstudiante, router, nombre) => {
-      
       try {
-        const res = await fetch('http://localhost:3030/estudiante/login', {
-                 method: "POST",
-                 credentials: "include",
-                 headers: {
-                   "Content-Type": "application/json",
-                 },
-                 body: JSON.stringify({
-                   numeroCuenta: numeroCuenta,
-                   claveEstudiante: claveEstudiante,
-                 }),
-               });
-        const data =  await res.json()
-        let { carreraSecundaria, carrera,  } = data.estudianteLogin
-        
-        carreraPrincipalBoton.value = carrera
-        carreraSecundariaBoton.value = carreraSecundaria
-        userNumeroCuenta.value = data.estudianteLogin.numeroCuenta
-        
+        const res = await fetch("http://localhost:3000/estudiante/login", {
+          method: "POST",
+          credentials: "include",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            numeroCuenta: numeroCuenta,
+            claveEstudiante: claveEstudiante,
+          }),
+        });
+        const data = await res.json();
 
-        if(!(carreraSecundaria == null)){
-          dialog.value = true
-        }else{
-          //AQUI TAMBIEN SE VA A REDIRIGIR A LA PAGINA DEL ESTUDIANTE
+        if (res.json.message != "Credenciales Incorrectas") {
+          let { carreraSecundaria, carrera } = data.estudianteLogin;
+
+          carreraPrincipalBoton.value = carrera;
+          carreraSecundariaBoton.value = carreraSecundaria;
+          userNumeroCuenta.value = data.estudianteLogin.numeroCuenta;
+
+          if (!(carreraSecundaria == null)) {
+            dialog.value = true;
+       
+          } else {
+            //AQUI TAMBIEN SE VA A REDIRIGIR A LA PAGINA DEL ESTUDIANTE
+            console.log(res.json.message);
+            router.push('/estudiantes');
+
+          }
         }
-
+        //Aqui esta el error de este data intenta sacar info que no esta
         
       } catch (error) {
-        
+        console.log(error);
+        window.alert('Credenciales Incorrectas');
       }
-    }
+    };
     // const
 
-    const actualizarCarrera = async(nombreCarrera) => {
-      const res = await fetch('http://localhost:3030/estudiante/actualizarCarrera', {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          numeroCuenta : userNumeroCuenta.value,
-          carrera: nombreCarrera
+    const actualizarCarrera = async (nombreCarrera) => {
+      const res = await fetch(
+        "http://localhost:3000/estudiante/actualizarCarrera",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            numeroCuenta: userNumeroCuenta.value,
+            carrera: nombreCarrera,
+          }),
+        }
+      );
 
-        })
-      })
-      
-      if(res.status === 200){
+      if (res.status === 200) {
         //AQUI SE VA A REDIRIGIR A LA PAGINA DEL ESTUDIANTE
+             router.push('/estudiantes');
       }
-    }
+    };
 
     onMounted(() => {
       // Mapea las rutas a los saludos correspondientes
@@ -250,13 +266,14 @@ export default {
       carreraPrincipalBoton,
       carreraSecundariaBoton,
       actualizarCarrera,
-      userNumeroCuenta
+      userNumeroCuenta,
     };
   },
 };
 </script>
 
 <style scoped>
+<<<<<<< HEAD
 @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
 .enlaceContrasenia{
   text-decoration-color: #282832;
@@ -265,27 +282,29 @@ export default {
   justify-content: flex-end;
 }
 .PopPup{
+=======
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
+.PopPup {
+>>>>>>> 67466ab284ef535b431eef8bef732156ac3c104a
   background-color: #282832;
-  border-radius:20px !important;
-
+  border-radius: 20px !important;
 }
 
-.textoPop{
+.textoPop {
   color: white;
-  font-family: 'Rubik';
-  font-size: 20px!important;
-  text-align: center!important;
+  font-family: "Rubik";
+  font-size: 20px !important;
+  text-align: center !important;
 }
 .botones {
   width: 50%;
   color: white;
-  font-family: 'Rubik';
+  font-family: "Rubik";
   display: flex;
   text-align: center;
   background-color: #77181e;
   margin: 15px 25%;
-  border-radius:20px !important;
-
+  border-radius: 20px !important;
 }
 .boton {
   background-color: #282832;
@@ -351,7 +370,7 @@ img {
   background-color: white;
 } */
 .icono {
-  color: rgb(5, 39, 103);
+  color: #282832;
 }
 
 .numeritos >>> input::-webkit-outer-spin-button,

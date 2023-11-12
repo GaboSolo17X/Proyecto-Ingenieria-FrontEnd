@@ -50,7 +50,7 @@ return{
       src:require('../assets/principal2.png'),
       titulo:'CALIFICACIONES',
       descripcion:'Se ha habilitado el proceso de visualización de notas, ingresa para ver tus calificaciones.',
-      ruta: '/matriculaEstudiantes',
+      ruta: '/calificacionesEstudiantes',
       altura: '370'
     },
     {

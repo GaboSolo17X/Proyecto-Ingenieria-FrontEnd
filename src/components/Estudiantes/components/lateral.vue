@@ -50,7 +50,7 @@
                 </v-col>
                 <v-col>
                   <div >
-                  <router-link to="/" active-class="amarillo" class="enlace"> 
+                  <router-link to="/certificadoEstudiantes" active-class="amarillo" class="enlace"> 
                   <v-list-item  style="margin-bottom: -10px;" title="Certificado ">
                   </v-list-item >
                   <v-list-item   style="margin-top: -10px;" title=" Académico">

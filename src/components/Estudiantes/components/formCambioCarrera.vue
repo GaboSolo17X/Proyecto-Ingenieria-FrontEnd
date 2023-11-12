@@ -115,7 +115,6 @@ export default {
         form.value.carr
         ) {
         isFormValid.value = true;
-        showAlertSuccess();
       } else {
         isFormValid.value = false;
       }

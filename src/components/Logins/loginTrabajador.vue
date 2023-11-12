@@ -81,7 +81,7 @@
             </v-row>
             <v-row justify="center">
               <v-col cols="12" md="12" lg="12" class="pt-0">
-                <v-btn class="boton" large rounded   @click="login(this.numeroEmp, this.claveEmp, this.router, this.nombre, this.dir)"
+                <v-btn class="boton mt-2" large rounded   @click="login(this.numeroEmp, this.claveEmp, this.router, this.nombre, this.dir)"
                   >Ingresar</v-btn
                 >
               </v-col>
@@ -187,7 +187,7 @@ export default {
     login: async (numeroEmp, claveEmp,router, nombre,dir) => {
       console.log(numeroEmp, claveEmp, nombre,dir)
       try { 
-        const res = await fetch('http://localhost:3030/'+nombre+'/login', {
+        const res = await fetch('http://localhost:3000/'+nombre+'/login', {
           method: "POST",
           credentials: "include",
           headers: {
@@ -206,6 +206,7 @@ export default {
         }
       } catch (error) {
         console.log(error)
+        window.alert('Credenciales Incorrectas');
       }
     },
   },

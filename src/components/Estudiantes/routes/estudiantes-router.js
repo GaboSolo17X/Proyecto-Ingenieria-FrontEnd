@@ -50,6 +50,18 @@ const estudianteRoutes = [
     component: () => import(/* webpackChunkName: "about" */ '../../../components/Estudiantes/views/reinicioContrasenia.vue'),
     
   },
+  {
+    path: '/certificadoEstudiantes',
+    name: 'certificadoEstudiantes',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Estudiantes/views/certificadoEstudiantes.vue'),
+    
+  },
+  {
+    path: '/calificacionesEstudiantes',
+    name: 'calificacionesEstudiantes',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Estudiantes/views/calificacionesEstudiantes.vue'),
+    
+  }
   
 ]
 
