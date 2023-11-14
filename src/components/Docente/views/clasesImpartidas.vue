@@ -28,12 +28,19 @@
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
 import Clase from  '../components/cardClase.vue'
+import { ref,onMounted } from 'vue';
 
 export default {
 components: {Lateral,Encabezado, Clase},
-data(){
-  return{
-    clases:[
+
+  setup(){
+    const docenteEs = () => {
+      console.log("El docente es")
+      let docente = localStorage.getItem('Docente')
+      console.log(docente)
+    };
+
+    const clases =[
       {
         title:'1000 - BASE DE DATOS',
         src: require('../assets/bases.png'),
@@ -45,9 +52,21 @@ data(){
         id:2
       }
     ]
-  }
+
+    onMounted(() => {
+      docenteEs();
+    });
+
+    return{
+      clases,
+      docenteEs,
+      
+
+    }
 }
 }
+
+
 </script>
 
 <style scoped>

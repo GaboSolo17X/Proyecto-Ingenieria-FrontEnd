@@ -4,11 +4,11 @@
         >
       <v-layout >
         <v-app-bar color="#282832" density="compact">
-          <v-app-bar-title >{{ title}}</v-app-bar-title>
+          <v-app-bar-title >{{title}}</v-app-bar-title>
   
           <template v-slot:append>
             <router-link to="/perfilEstudiante" active-class="amarillo" class="enlace">
-              <p class="nombreUser">Paco Mariachi</p>
+              <p class="nombreUser"></p>
               <div class="ImgUser"></div>  
             </router-link>
           </template>
@@ -19,7 +19,8 @@
   
   <script>
   export default {
-    props:{title:String},
+    props:{title:String,
+           datos:Object},
     setup(){
 
     }

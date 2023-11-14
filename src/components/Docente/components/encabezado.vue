@@ -6,7 +6,7 @@
           <v-app-bar-title >{{ title}}</v-app-bar-title>
   
           <template v-slot:append>
-            <p class="nombreUser">Paco Mariachi</p>
+            <p class="nombreUser">{{ }}</p>
             <div class="ImgUser"></div>  
           </template>
         </v-app-bar>
@@ -16,9 +16,14 @@
   
   <script>
   export default {
-    props:{title:String},
+    props:{title:String,
+          datos:Object},
     setup(){
 
+      console.log(datos)
+    return{
+    
+    };
     }
   }
   </script>
