@@ -1,6 +1,6 @@
 <template>
     <div >
-      <body style="background-color: white">
+      <body style="background-color: #282832">
         <v-row>
         <v-col cols="3">
           <Lateral/>

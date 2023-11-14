@@ -30,7 +30,7 @@
                 @mostrar-form="showEvaluacion"
               />
             </v-row>
-            <v-row  v-show="isClaseVisible"> 
+            <v-row v-show="isClaseVisible">
               <v-col></v-col>
               <v-col>
                 <v-btn
@@ -39,15 +39,22 @@
                   rounded="xl"
                   class="pa-6 boton"
                 >
-                  <router-link to="/notasPeriodoEstudiantes" class="subrayadoNo text">
+                  <router-link
+                    to="/notasPeriodoEstudiantes"
+                    class="subrayadoNo text"
+                  >
                     VER CALIFICACIONES</router-link
                   >
                 </v-btn>
               </v-col>
               <v-col></v-col>
             </v-row>
-            <FormEvaluacion v-show="isEvaluacionVisible" 
-            @mostrar-cards="showCards"/>
+            <FormEvaluacion
+              :clase="nombreClaseForm"
+              :docente="nombreCatedraticoForm"
+              v-show="isEvaluacionVisible"
+              @mostrar-cards="showCards"
+            />
           </div>
         </v-col>
       </v-row>
@@ -71,7 +78,7 @@ export default {
       {
         src: require("../assets/principal1.png"),
         nombre: "IS-410 Programación Orientada a Objetos",
-        catedratico:'Gabriel Omar Solorzano Oliva',
+        catedratico: "Gabriel Omar Solorzano Maquiavelico",
         horaInicio: "1800",
         horaFin: "1900",
         dias: "Lu,Ma,Mi,Ju",
@@ -81,7 +88,7 @@ export default {
       {
         src: require("../assets/principal2.png"),
         nombre: "IS-100 Introducción a la Ingeniería en Sistemas",
-        catedratico:'Gabriel Omar Solorzano Oliva',
+        catedratico: "Gabriel Omar Solorzano Oliva",
         horaInicio: "1800",
         horaFin: "1900",
         dias: "Lu,Ma,Mi,Ju",
@@ -91,7 +98,7 @@ export default {
       {
         src: require("../assets/principal3.png"),
         nombre: "IS-200 Arquitectura de computadoras",
-        catedratico:'Gabriel Omar Solorzano Oliva',
+        catedratico: "Gabriel Omar Solorzano Oliva",
         horaInicio: "1800",
         horaFin: "1900",
         dias: "Lu,Ma,Mi,Ju",
@@ -101,7 +108,7 @@ export default {
       {
         src: require("../assets/principal3.png"),
         nombre: "IS-710 Ecuaciones Diferenciales",
-        catedratico:'Gabriel Omar Solorzano Oliva',
+        catedratico: "Gabriel Omar Solorzano Oliva",
         horaInicio: "1800",
         horaFin: "1900",
         dias: "Lu,Ma,Mi,Ju",
@@ -110,23 +117,28 @@ export default {
       },
     ];
 
+    const nombreClaseForm = ref("");
+    const nombreCatedraticoForm = ref("");
 
-    const showEvaluacion = (nombre, catedratico) => {
-  isEvaluacionVisible.value = true;
-  isClaseVisible.value = false;
-  
-};
+    const showEvaluacion = (payload) => {
+      nombreClaseForm.value = payload.nombre;
+      nombreCatedraticoForm.value = payload.catedratico;
+      isEvaluacionVisible.value = true;
+      isClaseVisible.value = false;
+    };
 
-    const showCards =()=>{
-      isEvaluacionVisible.value =false;
-      isClaseVisible.value =true;
-    }
+    const showCards = () => {
+      isEvaluacionVisible.value = false;
+      isClaseVisible.value = true;
+    };
     return {
       cards,
       isClaseVisible,
       isEvaluacionVisible,
+      nombreClaseForm,
+      nombreCatedraticoForm,
       showEvaluacion,
-      showCards
+      showCards,
     };
   },
 };

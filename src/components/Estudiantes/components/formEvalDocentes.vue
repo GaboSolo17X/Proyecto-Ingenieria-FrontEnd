@@ -5,7 +5,7 @@
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
           <v-row class="encabezadoSolicitud">
             <v-col cols="6" style="text-align: center">
-              nombre clase y nombre catedratico
+              {{  clase }} <br> {{ docente}}
             </v-col>
             <v-col style="text-align: center">DEFICIENTE</v-col>
             <v-col cols="1" style="text-align: center">BUENO</v-col>
@@ -153,14 +153,14 @@
                 color="#282832"
                 size="large"
                 variant="elevated"
-              >
-                <router-link
+                @click="() => { $emit('mostrarCards'); goBack(); }"
+              >Volver
+                <!-- <router-link
                   to="/calificacionesEstudiantes"
                   class="subrayadoNo"
-                  @click="$emit('mostrarCards')"
                 >
                   Volver</router-link
-                >
+                > -->
               </v-btn>
             </v-col>
             <v-col></v-col>
@@ -174,8 +174,8 @@
 <script>
 import { onMounted, ref, watch } from "vue";
 export default {
-  props: ["form"],
-  setup(props) {
+  props: {clase:String, docente:String},
+  setup() {
     const isFormValid = ref(false);
     const form = ref({
       pregunta1: null,
@@ -202,6 +202,10 @@ export default {
         window.alert("Por favor complete todos los campos");
       }
     };
+    const goBack = () => {
+      // Puedes agregar alguna lógica adicional aquí si es necesario
+      window.location.reload()
+    };
 
     const showAlertSuccess = () => {
       window.alert("Se ha completado la evaluación correctamente :).");
@@ -216,6 +220,7 @@ export default {
       form,
       showAlertSuccess,
       onSubmit,
+      goBack
     };
   },
 };

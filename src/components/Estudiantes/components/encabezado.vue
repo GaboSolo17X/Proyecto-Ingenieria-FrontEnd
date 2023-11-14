@@ -49,10 +49,12 @@
     color: white;
   }
   .ImgUser{
+    background-size: cover; 
+  background-position: center; 
     background-image: url("../assets/usuarioPic.png");
     width: 38.5px;
   height: 40px;
-  border-radius: 360px;
+  border-radius: 50%;
   margin-right: 10px;
   }
   

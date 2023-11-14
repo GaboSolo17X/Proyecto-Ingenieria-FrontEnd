@@ -1,6 +1,6 @@
 <template>
   <v-col cols="6">
-    <v-form >
+    <v-form>
       <v-card
         class="mx-auto text mb-3 pb-2"
         max-width="310"
@@ -36,7 +36,7 @@
                 variant="flat"
                 rounded="xl"
                 class="buttom"
-                @click="$emit('mostrar-form', card.nombre, card.catedratico)"
+                @click="mostrarForm(card.nombre, card.catedratico)"
               >
                 Evaluar Docente
               </v-btn>
@@ -50,7 +50,14 @@
 <script>
 export default {
   props: ["card"],
-  setup() {},
+  setup(props, { emit }) {
+    const mostrarForm = (nombre,catedratico) => {
+      emit("mostrar-form", { nombre, catedratico });
+    };
+    return {
+      mostrarForm,
+    };
+  }
 };
 </script>
 
