@@ -5,7 +5,8 @@
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
           <v-row class="encabezadoSolicitud">
             <v-col cols="6" style="text-align: center">
-              {{  clase }} <br> {{ docente}}
+              {{ clase }} <br />
+              {{ docente }}
             </v-col>
             <v-col style="text-align: center">DEFICIENTE</v-col>
             <v-col cols="1" style="text-align: center">BUENO</v-col>
@@ -153,14 +154,13 @@
                 color="#282832"
                 size="large"
                 variant="elevated"
-                @click="() => { $emit('mostrarCards'); goBack(); }"
-              >Volver
-                <!-- <router-link
-                  to="/calificacionesEstudiantes"
-                  class="subrayadoNo"
-                >
-                  Volver</router-link
-                > -->
+                @click="
+                  () => {
+                    $emit('mostrarCards');
+                    goBack();
+                  }
+                "
+                >Volver
               </v-btn>
             </v-col>
             <v-col></v-col>
@@ -174,7 +174,7 @@
 <script>
 import { onMounted, ref, watch } from "vue";
 export default {
-  props: {clase:String, docente:String},
+  props: { clase: String, docente: String },
   setup() {
     const isFormValid = ref(false);
     const form = ref({
@@ -203,13 +203,18 @@ export default {
       }
     };
     const goBack = () => {
-      // Puedes agregar alguna lógica adicional aquí si es necesario
-      window.location.reload()
+      window.history.back();
+      form.value.pregunta1 = null;
+      form.value.pregunta2 = null;
+      form.value.pregunta3 = null;
+      form.value.pregunta4 = null;
+      form.value.pregunta5 = "";
+      form.value.pregunta6 = "";
     };
 
     const showAlertSuccess = () => {
       window.alert("Se ha completado la evaluación correctamente :).");
-      window.history.back();
+      window.location.reload();
     };
 
     const onSubmit = async () => {
@@ -220,7 +225,7 @@ export default {
       form,
       showAlertSuccess,
       onSubmit,
-      goBack
+      goBack,
     };
   },
 };

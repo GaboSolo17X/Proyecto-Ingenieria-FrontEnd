@@ -51,9 +51,9 @@
                 color="#282832"
                 size="large"
                 variant="elevated"
+                @click="goBack()"
               >
-              <router-link to=  "/solicitudesEstudiantes"  class="subrayadoNo">
-                Volver</router-link>
+                Volver
               </v-btn>
             </v-col>
           </v-row>
@@ -71,7 +71,6 @@ export default {
         justificacion: "",
     });
 
-    onMounted(async () => {});
 
     const isFormValid = ref(false);
 
@@ -81,6 +80,7 @@ export default {
         showAlertSuccess();
       } else {
         isFormValid.value = false;
+        window.alert("Por favor complete todos los campos");
       }
     };
 
@@ -91,15 +91,17 @@ export default {
 
     const onSubmit = async () => {
       validateForm();
-      if (isFormValid.value) {
-    //te regresa a la pagina principal de solicitudes
-      } 
     };
 
+    const goBack = () => {
+      window.history.back();
+      form.value.justificacion = ""
+    };
     return {
       form,
       showAlertSuccess,
-      onSubmit,
+      goBack,
+      onSubmit
     };
   },
 };
