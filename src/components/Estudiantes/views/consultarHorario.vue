@@ -65,7 +65,9 @@ export default {
                 edificio: 'B2',
                 dias: 'Sa',
                 horaInicio: '1400',
-                horaFinal: '1700'
+                horaFinal: '1700',
+                src: 'https://www.youtube.com/embed/LpoFBlH4wMI?si=ywdhA1YKtU1D81S9',
+                img: require('../assets/ing3.jpeg')
             }
         ];
 
