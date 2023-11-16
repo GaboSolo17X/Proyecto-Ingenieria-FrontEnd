@@ -49,12 +49,44 @@
             <v-col cols="3"><h3 class="titulos">Tus imágenes:</h3></v-col>
             <v-col>
               <v-row>
-                <CardFoto 
-              v-for="card in cards"
-              :key="card.Indice"
-              :card="card"
-              
-              />
+                <CardFoto
+                  v-for="card in cards"
+                  :key="card.Indice"
+                  :card="card"
+                />
+                <!-- esta es la card para subir imagen -->
+                <v-col cols="4">
+                  <v-card
+                    class="mx-auto text"
+                    color="white"
+                    rounded
+                    height="230px"
+                  >
+                    <v-row>
+                      
+                      <v-col class="pt-15 px-10">
+                        <v-file-input
+                          accept="image/png, image/jpeg, image/bmp"
+                          placeholder="Sube una nueva imagen"
+                          prepend-icon="fa-solid fa-camera"
+                          label="Nueva"
+                          small-chips
+                        ></v-file-input>
+                      </v-col>
+                    </v-row>
+                    
+                    <v-card-actions class="d-flex flex-column">
+                      <v-btn
+                        color="#282832"
+                        variant="flat"
+                        rounded="xl"
+                        class="px-10"
+                      >
+                        Subir
+                      </v-btn>
+                    </v-card-actions>
+                  </v-card></v-col
+                >
               </v-row>
             </v-col>
           </v-row>
@@ -82,9 +114,9 @@
 
 <script>
 import { onMounted, ref } from "vue";
-import CardFoto from './cardPerfil.vue';
+import CardFoto from "./cardPerfil.vue";
 export default {
-  components:{CardFoto},
+  components: { CardFoto },
   setup() {
     const clases = [
       { text: "Ecuaciones Diferenciales" },
@@ -130,13 +162,16 @@ export default {
     };
 
     return {
-      cards:[
-    {
-      Indice: 1,
-      src:require('../assets/usuarioPic.png')
-
-    }
-  ],
+      cards: [
+        {
+          Indice: 1,
+          src: require("../assets/usuarioPic.png"),
+        },
+        {
+          Indice: 2,
+          src: require("../assets/principal1.png"),
+        },
+      ],
       form,
       clases,
       handleFileChange,
