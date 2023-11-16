@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado title="Archivo CSV de Estudiantes" />
+          <Encabezado title="Archivo CSV de Estudiantes" v-if="trabajador" :datos="trabajador"/>
         </div>
         <div class="componentes" >
           <CardSubidoEstudents
@@ -22,15 +22,27 @@
 import Lateral from '../components/lateral.vue';
 import Encabezado from '../components/encabezado.vue';
 import CardSubidoEstudents from '../components/cardSubidoEstudents.vue';
+import { ref,onMounted } from 'vue';
 
 
 export default {
   components: { Lateral, Encabezado, CardSubidoEstudents },
-  setup() {
-
-    return {
+  setup(){
+      const trabajador=ref()
+      const docenteEs = async () => {
+      console.log("El docente es")
+      trabajador.value = JSON.parse(localStorage.getItem('Administrador'))
+      console.log(trabajador)
     };
-  },
+
+    onMounted(() => {
+      docenteEs();
+    });
+
+      return{
+        trabajador
+      }
+    }
 };
 </script>
 

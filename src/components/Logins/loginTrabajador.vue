@@ -27,7 +27,7 @@
                 </v-img>
               </v-col>
               <v-col cols="12" lg="12" md="12">
-                <h1 class="bien text-center">¡Bienvenido Puma {{puesto}}!</h1>
+                <h1 class="bien text-center">¡Bienvenidos Pumas {{puesto}}!</h1>
               </v-col>
               <v-col cols="12" lg="12" md="12">
                 <router-link to="/"
@@ -52,7 +52,7 @@
               <v-col lg="8" md="8" cols="12" class="pb-0">
                 <v-text-field
                 v-model="numeroEmp"
-                 :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',required]"
+                 :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos']"
                   class="shrink round"
                   dense
                   light
@@ -67,7 +67,7 @@
               <v-col lg="8" md="8" cols="12" class="py-0">
                 <v-text-field
                   v-model="claveEmp"
-                  :rules="[rules.required]"
+                  :rules="[(v) => !!v || 'Llenar campo vacio']"
                   class="shrink round"
                   dense
                   light
@@ -121,7 +121,7 @@ export default {
     const rules = ref({
     required: (value) => !!value || 'Llenar campo vacio',
     });
-    // const 
+   
 
     onMounted(() => {
       
@@ -172,6 +172,7 @@ export default {
     });
 
     return {
+      rules,
       puesto,
       dir,
       icon,
@@ -200,11 +201,13 @@ export default {
         });
         const data = await res.json();
         console.log(data.message);
-        console.log(data.docente)
 
+
+        if(data.message == "Credenciales Incorrectas" || data.message == "Error en el servidor"){
+          window.alert('Credenciales Incorrectas');
+        }else
         if(data.message=="Login exitoso"){
          
-          
           if(dir==='/docentes'){
             const infoUsuario =  JSON.stringify(data.docente)
             console.log(infoUsuario)
@@ -212,14 +215,17 @@ export default {
           } 
           if(dir==='/coordinador'){
             const infoUsuario = JSON.stringify( data.coordinador)
+            console.log(infoUsuario)
             localStorage.setItem('Coordinador',infoUsuario  )
           } 
           if(dir==='/administrador'){
              const infoUsuario = JSON.stringify( data.administrador)
+             console.log(infoUsuario)
             localStorage.setItem('Administrador', infoUsuario)
           } 
           if(dir==='/jefe'){
             const infoUsuario = JSON.stringify( data.jefe)
+            console.log(infoUsuario)
             localStorage.setItem('JefeDep', infoUsuario)
           } 
           router.push(dir);
@@ -227,7 +233,7 @@ export default {
         }
       } catch (error) {
         console.log(error)
-        window.alert('Credenciales Incorrectas');
+        // window.alert('Credenciales Incorrectas');
       }
     },
   },

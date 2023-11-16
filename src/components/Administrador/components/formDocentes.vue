@@ -10,7 +10,7 @@
             
         <v-text-field 
           v-model="form.name"
-          :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
+          :rules="[(v) => !!v || 'Campo Vacio',(v) => /^[a-zA-Z\s]+$/.test(v) || 'Solo letras permitidas', (v) => true]"
           class="mb-5" 
           label="Nombres" 
           hide-details="auto"
@@ -20,7 +20,7 @@
 
         <v-text-field 
           v-model="form.lastName"
-          :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
+          :rules="[(v) => !!v || 'Campo Vacio', (v) => /^[a-zA-Z\s]+$/.test(v) || 'Solo letras permitidas',(v) => true]"
           class="mb-5" 
           label="Apellidos" 
           hide-details="auto"
@@ -72,17 +72,17 @@
 
 
         <v-file-input 
-           v-model="form.imagen"
+          
            @change="handleFileChange"
-           show-size 
-           accept="image/*"
-           :rules="[(v) => !!v || 'Se requiere una imagen',(v) => true]" 
-           label="Imagen del docente"
+           :rules="[(v) => !!v || 'Se requiere una imagen']" 
+           accept=".png, .jpg, .jpeg"
            variant="solo-filled"
            rounded
+           
+           label="Imagen del docente"
            prepend-icon="fa-solid fa-image"
-           inner-append-icon="fa-solid fa-circle-xmark"
         ></v-file-input>
+
 
         <br />
         <v-btn
@@ -115,8 +115,9 @@ export default {
         carr: null,
         centroRe: null,
         email: '',
-        imagen: null,
+        // imagen: null,
     });
+    // v-model="form.imagen"
 
     onMounted(async ()=>{
       getCarreras();
@@ -147,6 +148,8 @@ export default {
       }
 
     }
+
+
     const validateForm = () => {
         if (
             form.value.name &&
@@ -154,8 +157,8 @@ export default {
             form.value.identidad &&
             form.value.carr &&
             form.value.centroRe &&
-            form.value.email &&
-            form.value.imagen 
+            form.value.email 
+            // form.value.imagen 
         ) {
             isFormValid.value = true;
         } else {
@@ -210,6 +213,7 @@ export default {
         form,
         centros,
         carreras,
+
         handleFileChange,
         pruebaRegistro,
         getCarreras,

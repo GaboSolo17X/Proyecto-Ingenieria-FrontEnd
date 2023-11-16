@@ -3,7 +3,7 @@
         <v-card class="contenidoNav" max-width="200" >
       <v-layout >
         <v-app-bar density="compact">
-          <v-app-bar-title >{{title}}</v-app-bar-title>
+          <v-app-bar-title >{{nombre ? nombre +' '+ title:title}}</v-app-bar-title>
   
           <template v-slot:append>
             <p class="nombreUser">{{ datos.nombres }}</p>
@@ -22,6 +22,7 @@
   <script>
   export default {
     props:{title:String,
+           nombre:String,
            datos:Object},
     setup(){
     return{

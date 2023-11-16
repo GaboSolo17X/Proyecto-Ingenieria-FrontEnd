@@ -49,9 +49,7 @@
                     class="shrink round"
                     v-model="numeroCuenta"
                     :rules="[
-                      (v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',
-                      required,
-                    ]"
+                      (v) => /^\d+$/.test(v) || 'Solo se permiten dígitos']"
                     dense
                     light
                     label="Numero de cuenta"
@@ -179,8 +177,12 @@ export default {
           }),
         });
         const data = await res.json();
+        console.log(data.message)
 
-        if (res.json.message != "Credenciales Incorrectas") {
+        if(data.message == "Credenciales Incorrectas" || data.message == "Error en el servidor"){
+          window.alert('Credenciales Incorrectas');
+        }
+        if (data.message != "Credenciales Incorrectas") {
           let { carreraSecundaria, carrera } = data.estudianteLogin;
 
           carreraPrincipalBoton.value = carrera;
@@ -208,7 +210,7 @@ export default {
         
       } catch (error) {
         console.log(error);
-        // window.alert('Credenciales Incorrectas');
+       
       }
     };
     // const
@@ -262,6 +264,7 @@ export default {
     
 
     return {
+       rules,
       login,
       dialog,
       puesto,
