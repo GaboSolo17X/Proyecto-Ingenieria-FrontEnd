@@ -18,7 +18,7 @@
     max-width="350" height="310">
             <v-img src="../assets/seguridad.png" class="clase-imagen">
             </v-img>
-                <v-card-title>Subir video introductorio {{ idSeccion }}</v-card-title>
+                <v-card-title>Subir video introductorio</v-card-title>
             <v-card-actions class="espacio-boton">
                 <v-form  @submit.prevent="onSubmit">
                     <div class="wrapper">

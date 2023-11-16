@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado :title="$route.params.title" v-if="docente" :datos="docente"/>
+          <Encabezado :title="$route.params.title" :nombre="$route.params.nombre " v-if="docente" :datos="docente"/>
         </div>
         <h1 class="componentesDocentes">Informacion de cada clase</h1>
         <section class="clases">

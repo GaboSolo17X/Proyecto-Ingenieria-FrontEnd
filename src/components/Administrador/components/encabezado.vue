@@ -6,8 +6,14 @@
           <v-app-bar-title >{{ title}}</v-app-bar-title>
   
           <template v-slot:append>
-            <p class="nombreUser">Paco Mariachi</p>
-            <div class="ImgUser"></div>  
+            <p class="nombreUser">{{datos.nombres}}</p>
+            <v-avatar>
+              <v-avatar color="red">
+                  <v-icon dark>
+                    mdi-account-circle
+                  </v-icon>
+                </v-avatar>
+              </v-avatar>   
           </template>
         </v-app-bar>
       </v-layout>
@@ -16,7 +22,8 @@
   
   <script>
   export default {
-    props:{title:String},
+    props:{title:String,
+           datos:Object},
     setup(){
 
     }

@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado title="Planificación Académica" />
+          <Encabezado title="Planificación Académica" v-if="trabajador" :datos="trabajador" />
         </div>
         <h1 class="componentesDocentes">Cargar interfaz de planificacion</h1>
       </v-col>
@@ -18,9 +18,25 @@
 <script>
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
-
+import { ref,onMounted } from 'vue';
 export default {
 components: {Lateral,Encabezado},
+setup(){
+      const trabajador=ref()
+      const docenteEs = async () => {
+      console.log("El docente es")
+      trabajador.value = JSON.parse(localStorage.getItem('Administrador'))
+      console.log(trabajador)
+    };
+
+    onMounted(() => {
+      docenteEs();
+    });
+
+      return{
+        trabajador
+      }
+    }
 }
 </script>
 
