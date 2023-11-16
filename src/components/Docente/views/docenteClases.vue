@@ -85,6 +85,7 @@ setup(){
                 banner: 'http://localhost:3000/'+item.bannerAsignatura,
                 horaIni: seccionItem.horaInicial,
                 facultad: item.nombreCarrera,
+                nombre:seccionItem.nombreSeccion
                 // Agrega otras propiedades que desees mostrar
               });
 

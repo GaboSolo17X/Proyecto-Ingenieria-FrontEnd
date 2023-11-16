@@ -10,7 +10,7 @@
       <v-form class="pa-9"  @submit.prevent="onSubmit">
         <v-text-field 
           v-model="form.name"
-          :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
+          :rules="[(v) => !!v || 'No se permiten campos vacios']"
           class="mb-5" 
           label="Nombres" 
           hide-details="auto"
@@ -20,7 +20,7 @@
 
         <v-text-field 
           v-model="form.lastName"
-          :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
+          :rules="[(v) => !!v || 'No se permiten campos vacios']"
           class="mb-5" 
           label="Apellidos" 
           hide-details="auto"
@@ -31,7 +31,7 @@
         <v-select
           v-model="form.carrPri"
           :items="carreras"
-          :rules="[(v) => !!v || 'Seleccione una carrera',(v) => true]"
+          :rules="[(v) => !!v || 'Seleccione una carrera']"
           label="Carrera Principal"
           required
           variant="solo-filled"
@@ -43,7 +43,7 @@
           v-model="form.carrSec"
           :items="carrerasSec"
           
-          :rules="[(v) => !!v || 'Seleccione una carrera', (v) => true]"
+          :rules="[(v) => !!v || 'Seleccione una carrera']"
           label="Carrera Secundaria"
           required
           variant="solo-filled"
@@ -77,7 +77,7 @@
         <v-text-field
           v-model="form.email"
           
-          :rules="[(v) => /^[a-z0-9+.-]+@[a-z.-]+\.[a-z]+$/i.test(v) || 'Ingrese un correo electrónico válido', (v) => true]"
+          :rules="[(v) => /^[a-z0-9+.-]+@[a-z.-]+\.[a-z]+$/i.test(v) || 'Ingrese un correo electrónico válido']"
           class="mb-2"
           clearable
           label="Correo Personal"
@@ -88,7 +88,7 @@
         <v-select
           v-model="form.centroRe"
           :items="centros"
-          :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
+          :rules="[(v) => !!v || 'No se permiten campos vacios']"
           label="Centro Regional"
           required
           variant="solo-filled"
@@ -96,9 +96,11 @@
         ></v-select>
 
         <v-file-input 
-           v-model="form.certificado"
+         
            show-size 
-           :rules="[(v) => !!v || 'Se requiere una imagen',(v) => true]"
+           accept=".png, .jpg, .jpeg"
+           :rules="[(v) => !!v || 'Se requiere una imagen']"
+           
            label="Certificado de Secundaria"
            variant="solo-filled"
            rounded
@@ -143,7 +145,7 @@ setup(){
      telefono: '',
      email: '',
      centroRe: null,
-     certificado: null,
+    //  certificado: null,
    });
 
    const centros = ['UNAH-VS', 'UNAH-CU', 'CURLA'];
@@ -244,8 +246,8 @@ const validateForm = () => {
     form.value.identidad &&
     form.value.telefono &&
     form.value.email &&
-    form.value.centroRe &&
-    form.value.certificado
+    form.value.centroRe 
+    // form.value.certificado
   ) {
     isFormValid.value = true;
   } else {

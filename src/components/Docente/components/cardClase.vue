@@ -5,15 +5,15 @@
     <v-card class="clase mx-auto"
     max-width="350" max-height="500px">
 
-    <div class="contIMG">
+
 
             <v-img :src="clase.banner" class="clase-imagen">
                 </v-img>
-        </div>
-                <v-card-title>{{clase.nombreClase}}</v-card-title>
+       
+                <v-card-title>{{clase.nombre+' - '+clase.nombreClase}}</v-card-title>
                 <v-card-subtitle>Facultad de {{ clase.facultad }}</v-card-subtitle>
             <v-card-actions class="espacio-boton">
-                <v-btn large rounded color="white" class="botoncito" text-center @click="cambiarPagina(clase.nombreClase, clase.id, clase.idSeccion)">ver</v-btn>
+                <v-btn large rounded color="white" class="botoncito" text-center @click="cambiarPagina(clase.nombreClase, clase.id, clase.idSeccion,clase.nombre)">ver</v-btn>
             </v-card-actions>
             <v-spacer></v-spacer>
     </v-card>
@@ -27,8 +27,8 @@ export default ({
     name:'clase',
     props:['clase'],
     methods:{
-        cambiarPagina(title, id, idSeccion){
-            this.$router.push({name:'clase',params:{title:title,idSeccion:idSeccion}});
+        cambiarPagina(title, id, idSeccion, nombre){
+            this.$router.push({name:'clase',params:{title:title,idSeccion:idSeccion,nombre:nombre}});
             // this.$router.push({name:'claseid',params:{idSeccion:idSeccion}});
             console.log("Este es el nombre de la clase "+title)
             console.log("Este es el id de la clase "+id)
@@ -63,8 +63,7 @@ export default ({
 .clase-imagen .imagen{
     width: 100%;
     height: 50px;
-    background-size: cover;
-    background-position: center;
+
 }
 
 
