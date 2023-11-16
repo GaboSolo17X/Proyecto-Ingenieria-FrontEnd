@@ -3,11 +3,16 @@
         <v-card class="contenidoNav" max-width="200" >
       <v-layout >
         <v-app-bar density="compact">
-          <v-app-bar-title >{{ title}}</v-app-bar-title>
+          <v-app-bar-title >{{title}}</v-app-bar-title>
   
           <template v-slot:append>
-            <p class="nombreUser">{{ }}</p>
-            <div class="ImgUser"></div>  
+            <p class="nombreUser">{{ datos.nombres }}</p>
+              <v-avatar>
+                <v-img
+                   :src="'http://localhost:3000/'+datos.foto"
+                   alt="John"
+                 ></v-img>
+              </v-avatar>  
           </template>
         </v-app-bar>
       </v-layout>
@@ -17,10 +22,8 @@
   <script>
   export default {
     props:{title:String,
-          datos:Object},
+           datos:Object},
     setup(){
-
-      console.log(datos)
     return{
     
     };

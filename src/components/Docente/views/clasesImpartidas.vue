@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado  title="Felicidades por impartir estas clases"/>
+          <Encabezado  title="Felicidades por impartir estas clases" v-if="docente" :datos="docente"/>
         </div>
         <div class="cuadrados">
         <h1 class="componentesDocentes">Clases impartidas</h1>
@@ -34,9 +34,10 @@ export default {
 components: {Lateral,Encabezado, Clase},
 
   setup(){
-    const docenteEs = () => {
+    const docente=ref()
+    const docenteEs = async () => {
       console.log("El docente es")
-      let docente = localStorage.getItem('Docente')
+      docente.value = JSON.parse(localStorage.getItem('DocentePrueba'))
       console.log(docente)
     };
 
@@ -59,7 +60,7 @@ components: {Lateral,Encabezado, Clase},
 
     return{
       clases,
-      docenteEs,
+      docente,
       
 
     }

@@ -6,12 +6,11 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado :title="$route.params.title"/>
+          <Encabezado :title="$route.params.title" v-if="docente" :datos="docente"/>
         </div>
         <h1 class="componentesDocentes">Informacion de cada clase</h1>
         <section class="clases">
-          <Video
-          />
+          <Video :idSeccion="$route.params.idSeccion"/>
         </section>
       </v-col>
     </v-row>
@@ -23,13 +22,38 @@
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
 import Video from  '../components/cardVideo.vue'
+import { ref,onMounted } from 'vue'
 
 export default {
 components: {Lateral,Encabezado, Video},
+// props: {
+//     idSeccion: {
+//       type: String,
+//     }
+// },
 created() {
     // Add a console.log statement to check the received title
     console.log('Received title:', this.$route.params.title);
+    console.log('Received idSeccion:', this.$route.params.idSeccion);
+    // console.log('Valor de miProp:', this.idSeccion);
   },
+
+  setup(){
+    
+
+    const docente=ref()
+    const docenteEs = async () => {
+      console.log("El docente es")
+      docente.value = JSON.parse(localStorage.getItem('DocentePrueba'))
+      console.log(docente)
+    };
+    onMounted(() => {
+      docenteEs();
+    });
+    return{
+      docente
+    }
+  }
 }
 </script>
 
