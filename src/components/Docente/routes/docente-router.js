@@ -27,7 +27,7 @@ const docenteRoutes = [
   
   },
    {
-    path: '/docenteClases/:title',
+    path: '/docenteClases/:title&:idSeccion',
     name: 'clase',
     component: () => import(/* webpackChunkName: "about" */ '../../../components/Docente/views/infoClase.vue'),
   

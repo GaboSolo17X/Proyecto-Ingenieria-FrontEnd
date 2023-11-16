@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado  title="Reiniciar clave"/>
+          <Encabezado  title="Reiniciar clave" v-if="docente" :datos="docente"/>
         </div>
         <h1 class="componentesDocentes">reiniciar clave?</h1>
       </v-col>
@@ -18,9 +18,26 @@
 <script>
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
+import { ref,onMounted } from 'vue'
 
 export default {
 components: {Lateral,Encabezado},
+
+setup(){
+  const docente=ref()
+    const docenteEs = async () => {
+      console.log("El docente es")
+      docente.value = JSON.parse(localStorage.getItem('DocentePrueba'))
+      console.log(docente)
+    };
+    onMounted(() => {
+      docenteEs();
+    });
+
+    return{
+      docente,
+    }
+}
 }
 </script>
 

@@ -32,7 +32,7 @@
               <v-list-item  title="subida de notas" ></v-list-item>
             </router-link>
             </div>
-            <div class="texto">
+            <!-- <div class="texto">
             <div class="iconos"><v-icon  icon="fa:fas fa-solid fa-user-xmark" ></v-icon></div>
               <div >
                 <router-link to="/reinicioClave"  active-class="amarillo" class="enlace">
@@ -40,7 +40,7 @@
                 </router-link>
               </div>
               
-            </div>
+            </div> -->
           </v-list>
   
           <template v-slot:append>

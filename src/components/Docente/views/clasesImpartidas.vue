@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado  title="Felicidades por impartir estas clases"/>
+          <Encabezado  title="Felicidades por impartir estas clases" v-if="docente" :datos="docente"/>
         </div>
         <div class="cuadrados">
         <h1 class="componentesDocentes">Clases impartidas</h1>
@@ -28,12 +28,20 @@
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
 import Clase from  '../components/cardClase.vue'
+import { ref,onMounted } from 'vue';
 
 export default {
 components: {Lateral,Encabezado, Clase},
-data(){
-  return{
-    clases:[
+
+  setup(){
+    const docente=ref()
+    const docenteEs = async () => {
+      console.log("El docente es")
+      docente.value = JSON.parse(localStorage.getItem('DocentePrueba'))
+      console.log(docente)
+    };
+
+    const clases =[
       {
         title:'1000 - BASE DE DATOS',
         src: require('../assets/bases.png'),
@@ -45,9 +53,21 @@ data(){
         id:2
       }
     ]
-  }
+
+    onMounted(() => {
+      docenteEs();
+    });
+
+    return{
+      clases,
+      docente,
+      
+
+    }
 }
 }
+
+
 </script>
 
 <style scoped>

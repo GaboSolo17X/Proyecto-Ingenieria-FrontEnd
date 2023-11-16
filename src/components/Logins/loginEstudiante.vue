@@ -197,11 +197,18 @@ export default {
 
           }
         }
+
+        const token = data.token;
+        console.log(token)
+        
+        localStorage.setItem('Estudiante', token)
+        
+
         //Aqui esta el error de este data intenta sacar info que no esta
         
       } catch (error) {
         console.log(error);
-        window.alert('Credenciales Incorrectas');
+        // window.alert('Credenciales Incorrectas');
       }
     };
     // const
@@ -251,6 +258,8 @@ export default {
 
       nombre.value = "estudiante";
     });
+
+    
 
     return {
       login,

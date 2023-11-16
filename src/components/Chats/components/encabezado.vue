@@ -1,18 +1,16 @@
 
   <template >
-        <v-card class="contenidoNav" max-width="200" >
+        <v-card class="contenidoNav" max-width="200" 
+        >
       <v-layout >
-        <v-app-bar density="compact">
+        <v-app-bar color="#282832" density="compact">
           <v-app-bar-title >{{title}}</v-app-bar-title>
   
           <template v-slot:append>
-            <p class="nombreUser">{{ datos.nombres }}</p>
-              <v-avatar>
-                <v-img
-                   :src="'http://localhost:3000/'+datos.foto"
-                   alt="John"
-                 ></v-img>
-              </v-avatar>  
+            <router-link to="/perfilEstudiante" active-class="amarillo" class="enlace">
+              <p class="nombreUser"></p>
+              <div class="ImgUser"></div>  
+            </router-link>
           </template>
         </v-app-bar>
       </v-layout>
@@ -24,9 +22,7 @@
     props:{title:String,
            datos:Object},
     setup(){
-    return{
-    
-    };
+
     }
   }
   </script>
@@ -34,34 +30,39 @@
   <style scoped>
   @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;800&display=swap');
 
-.v-app-bar{
-  height: 60px;
-  border-bottom: solid;
-  border-bottom-color:  #77181E;
-  box-shadow: none !important;
+  .enlace{
+  padding: left 2px, !important;
+  color: white;
+  text-decoration: none !important;
+  display: flex;
+  flex-wrap: nowrap;
 }
 
+.amarillo{
+  color: #FBD411;
+}
 .contenidoNav{
     width: 50%;
 }
   .v-app-bar-title{
     font-size: 30px;
-    font-family: 'Rubik', sans-serif;
-    color: #77181E;
-    
+    font-family: 'Rubik', sans-serif ;
+    color: white;
+    font-weight: 800;
   }
   .ImgUser{
     background-image: url("../assets/usuarioPic.png");
     width: 38.5px;
-height: 40px;
-border-radius: 360px;
-margin-right: 10px;
+  height: 40px;
+  border-radius: 360px;
+  margin-right: 10px;
   }
   
   .nombreUser{
     font-family: 'Rubik', sans-serif;
     margin-right: 30px;
-    color: #77181E;
+    padding-top: 6px;
+    color: white;
+    font-weight: 800;
   }
-
   </style>

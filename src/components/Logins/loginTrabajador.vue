@@ -200,9 +200,30 @@ export default {
         });
         const data = await res.json();
         console.log(data.message);
+        console.log(data.docente)
 
         if(data.message=="Login exitoso"){
-          router.push(dir); 
+         
+          
+          if(dir==='/docentes'){
+            const infoUsuario =  JSON.stringify(data.docente)
+            console.log(infoUsuario)
+            localStorage.setItem('DocentePrueba',infoUsuario)
+          } 
+          if(dir==='/coordinador'){
+            const infoUsuario = JSON.stringify( data.coordinador)
+            localStorage.setItem('Coordinador',infoUsuario  )
+          } 
+          if(dir==='/administrador'){
+             const infoUsuario = JSON.stringify( data.administrador)
+            localStorage.setItem('Administrador', infoUsuario)
+          } 
+          if(dir==='/jefe'){
+            const infoUsuario = JSON.stringify( data.jefe)
+            localStorage.setItem('JefeDep', infoUsuario)
+          } 
+          router.push(dir);
+          
         }
       } catch (error) {
         console.log(error)

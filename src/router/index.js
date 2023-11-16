@@ -3,6 +3,7 @@ import admisionRouter from "../components/Admisiones/routes/admin-router";
 import adminRouter from "../components/Administrador/routes/administrador-router";
 import docenteRouter from "../components/Docente/routes/docente-router";
 import estudianteRouter from "../components/Estudiantes/routes/estudiantes-router"
+import chatRouter from "../components/Chats/routes/chat-router"
 
 
 const routes = [
@@ -19,7 +20,7 @@ const routes = [
   {
     path: '/docentes',
     name: 'docentes',
-    component: () => import(/* webpackChunkName: "about" */ '../views/LandingViews/Docentes.vue'),
+    component: () => import(/* webpackChunkName: "about" */ '../components/Docente/views/docenteClases.vue'),
    
   },
   {
@@ -79,7 +80,8 @@ const routes = [
   ...admisionRouter.options.routes,
   ...adminRouter.options.routes,
   ...docenteRouter.options.routes,
-  ...estudianteRouter.options.routes
+  ...estudianteRouter.options.routes,
+  ...chatRouter.options.routes
 
 ]
 
