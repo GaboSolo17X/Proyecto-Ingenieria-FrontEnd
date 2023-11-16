@@ -20,14 +20,16 @@
         </div>
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
           <p>Seleccione las clases que desea cancelar</p>
-          <v-list
-            v-model="clasesSeleccionadas"
-            class="checkboxs elevation-3 mb-3"
-          >
+          <v-list class="checkboxs elevation-3 mb-3">
             <v-list-item v-for="(clase, index) in clases" :key="index">
               <v-row>
                 <v-col>
-                  <input type="checkbox" /><label class="ml-3" style="color: rgb(118, 118, 118);">{{ clase.text }}</label >
+                  <input
+                    type="checkbox"
+                    v-model="form.clasesSeleccionadas[index]"
+                  /><label class="ml-3" style="color: rgb(118, 118, 118)">{{
+                    clase.text
+                  }}</label>
                 </v-col>
               </v-row>
             </v-list-item>
@@ -74,10 +76,9 @@
                 color="#282832"
                 size="large"
                 variant="elevated"
+                @click="goBack()"
               >
-                <router-link to="/solicitudesEstudiantes" class="subrayadoNo">
-                  Volver</router-link
-                >
+                Volver
               </v-btn>
             </v-col>
           </v-row>
@@ -96,9 +97,10 @@ export default {
       { text: "Dibujo II" },
       { text: "Ingenieria de Software" },
     ];
+
     const isFormValid = ref(false);
     const form = ref({
-      clasesSeleccionadas: null,
+      clasesSeleccionadas: [],
       pdf: null,
       justificacion: "",
     });
@@ -107,16 +109,15 @@ export default {
       if (
         form.value.justificacion &&
         form.value.pdf &&
-        form.value.clasesSeleccionadas
+        form.value.clasesSeleccionadas.length > 0
       ) {
         isFormValid.value = true;
         showAlertSuccess();
       } else {
         isFormValid.value = false;
+        window.alert("Por favor complete todos los campos");
       }
     };
-
-  
 
     const showAlertSuccess = () => {
       window.alert("Se ha enviado la solictud correctamente.");
@@ -125,15 +126,20 @@ export default {
 
     const onSubmit = async () => {
       validateForm();
-      if (isFormValid.value) {
-         //te regresa a la pagina principal de solicitudes
-      }
+    };
+
+    const goBack = () => {
+      window.history.back();
+      form.value.justificacion = "",
+        form.value.pdf = null,
+        form.value.clasesSeleccionadas = []
     };
 
     return {
       form,
       clases,
       showAlertSuccess,
+      goBack,
       onSubmit,
     };
   },

@@ -109,6 +109,7 @@ export default {
         showAlertSuccess();
       } else {
         isFormValid.value = false;
+        window.alert("Por favor complete todos los campos");
       }
     };
 
@@ -118,12 +119,7 @@ export default {
     };
 
     const onSubmit = async () => {
-      validateForm(); // Validar el formulario antes de enviar
-
-      if (isFormValid.value) {
-        // Realizar el envío del formulario si es válido
-        console.log(form.value);
-      }
+      validateForm(); 
     };
 
     return {

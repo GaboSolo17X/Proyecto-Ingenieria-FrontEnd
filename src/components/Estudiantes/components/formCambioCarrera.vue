@@ -62,10 +62,9 @@
                 color="#282832"
                 size="large"
                 variant="elevated"
+                @click="goBack()"
               >
-                <router-link to="/solicitudesEstudiantes" class="subrayadoNo">
-                  Volver</router-link
-                >
+                Volver 
               </v-btn>
             </v-col>
           </v-row>
@@ -85,11 +84,11 @@ export default {
       justificacion: "",
       carr: null,
     });
-    
+
     onMounted(async () => {
       getCarreras();
     });
-    
+
     const getCarreras = async () => {
       try {
         const res = await fetch("http://localhost:3030/carreras/", {
@@ -110,32 +109,35 @@ export default {
     };
 
     const validateForm = () => {
-      if (
-        form.value.justificacion &&
-        form.value.carr
-        ) {
+      if (form.value.justificacion && form.value.carr) {
         isFormValid.value = true;
+        showAlertSuccess();
       } else {
         isFormValid.value = false;
+        window.alert("Por favor complete todos los campos");
       }
+    };
+
+    const goBack = () => {
+      window.history.back();
+      form.value.justificacion= "",
+      form.value.carr= null
     };
 
     const showAlertSuccess = () => {
       window.alert("Se ha enviado la solictud correctamente.");
+      window.history.back();
     };
 
     const onSubmit = async () => {
       validateForm();
-      if (isFormValid.value) {
-        showAlertSuccess();
-        window.history.back(); //te regresa a la pagina principal de solicitudes
-      }
     };
 
     return {
       form,
       carreras,
       showAlertSuccess,
+      goBack,
       onSubmit,
     };
   },
