@@ -34,7 +34,11 @@
           <v-col class="right-side text-center">
             <v-row justify="center">
               <v-col class="pb-0">
-                <v-icon icon="fa-solid fa-user" base-color="red" class="icono"></v-icon>
+                <v-icon
+                  icon="fa-solid fa-user"
+                  base-color="red"
+                  class="icono"
+                ></v-icon>
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -99,7 +103,10 @@
             </v-row>
             <v-row justify="center">
               <v-col lg="8" md="8" cols="12" class="py-0">
-                <router-link to="/reinicioClaveEstudiantes" class="enlaceContrasenia mb-5"> 
+                <router-link
+                  to="/reinicioClaveEstudiantes"
+                  class="enlaceContrasenia mb-5"
+                >
                   ¿Olvidaste tu contraseña?
                 </router-link>
               </v-col>
@@ -189,23 +196,18 @@ export default {
 
           if (!(carreraSecundaria == null)) {
             dialog.value = true;
-       
           } else {
             //AQUI TAMBIEN SE VA A REDIRIGIR A LA PAGINA DEL ESTUDIANTE
             console.log(res.json.message);
-            router.push('/estudiantes');
+            const infoUsuario = data.estudiante;
+            console.log(infoUsuario);
 
+            localStorage.setItem("Estudiante", infoUsuario);
+            router.push("/estudiantes");
           }
         }
 
-        const token = data.token;
-        console.log(token)
-        
-        localStorage.setItem('Estudiante', token)
-        
-
         //Aqui esta el error de este data intenta sacar info que no esta
-        
       } catch (error) {
         console.log(error);
         // window.alert('Credenciales Incorrectas');
@@ -230,7 +232,7 @@ export default {
 
       if (res.status === 200) {
         //AQUI SE VA A REDIRIGIR A LA PAGINA DEL ESTUDIANTE
-             router.push('/estudiantes');
+        router.push("/estudiantes");
       }
     };
 
@@ -259,8 +261,6 @@ export default {
       nombre.value = "estudiante";
     });
 
-    
-
     return {
       login,
       dialog,
@@ -282,14 +282,14 @@ export default {
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
-.enlaceContrasenia{
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
+.enlaceContrasenia {
   text-decoration-color: #282832;
   color: #282832;
   display: flex;
   justify-content: flex-end;
 }
-.PopPup{
+.PopPup {
   background-color: #282832;
   border-radius: 20px !important;
 }

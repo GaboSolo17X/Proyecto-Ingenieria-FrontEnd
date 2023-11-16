@@ -19,7 +19,9 @@
   
   <script>
   export default {
-    props:{title:String},
+    props:{title:String,
+    datos:Object
+  },
     setup(){
 
     }
