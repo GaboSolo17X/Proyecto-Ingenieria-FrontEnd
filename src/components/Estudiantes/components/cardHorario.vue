@@ -13,7 +13,7 @@
 
     <v-card-text>
         
-        <v-dialog width="500">
+       <v-dialog width="500">
     <template v-slot:activator="{ props }">
       <v-btn
         block
@@ -27,8 +27,27 @@
 
     <template v-slot:default="{ isActive }">
       <v-card title="Introduccion a la clase">
+        <v-divider></v-divider>
+        <v-card-text class="py-0 pt-5">
+      <v-row align="center" no-gutters>
+        <v-col
+          cols="3"
+        >
+          <v-img
+            cover
+            height="100"
+            width="100"
+            :src="clase.img"
+    ></v-img>
+        </v-col>
+
+        <v-col cols="6" class="text-left">
+          Lorem ipsum alalalalalala soy su profe
+        </v-col>
+      </v-row>
+    </v-card-text>
         <v-card-text>
-        Aqui va un videito de youtube 
+    <iframe width="450" height="250" :src="clase.src" title="YouTube video player" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share" allowfullscreen></iframe>
         </v-card-text>
 
         <v-card-actions>

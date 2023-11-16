@@ -45,7 +45,9 @@ export default {
                 edificio: 'B2',
                 dias: 'Lu, Ma, Mi',
                 horaInicio: '0900',
-                horaFinal: '1000'
+                horaFinal: '1000',
+                src:'https://www.youtube.com/embed/6q0JnftlH-I?si=DhrQ64paZ-W8Mc2i',
+                img: require('../assets/ing1.jpeg')
             },
             {
                 asignatura: 'Auditoria informatica',
@@ -53,7 +55,9 @@ export default {
                 edificio: 'B1',
                 dias: 'Lu, Ma, Mi, Ju',
                 horaInicio: '0700',
-                horaFinal: '0800'
+                horaFinal: '0800',
+                src: 'https://www.youtube.com/embed/DUT5rEU6pqM?si=FHhwD8VXdVaJ8f_H',
+                img: require('../assets/ing2.jpeg')
             },
             {
                 asignatura: 'Disenio de compiladores',
