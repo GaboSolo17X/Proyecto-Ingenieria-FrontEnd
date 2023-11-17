@@ -8,7 +8,7 @@
         </v-col>
         <v-col>
           <div class="contenido">
-            <Encabezado title="Consultar horario" />
+            <Encabezado title="Consultar horario" v-if="estudiante" :datos="estudiante"/>
           </div>
           <div class="componentesDocentes">
             <TabClases />
@@ -29,11 +29,28 @@ import Lateral from "../components/lateral.vue";
 import Encabezado from "../components/encabezado.vue";
 import TabClases from '../components/tabClases.vue'
 import Canceladas from '../components/cardCancelada.vue'
-import { ref } from "vue";
+import { ref,onMounted } from 'vue'
 
 export default {
   components: { Lateral, Encabezado, Canceladas, TabClases },
-  
+  setup(){
+    
+
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+    return{
+      estudiante
+    }
+
+    
+  }
 };
 </script>
 

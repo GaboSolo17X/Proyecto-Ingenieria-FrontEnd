@@ -7,7 +7,7 @@
         </v-col>
         <v-col>
           <div class="contenido">
-            <Encabezado title="Tus Calificaciones" />
+            <Encabezado title="Tus Calificaciones" v-if="estudiante" :datos="estudiante" />
           </div>
           <v-row v-show="isClaseVisible">
             <v-col class="rubik infoEvaluacion align-center d-flex flex-column">
@@ -67,7 +67,7 @@ import CardClase from "../components/cardClase.vue";
 import Lateral from "../components/lateral.vue";
 import Encabezado from "../components/encabezado.vue";
 import FormEvaluacion from "../components/formEvalDocentes.vue";
-import { ref } from "vue";
+import { ref,onMounted } from "vue";
 
 export default {
   components: { CardClase, Lateral, Encabezado, FormEvaluacion },
@@ -131,14 +131,28 @@ export default {
       isEvaluacionVisible.value = false;
       isClaseVisible.value = true;
     };
+
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+    
+
     return {
       cards,
       isClaseVisible,
       isEvaluacionVisible,
       nombreClaseForm,
       nombreCatedraticoForm,
+      estudiante,
       showEvaluacion,
       showCards,
+      
     };
   },
 };

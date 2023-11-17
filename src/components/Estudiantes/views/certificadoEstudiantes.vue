@@ -7,7 +7,7 @@
         </v-col>
         <v-col cols="8">
           <div class="contenido">
-            <Encabezado  title="Certificado de estudios"/>
+            <Encabezado  title="Certificado de estudios" v-if="estudiante" :datos="estudiante"/>
           </div>
           <div class="componentesDocentes">
                 <CardCertificado/>
@@ -24,9 +24,12 @@
   import Lateral from '../components/lateral.vue'
   import Encabezado from '../components/encabezado.vue'
   import CardCertificado from '../components/cardCertificado.vue'
-  
+  import { ref,onMounted } from 'vue'
+
   export default {
   components:{CardCertificado,Lateral,Encabezado},
+
+  
   data(){
   return{
     cards:[
@@ -54,6 +57,22 @@
       }
     ]
   }
+  },
+  setup(){
+    
+
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+    return{
+      estudiante
+    }
   }
   }
   </script>

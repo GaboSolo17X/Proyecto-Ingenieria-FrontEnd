@@ -7,7 +7,7 @@
         </v-col>
         <v-col >
           <div class="contenido">
-            <Encabezado  title="Mi perfil"/>
+            <Encabezado  title="Mi perfil" v-if="estudiante" :datos="estudiante"/>
           </div>
           <div class="componentesDocentes">
             <Perfil/>
@@ -23,14 +23,29 @@
   import Lateral from '../components/lateral.vue'
   import Encabezado from '../components/encabezado.vue'
   import Perfil from '../components/perfil.vue'
-  
+  import { ref,onMounted } from 'vue'
+
   export default {
   components:{Lateral,Encabezado, Perfil},
-  data(){
-  return{
+  setup(){
     
-  }
-  }
+
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+    return{
+      estudiante
+    }
+
+    
+  } 
+
   }
   </script>
   

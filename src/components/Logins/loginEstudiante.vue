@@ -172,7 +172,7 @@ export default {
     });
     const login = async (numeroCuenta, claveEstudiante, router, nombre) => {
       try {
-        const res = await fetch("http://localhost:3000/estudiante/login", {
+        const res = await fetch("http://localhost:3030/estudiante/login", {
           method: "POST",
           credentials: "include",
           headers: {
@@ -201,7 +201,9 @@ export default {
           } else {
             //AQUI TAMBIEN SE VA A REDIRIGIR A LA PAGINA DEL ESTUDIANTE
             console.log(res.json.message);
-            const infoUsuario = data.estudiante;
+
+            //este es la info del estudiante
+            const infoUsuario = JSON.stringify(data.estudianteLogin);
             console.log(infoUsuario);
 
             localStorage.setItem("Estudiante", infoUsuario);
@@ -219,7 +221,7 @@ export default {
 
     const actualizarCarrera = async (nombreCarrera) => {
       const res = await fetch(
-        "http://localhost:3000/estudiante/actualizarCarrera",
+        "http://localhost:3030/estudiante/actualizarCarrera",
         {
           method: "POST",
           headers: {

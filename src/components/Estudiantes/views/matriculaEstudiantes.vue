@@ -7,7 +7,7 @@
         </v-col>
         <v-col>
           <div class="contenido">
-            <Encabezado title="Matricula de clases" />
+            <Encabezado title="Matricula de clases" v-if="estudiante" :datos="estudiante"/>
           </div>
           <div class="componentesDocentes">
               <ToolbarBuscar class="large-card" />
@@ -39,7 +39,7 @@ import Matricula from '../components/cardMatricula.vue'
 import ToolbarBuscar from '../components/toolbarBuscar.vue'
 import CardDetalles from '../components/cardDetalles.vue'
 import BotonHorario from '../components/botonHorario.vue'
-import { ref } from "vue";
+import { ref,onMounted } from 'vue'
 
 export default {
   components: {Lateral, Encabezado, Matricula, ToolbarBuscar , CardDetalles , BotonHorario },
@@ -65,8 +65,19 @@ export default {
       },
     ];
 
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+
     return {
       clases,
+      estudiante
     };
   },
 };

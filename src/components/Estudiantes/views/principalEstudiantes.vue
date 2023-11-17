@@ -79,7 +79,9 @@ setup(){
     return{
       estudiante
     }
-  }
+
+    
+  } 
 }
 </script>
 

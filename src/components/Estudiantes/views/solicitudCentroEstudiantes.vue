@@ -7,7 +7,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado  title="Cambio de centro"/>
+          <Encabezado  title="Cambio de centro" v-if="estudiante" :datos="estudiante"/>
         </div>
         <div class="componentesDocentes">
           <FormCambioCentro/>
@@ -23,14 +23,27 @@
 import Lateral from '../components/lateral.vue'
 import Encabezado from '../components/encabezado.vue'
 import FormCambioCentro from '../components/formCambioCentro.vue'
-
+import { ref,onMounted } from 'vue'
 export default {
 components:{Lateral,Encabezado,FormCambioCentro},
-data(){
-return{
-  
-}
-}
+setup(){
+    
+
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+    return{
+      estudiante
+    }
+
+    
+  }
 }
 </script>
 
