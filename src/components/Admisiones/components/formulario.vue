@@ -10,7 +10,7 @@
       <v-form class="pa-9"  @submit.prevent="onSubmit">
         <v-text-field 
           v-model="form.name"
-          :rules="[(v) => !!v || 'No se permiten campos vacios']"
+          :rules="[(v) => !!v || 'Campo Vacio', (v) => /^[a-zA-Z\s]+$/.test(v) || 'Solo letras permitidas']"
           class="mb-5" 
           label="Nombres" 
           hide-details="auto"
@@ -20,7 +20,7 @@
 
         <v-text-field 
           v-model="form.lastName"
-          :rules="[(v) => !!v || 'No se permiten campos vacios']"
+          :rules="[(v) => !!v || 'Campo Vacio', (v) => /^[a-zA-Z\s]+$/.test(v) || 'Solo letras permitidas']"
           class="mb-5" 
           label="Apellidos" 
           hide-details="auto"
@@ -66,7 +66,7 @@
         <v-text-field 
         v-model="form.telefono"
           class="mb-5 numeritos"
-          :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos']"
+          :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos', (v) => !!v || 'No se permiten campos vacios']"
           label="Telefono" 
           hide-details="auto"
           variant="solo-filled"
