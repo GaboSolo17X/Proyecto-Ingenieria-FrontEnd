@@ -9,7 +9,11 @@
             <Encabezado  title="Subida de Notas" v-if="docente" :datos="docente"/>
           </div>
         <div class="asignatura">
-          <SelectAsignatura />
+            <v-select
+              label="Seleccionar"
+              :items="clases"
+              variant="outlined"
+            ></v-select>
         </div>
         <div class="componentesDocentes">
         <TablaNotas/>
@@ -32,10 +36,66 @@ components: {Lateral,Encabezado, TablaNotas, SelectAsignatura},
 setup(){
 
   const docente=ref()
+  const numeroEmpleadoDocente=ref()
+  const clases = ref([])
+    const asignaturas = ref([])
+    const seccion = ref([])
     const docenteEs = async () => {
       console.log("El docente es")
       docente.value = JSON.parse(localStorage.getItem('DocentePrueba'))
+      numeroEmpleadoDocente.value = docente.value.numeroEmpleadoDocente
+
       console.log(docente)
+
+      try {
+        const res = await fetch('http://localhost:3000/docente/getSeccionesDocente', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+            },
+          body: JSON.stringify({
+              numeroEmpleadoDocente: numeroEmpleadoDocente.value,
+            })
+        });
+        const data = await res.json();
+        console.log(data)
+        // clases.value = data.map(clases=>clases)
+        asignaturas.value = data.asignaturas;
+        seccion.value = data.secciones;
+
+
+        asignaturas.value.forEach(nestedArray => {
+          nestedArray.forEach(item => {
+            // Now 'item' contains the information inside the nested array
+            console.log(item);
+
+           console.log (item.idAsignatura)
+            seccion.value.forEach(seccionItem=>{
+              const seccionID=seccionItem.idAsignatura
+              if(item.idAsignatura===(seccionID)){
+                console.log("Tenemos un match con "+item.nombreClase)
+              //   clases.value.push({
+              //   idSeccion: seccionItem.idSeccion,
+              //   nombreClase: item.nombreClase,
+              // });
+              const clase=ref()
+               clase.value=seccionItem.nombreSeccion+'-'+item.nombreClase
+               console.log(clase)
+                clases.value.push(clase.value);
+
+              // clases.value=item.nombreClase
+              // console.log(clases)
+
+              }
+
+            });
+          });
+        });
+
+      } catch (error) {
+        console.log(error)
+
+      }
     };
     
     onMounted(() => {
@@ -44,6 +104,7 @@ setup(){
 
   return{
     docente,
+    clases
   }
 }
 }

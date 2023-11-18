@@ -3,14 +3,14 @@
     <v-sheet class="pa-12" rounded>
         
     <v-card class="mx-auto px-6 py-8 mt-10 rounded-xl bg-color" max-width="600 " >
-        <v-form class="pa-9"  @submit.prevent="onSubmit">
+        <v-form class="pa-9 formulario"  @submit.prevent="onSubmit">
             <v-card-text class="pa-0 text-center">
         <h1 class="mb-5 ">Nuevo Docente</h1><br>
         </v-card-text>
             
         <v-text-field 
           v-model="form.name"
-          :rules="[(v) => !!v || 'Campo Vacio',(v) => /^[a-zA-Z\s]+$/.test(v) || 'Solo letras permitidas', (v) => true]"
+          :rules="[(v) => !!v || 'Llene el campo', (v) => /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/.test(v) || 'Solo letras permitidas']"
           class="mb-5" 
           label="Nombres" 
           hide-details="auto"
@@ -20,7 +20,7 @@
 
         <v-text-field 
           v-model="form.lastName"
-          :rules="[(v) => !!v || 'Campo Vacio', (v) => /^[a-zA-Z\s]+$/.test(v) || 'Solo letras permitidas',(v) => true]"
+          :rules="[(v) => !!v || 'Llene el campo', (v) => /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/.test(v) || 'Solo letras permitidas']"
           class="mb-5" 
           label="Apellidos" 
           hide-details="auto"
@@ -30,12 +30,14 @@
 
        <v-text-field 
          v-model="form.identidad"
-         :rules="[(v) => /^[0-9-]+$/.test(v) || 'Solo se permiten números y guiones', (v) => v.length <= 15 || 'Máximo 15 caracteres']"
+         :rules="[(v) => !!v || 'Llene el campo']"
           class="mb-5 numeritos"
           label="Identidad" 
           hide-details="auto"
           variant="solo-filled"
           type="text"
+          @input="formatText"
+          placeholder="0000-0000-00000"
           rounded>
         </v-text-field>
 
@@ -52,7 +54,7 @@
         <v-select
           v-model="form.centroRe"
           :items="centros"
-          :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
+          :rules="[(v) => !!v || 'Seleccione un centro', (v) => true]"
           label="Centro Regional"
           required
           variant="solo-filled"
@@ -201,6 +203,12 @@ export default {
       window.location.reload();//recarga la pagina una vez se valida el form y se da clic en guardar
     };
 
+    const formatText=()=>{
+    let numericValue=form.value.identidad.replace(/\D/g, '');
+    numericValue= numericValue.substring(0,13);
+    form.value.identidad= numericValue.replace(/(\d{4})(\d{4})(\d{5})/, '$1-$2-$3');
+
+  }
     const onSubmit = async () => {
     validateForm();
     if (isFormValid.value) {
@@ -217,10 +225,13 @@ export default {
         handleFileChange,
         pruebaRegistro,
         getCarreras,
-        onSubmit
+        onSubmit,
+        formatText
 
     }
     }
+
+
 }
 </script>
 
@@ -236,5 +247,8 @@ export default {
 width: 150%;
 padding-right: 100px;
  margin-left: -100px;
+}
+.formulario :deep(.v-messages){
+  color: yellow !important;
 }
 </style>
