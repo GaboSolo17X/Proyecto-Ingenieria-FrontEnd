@@ -28,7 +28,6 @@
             required
             variant="solo-filled"
             append-inner-icon="fa-solid fa-chevron-down"
-            @click="carreraPri"
           ></v-select>
 
           <p>
@@ -84,15 +83,21 @@ export default {
   setup() {
     const isFormValid = ref(false);
     const carreras = ref([]);
-    const carrPri = datos.carrera;
+    const carrerasTot = ref([]);
     const form = ref({
       justificacion: "",
       carr: null,
     });
 
-    onMounted(async () => {
-      getCarreras();
-    });
+    const estudiante = ref();
+    const carrPri = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      carrPri.value = estudiante.value.carrera;
+      console.log(estudiante);
+      console.log(carrPri);
+    };
 
     const getCarreras = async () => {
       try {
@@ -103,25 +108,28 @@ export default {
           },
         });
         const data = await res.json();
-
-        for (let index = 0; index < data.length; index++) {
-          carreras.value.push(data[index].nombreCarrera);
-        }
+        // carrerasTot.value = data.map(carrera => carrera.nombreCarrera);
+        // console.log(carrerasTot);
+        // carreras.value= carrerasTot.value.filter(carrera => carrera.nombreCarrera !== 'Arquitectura').map(carrera => carrera.nombreCarrera);
+        carrerasTot.value = data; // Asigna todas las carreras a carrerasTot.value
+        carreras.value = carrerasTot.value
+          .filter((carrera) => carrera.nombreCarrera !== carrPri.value)
+          .map((carrera) => carrera.nombreCarrera);
       } catch (error) {
         console.log(error);
       }
     };
 
-    const carreraPri = () => {
-      // Filtrar las carreras secundarias según la condición y la selección del primer v-select
-      const selectedCarrera = carrPri;
-      carreras.value = carrerasTot.value
-        .filter(
-          (carrera) =>
-            !carrera.examen && carrera.nombreCarrera !== selectedCarrera
-        )
-        .map((carrera) => carrera.nombreCarrera);
-    };
+    
+
+    onMounted(() => {
+      estudianteEs();
+      getCarreras();
+    });
+
+    // const carreraPri = () => {
+
+    // };
 
     const validateForm = () => {
       if (form.value.justificacion && form.value.carr) {
@@ -142,17 +150,6 @@ export default {
       window.alert("Se ha enviado la solictud correctamente.");
       window.history.back();
     };
-
-    const estudiante = ref();
-    const estudianteEs = async () => {
-      console.log("El estudiante es");
-      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
-      console.log(estudiante);
-    };
-
-    onMounted(() => {
-      estudianteEs();
-    });
 
     const pruebaCarrera = async () => {
       try {
@@ -184,7 +181,6 @@ export default {
     return {
       form,
       carreras,
-      carreraPri,
       showAlertSuccess,
       goBack,
       onSubmit,
