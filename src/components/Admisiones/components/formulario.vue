@@ -236,6 +236,7 @@ setup(){
         .filter(carrera => !carrera.examen && carrera.nombreCarrera !== selectedCarrera)
         .map(carrera => carrera.nombreCarrera);
 
+   
       // console.log(carrerasSec);
     };
 

@@ -25,11 +25,11 @@
       </tr>
     </thead>
     <tbody>
-      <tr v-for="estudiante in estudiantes"
-          :key="estudiante.cuenta"
+      <tr v-for="estudiante in datos"
+          :key="estudiante.numeroCuenta"
           >
-        <td>{{estudiante.cuenta}}</td>
-        <td>{{estudiante.nombre}}</td>
+        <td>{{estudiante.numeroCuenta}}</td>
+        <td>{{estudiante.nombres+' '+estudiante.apellidos}}</td>
         <td><v-text-field label="nota" variant="outlined" density="compact" class="campo"></v-text-field></td>
         <td>{{estudiante.obs}}</td>
         <td><v-icon :icon="estudiante.icono"></v-icon></td>
@@ -43,24 +43,26 @@
 <script>
 
 export default ({
+  props:{datos:{type: Object,
+      default: () => ({})} },
     data(){
   return{
-    estudiantes:[
-      {
-        cuenta:'20201004061',
-        nombre: 'Jose Mario',
-        nota: 64,
-        obs:'REP',
-        icono:'fa:fas fa-solid fa-circle-xmark'
-      },
-      {
-        cuenta:'20201004061',
-        nombre: 'Gabriel Omar Solorzano',
-        nota:98,
-        obs:'APR',
-        icono:'fa:fas fa-solid fa-circle-check'
-      }
-    ]
+    // estudiantes:[
+    //   {
+    //     cuenta:'20201004061',
+    //     nombre: 'Jose Mario',
+    //     nota: 64,
+    //     obs:'REP',
+    //     icono:'fa:fas fa-solid fa-circle-xmark'
+    //   },
+    //   {
+    //     cuenta:'20201004061',
+    //     nombre: 'Gabriel Omar Solorzano',
+    //     nota:98,
+    //     obs:'APR',
+    //     icono:'fa:fas fa-solid fa-circle-check'
+    //   }
+    // ]
   }
 }
 })

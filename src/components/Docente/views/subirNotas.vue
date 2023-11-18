@@ -10,13 +10,14 @@
           </div>
         <div class="asignatura">
             <v-select
-              label="Seleccionar"
-              :items="clases"
+              v-model="selectedItem"
+              label="Seleccionar la Clase"
+              :items="clasesSelect"
               variant="outlined"
             ></v-select>
         </div>
         <div class="componentesDocentes">
-        <TablaNotas/>
+        <TablaNotas  :datos="alumnosArray"/>
         </div>
       </v-col>
     </v-row>
@@ -29,7 +30,7 @@ import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
 import TablaNotas from '../components/tablaNotas.vue'
 import SelectAsignatura from '../components/selectAsignatura.vue'
-import { ref,onMounted } from 'vue';
+import { ref,onMounted, watch} from 'vue';
 
 export default {
 components: {Lateral,Encabezado, TablaNotas, SelectAsignatura},
@@ -37,9 +38,11 @@ setup(){
 
   const docente=ref()
   const numeroEmpleadoDocente=ref()
-  const clases = ref([])
+  const clasesSelect = ref([])
     const asignaturas = ref([])
     const seccion = ref([])
+    const selectedItem = ref(null);
+    const clasesFilter=ref([])
     const docenteEs = async () => {
       console.log("El docente es")
       docente.value = JSON.parse(localStorage.getItem('DocentePrueba'))
@@ -74,15 +77,18 @@ setup(){
               const seccionID=seccionItem.idAsignatura
               if(item.idAsignatura===(seccionID)){
                 console.log("Tenemos un match con "+item.nombreClase)
-              //   clases.value.push({
-              //   idSeccion: seccionItem.idSeccion,
-              //   nombreClase: item.nombreClase,
-              // });
-              const clase=ref()
+                
+                clasesFilter.value.push({
+                idSeccion: seccionItem.idSeccion,
+                nombreClase: item.nombreClase,
+                nombreSeccion:seccionItem.nombreSeccion
+              });
+               const clase=ref()
                clase.value=seccionItem.nombreSeccion+'-'+item.nombreClase
                console.log(clase)
-                clases.value.push(clase.value);
+               clasesSelect.value.push(clase.value);
 
+              
               // clases.value=item.nombreClase
               // console.log(clases)
 
@@ -97,6 +103,68 @@ setup(){
 
       }
     };
+
+
+
+    let idSeccion=ref()
+
+    watch(selectedItem, (newValue, oldValue) => {
+      console.log('Cambiamos el valor de ', oldValue, ' a ', newValue);
+
+      console.log(clasesFilter)
+      clasesFilter.value.forEach(nestedArray => {
+        if(newValue!=nestedArray.nombreSeccion+'-'+nestedArray.nombreClase){
+          console.log(nestedArray.nombreClase)
+          console.log(nestedArray.idSeccion)
+          idSeccion=nestedArray.idSeccion
+        }
+      })
+      console.log('El id seccion donde se cargaran los usuarios es: '+idSeccion)
+      estudiantes()
+    });
+
+
+
+    const alumnos=ref()
+    const alumnosArray=ref([])
+    const estudiantes = async () => {
+    
+      try {
+        const res = await fetch(' http://localhost:3000/docente/getEstudiantesSeccion', {
+          method: 'POST',
+          headers: {
+              'Content-Type': 'application/json',
+            },
+          body: JSON.stringify({
+            idSeccion: idSeccion,
+            })
+        });
+        const data = await res.json();
+        console.log(data)
+        alumnos.value = data.estudiantes;
+        console.log(alumnos.nombres)
+
+        alumnosArray.value.splice(0, alumnosArray.value.length); 
+
+        alumnos.value.forEach(item => {
+
+          alumnosArray.value.push({
+                numeroCuenta: item.numeroCuenta,
+                nombres: item.nombres,
+                apellidos: item.apellidos
+              });
+
+        console.log(alumnosArray)
+      })
+      
+
+
+      } catch (error) {
+        console.log(error)
+
+      }
+    };
+   
     
     onMounted(() => {
       docenteEs();
@@ -104,7 +172,14 @@ setup(){
 
   return{
     docente,
-    clases
+    selectedItem,
+    clasesSelect,
+    clasesFilter,
+    idSeccion,
+    alumnosArray
+    
+   
+ 
   }
 }
 }
