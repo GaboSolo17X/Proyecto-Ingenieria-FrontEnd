@@ -10,7 +10,7 @@
           <Encabezado  title="Cancelaciones excepcionales" v-if="estudiante" :datos="estudiante"/>
         </div>
         <div class="componentesDocentes">
-          <FormCancelacionExcepcional/>
+          <FormCancelacionExcepcional v-if="estudiante" :datos="estudiante"/>
         </div>
       </v-col>
     </v-row>

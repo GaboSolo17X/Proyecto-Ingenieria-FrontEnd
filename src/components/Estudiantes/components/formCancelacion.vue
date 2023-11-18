@@ -6,15 +6,15 @@
           <v-row>
             <v-col>
               <v-card-text class="pa-0 text-center">
-                <h1 class="mb-3">Paco Mariachi almendares Rodriguez</h1>
+                <h1 class="mb-3">{{ datos.nombres }} {{ ' ' }} {{ datos.apellidos }}</h1>
               </v-card-text>
             </v-col>
           </v-row>
           <v-row>
-            <v-col style="text-align: center">CURLA</v-col>
+            <v-col style="text-align: center">{{ datos.centroRegional }}</v-col>
             <v-col></v-col>
             <v-col cols="5" style="text-align: left"
-              >Ingeniería Aeroespacial</v-col
+              >{{ datos.carrera }}</v-col
             >
           </v-row>
         </div>
@@ -38,12 +38,14 @@
           <p>Suba aquí su formato pdf de cancelación de clases:</p>
           <v-file-input
             v-model="form.pdf"
+            @change="handleFileChange"
             show-size
             accept=".pdf"
             :rules="[(v) => !!v || 'Se requiere un archivo ', (v) => true]"
             label="Subir PDF"
             variant="solo-filled"
             prepend-icon="fa-solid fa-file"
+            
           ></v-file-input>
           <p>Ingrese la justificacion de su cancelación excepcional:</p>
           <v-textarea
@@ -89,20 +91,32 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 export default {
+  props:{datos:Object},
   setup() {
     const clases = [
       { text: "Ecuaciones Diferenciales" },
       { text: "Dibujo II" },
       { text: "Ingenieria de Software" },
     ];
-
+    const usrfile = ref("");
     const isFormValid = ref(false);
     const form = ref({
       clasesSeleccionadas: [],
       pdf: null,
       justificacion: "",
+    });
+
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      usrfile.value = file;
+    };
+
+    const selectedClassesNames = computed(() => {
+      return form.value.clasesSeleccionadas
+        .map((isSelected, index) => (isSelected ? clases[index].text : null))
+        .filter((className) => className !== null);
     });
 
     const validateForm = () => {
@@ -121,23 +135,62 @@ export default {
 
     const showAlertSuccess = () => {
       window.alert("Se ha enviado la solictud correctamente.");
+      // console.log(form.value.justificacion);
+       //console.log(form.value.pdf);
+      // console.log(selectedClassesNames.value);
       window.history.back();
+    };
+
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+      
+    };
+
+    onMounted(() => {
+      estudianteEs ();
+    });
+
+    const pruebaCancelacion = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        formData.append("clases", selectedClassesNames.value);
+        formData.append("justificacion", form.value.justificacion);
+        formData.append("cancelacionPdf", usrfile.value);
+        const res = await fetch("http://localhost:3030/estudiante/cancelacionExcepcional", {
+          method: "POST",
+          body: formData,
+        });
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
     };
 
     const onSubmit = async () => {
       validateForm();
+
+      if(isFormValid.value){
+        pruebaCancelacion();
+      }
     };
 
     const goBack = () => {
       window.history.back();
-      form.value.justificacion = "",
-        form.value.pdf = null,
-        form.value.clasesSeleccionadas = []
+      (form.value.justificacion = ""),
+        (form.value.pdf = null),
+        (form.value.clasesSeleccionadas = []);
     };
 
     return {
       form,
       clases,
+      usrfile,
+      handleFileChange,
       showAlertSuccess,
       goBack,
       onSubmit,

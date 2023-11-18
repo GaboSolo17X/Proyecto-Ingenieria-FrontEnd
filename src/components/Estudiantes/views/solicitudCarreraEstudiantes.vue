@@ -10,7 +10,7 @@
           <Encabezado  title="Cambio de carrera" v-if="estudiante" :datos="estudiante"/>
         </div>
         <div class="componentesDocentes">
-          <FormCambiocarrera/>
+          <FormCambiocarrera v-if="estudiante" :datos="estudiante"/>
         </div>
       </v-col>
     </v-row>

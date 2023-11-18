@@ -10,7 +10,7 @@
           <Encabezado  title="Cambio de centro" v-if="estudiante" :datos="estudiante"/>
         </div>
         <div class="componentesDocentes">
-          <FormCambioCentro/>
+          <FormCambioCentro v-if="estudiante" :datos="estudiante"/>
         </div>
       </v-col>
     </v-row>

@@ -8,7 +8,7 @@
   
           <template v-slot:append>
             <router-link to="/perfilEstudiante" active-class="amarillo" class="enlace">
-              <p class="nombreUser">{{ datos.nombres }}</p>
+              <p class="nombreUser">{{ datos.nombres }} {{ ' ' }}{{ datos.apellidos }}</p>
               <!-- <div class="ImgUser"></div>   -->
               <v-avatar>
                 <v-img

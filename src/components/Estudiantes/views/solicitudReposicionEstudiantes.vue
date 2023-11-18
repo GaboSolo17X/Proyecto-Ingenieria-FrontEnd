@@ -10,7 +10,7 @@
           <Encabezado  title="Solicitud de reposición" v-if="estudiante" :datos="estudiante"/>
         </div>
         <div class="componentesDocentes">
-          <FormRepo/>
+          <FormRepo v-if="estudiante" :datos="estudiante"/>
         </div>
       </v-col>
     </v-row>

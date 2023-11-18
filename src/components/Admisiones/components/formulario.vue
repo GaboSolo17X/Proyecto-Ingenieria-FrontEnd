@@ -158,7 +158,7 @@ setup(){
    
    onMounted(async () => {
       try {
-        const res = await fetch('http://localhost:3000/carreras',{
+        const res = await fetch('http://localhost:3030/carreras',{
           method:'GET',
           headers:{
             'Content-Type':'application/json'
