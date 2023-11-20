@@ -9,15 +9,28 @@
             <Encabezado  title="Subida de Notas" v-if="docente" :datos="docente"/>
           </div>
         <div class="asignatura">
-            <v-select
-              v-model="selectedItem"
-              label="Seleccionar la Clase"
-              :items="clasesSelect"
-              variant="outlined"
-            ></v-select>
+          <v-row>
+            <v-col cols="3"> <v-select
+                v-model="selectedItem"
+                label="Seleccionar la Clase"
+                :items="clasesSelect"
+                variant="outlined"
+                
+              ></v-select></v-col>
+              <v-col cols="2"></v-col>
+
+            <v-col cols="7">
+              <div class="observaciones">
+                 <span>En las observaciones los unicos campos validos son:</span>
+                 <span>Aprobo = APR, Reprobo = REP, No se Presento = NP, Abandono = ABN</span>
+              </div>
+            </v-col>
+          </v-row>
+           
+
         </div>
         <div class="componentesDocentes">
-        <TablaNotas  :datos="alumnosArray"/>
+        <TablaNotas  :datos="alumnosArray" :idSec="idSeccion"/>
         </div>
       </v-col>
     </v-row>
@@ -120,14 +133,14 @@ setup(){
         }
       })
       console.log('El id seccion donde se cargaran los usuarios es: '+idSeccion)
-      estudiantes()
+      estudiantes(idSeccion)
     });
 
 
 
     const alumnos=ref()
     const alumnosArray=ref([])
-    const estudiantes = async () => {
+    const estudiantes = async (id) => {
     
       try {
         const res = await fetch(' http://localhost:3000/docente/getEstudiantesSeccion', {
@@ -151,7 +164,8 @@ setup(){
           alumnosArray.value.push({
                 numeroCuenta: item.numeroCuenta,
                 nombres: item.nombres,
-                apellidos: item.apellidos
+                apellidos: item.apellidos,
+                id:id
               });
 
         console.log(alumnosArray)
@@ -191,16 +205,18 @@ setup(){
   @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
 
 .asignatura{
-    width: 270px;
-    margin-top: 100px;
+    width: 120%;
+    margin-top: 80px;
     position: relative;
     right: 100px !important;
+    margin-left: -100px;
 }
 
 .componentesDocentes{
 margin-top: 10px;
 left: 230px !important;
-width: calc((100% - 230px) - 0px);
+width: calc((105% - 230px) - 0px);
+margin-left: -100px;
 }
 
 .rubik{
@@ -219,5 +235,12 @@ transform: translateY(0%);
 position: fixed;
 left: 230px;
 width: calc((100% - 230px) - 0px);
+
 }
+
+.observaciones span {
+  display: block; 
+  margin-bottom: 10px;
+}
+
 </style>

@@ -281,6 +281,13 @@ const validateForm = () => {
   form.value.certificado=file
   console.log(file)
  }
+
+ const isCardExVisible=ref(false)
+    const isFormVisible=ref(true)
+    const showCardEx = () => {
+      isCardExVisible.value = true;
+      isFormVisible.value=false;
+    };
  
  const pruebaRegistro=async()=>{
   try {
@@ -300,6 +307,14 @@ const validateForm = () => {
     });
     const data=await res.json();
     console.log(data)
+
+    if(data.message==="El aspirante ya existe"){
+      window.alert(data.message)
+    window.location.reload();
+
+      isCardExVisible.value = false;
+    }
+
   } catch (error) {
     console.log(error)
     
@@ -319,12 +334,7 @@ const onSubmit = async () => {
   }
 };
 
-    const isCardExVisible=ref(false)
-    const isFormVisible=ref(true)
-    const showCardEx = () => {
-      isCardExVisible.value = true;
-      isFormVisible.value=false;
-    };
+    
 
   const formatText=()=>{
     let numericValue=form.value.identidad.replace(/\D/g, '');

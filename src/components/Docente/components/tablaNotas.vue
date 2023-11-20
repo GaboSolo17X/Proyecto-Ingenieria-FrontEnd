@@ -1,8 +1,10 @@
 <template>
+  
+
   <div class="tabla">
     <v-table
     fixed-header
-    height="500px"
+    height="400px"
   >
     <thead class="encabezado">
       <tr>
@@ -18,9 +20,9 @@
         <th class="text-left">
           Observacion
         </th>
-        <th class="text-left">
+        <!-- <th class="text-left">
           icono
-        </th>
+        </th> -->
 
       </tr>
     </thead>
@@ -30,83 +32,103 @@
           >
         <td>{{estudiante.numeroCuenta}}</td>
         <td>{{estudiante.nombres+' '+estudiante.apellidos}}</td>
-        <td><v-text-field label="nota" variant="outlined" density="compact" class="campo"></v-text-field></td>
-        <td>{{estudiante.obs}}</td>
-        <td><v-icon :icon="estudiante.icono"></v-icon></td>
+        <td><v-text-field v-model="estudiante.nota" label="0 -100" variant="outlined" density="compact" class="campo" :rules="[
+         (v) => !!v || 'El valor es requerido', 
+         (v) => (v >= 0 && v <= 100) || 'Ingresa un valor entre 0 y 100']"></v-text-field></td>
+        <td><v-text-field v-model="estudiante.estado" label="APR/RPD/NSP/ABN" variant="outlined" density="compact" class="campo" :rules = "[
+      (v) => !!v || 'El valor es requerido', 
+      (v) => /^(APR|RPD|NSP|ABN)$/.test(v) || 'Ingresa un valor válido (APR, REP, NP, ABN)' ]"></v-text-field></td>
+        <!-- <td><v-icon :icon="estudiante.icono"></v-icon></td> -->
       </tr>
     </tbody>
   </v-table>
   </div>
+  <br>
+  <v-btn @click="guardarDatos">Guardar Datos</v-btn>
  
 </template>
 
 <script>
+import { ref } from 'vue';
 
-export default ({
+export default {
   props:{datos:{type: Object,
-      default: () => ({})} },
-    data(){
-  return{
-    // estudiantes:[
-    //   {
-    //     cuenta:'20201004061',
-    //     nombre: 'Jose Mario',
-    //     nota: 64,
-    //     obs:'REP',
-    //     icono:'fa:fas fa-solid fa-circle-xmark'
-    //   },
-    //   {
-    //     cuenta:'20201004061',
-    //     nombre: 'Gabriel Omar Solorzano',
-    //     nota:98,
-    //     obs:'APR',
-    //     icono:'fa:fas fa-solid fa-circle-check'
-    //   }
-    // ]
-  }
-}
-})
-// import {ref,onMounted} from 'vue';
-//   export default {
-//     setup(){
-//     const estudiantes = ref([])
+      default: () => ({})},},
   
-//     onMounted(async () => {
-//         try {
-//         const res = await fetch('http://localhost:3030/estudiante/getestudiantes',{
-//           method:'GET',
-//           headers:{
-//             'Content-Type':'application/json'
-//           }
-//         });
       
-//         const estudiante= await res.json();
-//         console.log(estudiante)
-//         for (let index = 0; index < estudiante.length; index++) {
-//           let EstudianteGuardar ={
-//             nombre: estudiante[index].nombres+ ' '+estudiante[index].apellidos,
-//             cuenta: estudiante[index].numeroCuenta,
-//             carrera: estudiante[index].carrera,
-//             correo: estudiante[index].correoPersonal,
-//             centro: estudiante[index].centroRegional,
+  setup(props){
 
-//           }
-//           estudiantes.value.push(EstudianteGuardar)
-//         }
+    const idSeccion=ref()
+    const datosAGuardar=ref([])
+    const guardarDatos = () => {
+      // Itera sobre los datos y recopila las notas y estados
+      // datosAGuardar.value = props.datos.push(estudiante => ({
+      //   numeroCuenta: estudiante.numeroCuenta,
+      //   nota: estudiante.nota,
+      //   estado: estudiante.estado,
+      // }));
+
+      props.datos.forEach(estudiante=>{
+        datosAGuardar.value.push({
+          numeroCuenta: estudiante.numeroCuenta,
+          nota: estudiante.nota,
+          estado: estudiante.estado,
+        })
+      })
+  
+
+      const primerEstudiante = props.datos[0];
+      idSeccion.value = primerEstudiante ? primerEstudiante.id : null;
+      // Ahora puedes enviar 'datosAGuardar' a tu base de datos
+      console.log('Datos a guardar:', datosAGuardar.value);
+      console.log('Id de la Seccion:', idSeccion)
+      // Lógica para enviar los datos a la base de datos
+
+      const datosPorEnviar={
+      idSeccion:idSeccion.value,
+      arrayEstudiantesNota:datosAGuardar.value
+    };
+    const sec=[{sec:0,al:'hola'},'2']
+    console.log(sec)
+
+    console.log(datosPorEnviar)
+      const subirNota = async () => {
+        
+        try {
+          const res = await fetch('http://localhost:3000/matricula/subirNota', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+              },
+            body: JSON.stringify(datosPorEnviar)
+          });
+          const data = await res.json();
+          console.log(data)
+  
+        } catch (error) {
+          console.log(error)
+  
+        }
+      };
+
+      subirNota()
+
+      
+    };
+
+    
+
+    
+
+    return{
+      guardarDatos,
+    
+    }
+   
+    }
+  }
 
 
-//       } catch (error) {
-//         console.error('Error al cargar los datos desde el archivo JSON:', error);
-//       }
-//     });
-
-    // return {
-    //   estudiantes
-    // };
-
-
-  //   },
-  // }
 </script>
 
 <style scoped>
@@ -126,6 +148,8 @@ export default ({
 
 .campo{
   margin-top:8px;
+  width:100px;
 }
+
 
 </style>
