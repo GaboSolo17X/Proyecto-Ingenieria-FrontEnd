@@ -108,9 +108,6 @@ export default {
           },
         });
         const data = await res.json();
-        // carrerasTot.value = data.map(carrera => carrera.nombreCarrera);
-        // console.log(carrerasTot);
-        // carreras.value= carrerasTot.value.filter(carrera => carrera.nombreCarrera !== 'Arquitectura').map(carrera => carrera.nombreCarrera);
         carrerasTot.value = data; // Asigna todas las carreras a carrerasTot.value
         carreras.value = carrerasTot.value
           .filter((carrera) => carrera.nombreCarrera !== carrPri.value)

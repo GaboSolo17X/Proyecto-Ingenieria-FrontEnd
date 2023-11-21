@@ -18,6 +18,11 @@
     </v-table>
   </v-card>
 </template>
+
+<script>
+
+</script>
+
 <style scoped>
 .text-left{
     background-color: #77181E !important;

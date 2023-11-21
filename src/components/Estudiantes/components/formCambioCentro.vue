@@ -6,7 +6,9 @@
           <v-row>
             <v-col>
               <v-card-text class="pa-0 text-center">
-                <h1 class="mb-3">{{ datos.nombres }} {{ " " }} {{ datos.apellidos }}</h1>
+                <h1 class="mb-3">
+                  {{ datos.nombres }} {{ " " }} {{ datos.apellidos }}
+                </h1>
               </v-card-text>
             </v-col>
           </v-row>
@@ -15,7 +17,7 @@
           <p>Seleccione el centro al que desea hacer el cambio</p>
           <v-select
             v-model="form.centroRe"
-            :items="centros"
+            :items="centroFiltro"
             :rules="[(v) => !!v || 'Seleccione una carrera', (v) => true]"
             label="Centros"
             required
@@ -73,6 +75,8 @@ export default {
   setup() {
     const isFormValid = ref(false);
     const centros = ["UNAH-VS", "UNAH-CU", "CURLA"];
+    const centroFiltro = ref([]);
+    const centroActual = ref();
     const form = ref({
       justificacion: "",
       centroRe: null,
@@ -97,7 +101,10 @@ export default {
     const estudianteEs = async () => {
       console.log("El estudiante es");
       estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
-      console.log(estudiante);
+      centroActual.value = estudiante.value.centroRegional;
+      centroFiltro.value = centros
+        .filter((centro) => centro !== centroActual.value)
+        .map((centro) => centro);
     };
 
     onMounted(() => {
@@ -139,7 +146,7 @@ export default {
 
     return {
       form,
-      centros,
+      centroFiltro,
       showAlertSuccess,
       goBack,
       onSubmit,

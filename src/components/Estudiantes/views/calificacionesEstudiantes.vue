@@ -7,7 +7,11 @@
         </v-col>
         <v-col>
           <div class="contenido">
-            <Encabezado title="Tus Calificaciones" v-if="estudiante" :datos="estudiante" />
+            <Encabezado
+              title="Tus Calificaciones"
+              v-if="estudiante"
+              :datos="estudiante"
+            />
           </div>
           <v-row v-show="isClaseVisible">
             <v-col class="rubik infoEvaluacion align-center d-flex flex-column">
@@ -33,21 +37,40 @@
             <v-row v-show="isClaseVisible">
               <v-col></v-col>
               <v-col>
-                <v-btn
-                  color="white"
-                  variant="flat"
-                  rounded="xl"
-                  class="pa-6 boton"
+                <router-link
+                  to="/notasPeriodoEstudiantes"
+                  class="subrayadoNo text"
                 >
-                  <router-link
-                    to="/notasPeriodoEstudiantes"
-                    class="subrayadoNo text"
+                  <v-btn
+                    color="white"
+                    variant="flat"
+                    rounded="xl"
+                    class="pa-6 boton"
                   >
-                    VER CALIFICACIONES</router-link
-                  >
-                </v-btn>
+                    VER CALIFICACIONES</v-btn
+                  ></router-link
+                >
               </v-col>
               <v-col></v-col>
+            </v-row>
+            <v-row v-show="isClaseVisible">
+              <v-col cols=""></v-col>
+              <v-col cols="" class="text">
+                <router-link
+                  to="/principalEstudiantes"
+                  class="rubik subrayadoNo"
+                >
+                  <v-btn
+                    color="white"
+                    variant="flat"
+                    rounded="xl"
+                    class="py-6 px-10 mt-5 text"
+                  >
+                    VOLVER</v-btn
+                  ></router-link
+                >
+              </v-col>
+              <v-col cols=""></v-col>
             </v-row>
             <FormEvaluacion
               :clase="nombreClaseForm"
@@ -67,7 +90,7 @@ import CardClase from "../components/cardClase.vue";
 import Lateral from "../components/lateral.vue";
 import Encabezado from "../components/encabezado.vue";
 import FormEvaluacion from "../components/formEvalDocentes.vue";
-import { ref,onMounted } from "vue";
+import { ref, onMounted } from "vue";
 
 export default {
   components: { CardClase, Lateral, Encabezado, FormEvaluacion },
@@ -132,16 +155,15 @@ export default {
       isClaseVisible.value = true;
     };
 
-    const estudiante=ref()
-    const estudianteEs  = async () => {
-      console.log("El estudiante es")
-      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
-      console.log(estudiante)
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      console.log(estudiante);
     };
     onMounted(() => {
-      estudianteEs ();
+      estudianteEs();
     });
-    
 
     return {
       cards,
@@ -152,7 +174,6 @@ export default {
       estudiante,
       showEvaluacion,
       showCards,
-      
     };
   },
 };
@@ -166,6 +187,10 @@ export default {
 }
 .text {
   font-family: "Rubik";
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
 }
 
 .subrayadoNo {
