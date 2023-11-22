@@ -20,8 +20,12 @@
               ><h3>{{ datos.centroRegional }}</h3></v-col
             >
             <v-col style="text-align: left"
+              ><h3>Insertar indice global</h3></v-col
+            >
+            <v-col style="text-align: left"
               ><h3>{{ datos.carrera }}</h3></v-col
             >
+            
           </v-row>
         </div>
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
@@ -40,6 +44,7 @@
             <v-col>
               <!-- v-model="form.descripcion" -->
               <v-textarea
+              v-model="form.nuevaDescripcion"
                 class="mb-5"
                 label="Cuentanos sobre ti"
                 hide-details="auto"
@@ -60,6 +65,7 @@
                 <!-- esta es la card para subir imagen -->
                 <v-col cols="4">
                   <v-card
+                  v-show="isSubirFotoVisible"
                     class="mx-auto text"
                     color="white"
                     rounded
@@ -145,10 +151,12 @@ export default {
   },
   components: { CardFoto },
   setup() {
-    const isFormValid = ref(false);
+    const isSubirFotoVisible = ref(true);
+    const isFormFotoValid = ref(false);
+    const isFormdescripValid = ref(false);
     const descripcActual = ref("");
     const form = ref({
-      descripcion: "",
+      nuevaDescripcion: "",
     });
 
     const formFoto = ref({
@@ -164,18 +172,13 @@ export default {
 
     const subirFoto = async () => {
       validateFoto(); // Validar el formulario antes de enviar
-
-      if (isFormValid.value) {
-        // Realizar el envío del formulario si es válido
-        enviarFoto();
-      }
     };
 
-    const enviarFoto = async () => {
+    const enviarFoto = async (foto) => {
       try {
         const formData = new FormData();
         formData.append("cuenta", estudiante.value.numeroCuenta);
-        formData.append("nuevaFoto", formFoto.value.nuevaFoto);
+        formData.append("fotoEstudiante", foto);
         const res = await fetch(
           " http://localhost:3030/perfilEstudiante/addFoto",
           {
@@ -190,12 +193,47 @@ export default {
       }
     };
 
+    const actualizarDescripción = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("numeroCuenta", estudiante.value.numeroCuenta);
+        formData.append("idfotoEstudiante", '' );
+        formData.append("descripcion", form.value.nuevaDescripcion);
+        const res = await fetch(
+          " http://localhost:3030/perfilEstudiante/modPerfilEstudiante",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        // console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const validateFoto = () => {
-      if (formFoto.value.nuevaFoto ) {
-        isFormValid.value = true;
+      if (formFoto.value.nuevaFoto) {
+        isFormFotoValid.value = true;
+        enviarFoto(formFoto.value.nuevaFoto);
+        window.location.reload();
+        //console.log("foto enviada");
       } else {
-        isFormValid.value = false;
-        window.alert('No ha seleccionado ninguna foto')
+        isFormFotoValid.value = false;
+        window.alert("No ha seleccionado ninguna foto");
+      }
+    };
+
+    const validateDescripcion = () => { //editar esto
+      if (form.value.nuevaDescripcion) {
+        isFormdescripValid.value = true;
+        actualizarDescripción();
+        // console.log("descripción valida");
+         window.location.reload();
+      } else {
+        isFormdescripValid.value = false;
+        window.alert("No hay cambios nuevos en la descripción ");
       }
     };
 
@@ -234,6 +272,8 @@ export default {
         // console.log(data);
         cards.value = data.fotos;
         console.log(cards);
+        console.log(cards.value.length);
+        mostrarSubir();
       } catch (error) {
         console.log(error);
       }
@@ -245,17 +285,37 @@ export default {
       console.log(file);
     };
 
+    const mostrarSubir =()=>{
+      if (cards.value.length<3) {
+        isSubirFotoVisible.value = true;
+        console.log("Me muestro")
+        console.log("Mi tamanio "+cards.value.length)
+      } else {
+        isSubirFotoVisible.value = false;
+        console.log("No me muestro")
+        console.log("Mi tamanio "+cards.value.length)
+      }
+    }
+
     onMounted(() => {
-      handleFileChange, estudianteEs();
+      estudianteEs();
       getDescripcion();
       getFotos();
+     
     });
 
+    const onSubmit = async () => {
+      validateDescripcion(); // Validar la descripción
+    };
+
     return {
+      isSubirFotoVisible,
+      form,
       cards,
       descripcActual,
+      handleFileChange,
       subirFoto,
-      // handleCardSelected,
+      onSubmit,
     };
   },
 };

@@ -94,9 +94,11 @@
 
         <template v-slot:append>
           <div class="pa-2">
+            <v-btn block class="enlace"
+              @click="LimpiarLs()">
             <router-link to="/" class="enlace">
-              <v-btn block class="enlace"> Salir </v-btn>
-            </router-link>
+               Salir 
+            </router-link></v-btn>
           </div>
         </template>
       </v-navigation-drawer>
@@ -107,7 +109,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  setup(){
+
+
+    const LimpiarLs= ()=>{
+      localStorage.clear();
+    }
+    return{
+      LimpiarLs,
+    }
+  }
+
+
+};
 </script>
 
 <style scoped>
