@@ -10,7 +10,7 @@
             <Encabezado  title="Mi perfil" v-if="estudiante" :datos="estudiante"/>
           </div>
           <div class="componentesDocentes">
-            <Perfil/>
+            <Perfil v-if="estudiante" :datos="estudiante"/>
           </div>
         </v-col>
       </v-row>
