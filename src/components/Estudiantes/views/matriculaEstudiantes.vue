@@ -20,7 +20,8 @@
                   <!-- v-model="departamento" -->
                   <v-col cols="" class="formulario">
                     <v-select
-                      :items="departamentos"
+                      v-model="selectDepa"
+                      :items="departamentoFiltro"
                       :rules="[
                         (v) => !!v || 'Seleccione un departamento',
                         (v) => true,
@@ -36,6 +37,7 @@
                   <!-- v-model="asignatura" -->
                   <v-col cols="" class="formulario">
                     <v-select
+                    v-model="selectClase"
                       :items="asignaturas"
                       :rules="[
                         (v) => !!v || 'Seleccione una asignatura',
@@ -58,7 +60,7 @@
             <v-row>
               <Matricula
                 v-for="clase in clases"
-                :key="clase.nombre"
+                :key="clase.idSeccion"
                 :clase="clase"
                 :card="card"
               />
@@ -102,7 +104,7 @@ import Matricula from "../components/cardMatricula.vue";
 import ToolbarBuscar from "../components/toolbarBuscar.vue";
 import CardDetalles from "../components/cardDetalles.vue";
 import BotonHorario from "../components/botonHorario.vue";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, watch } from "vue";
 
 export default {
   components: {
@@ -121,14 +123,9 @@ export default {
     //   dias: "Lu, Ma, Mi",
     //   cupos: 25,
     // },
-    const departamentos = ["Lenguas", "Matematica aplicada", "Fisica"];
     const departamentoFiltro = ref([]);
-    const asignaturas = [
-      "Introduccion a la ingenieria en sistemas",
-      "Sociologia",
-      "Diseño de compiladores",
-    ];
-    const asignaturaFiltro = ref([]);
+    const arregloDeObjetos2 =ref([]);
+    const asignaturas = ref([]);
     const estudiante = ref();
     const estudianteEs = async () => {
       console.log("El estudiante es");
@@ -137,33 +134,150 @@ export default {
     };
     onMounted(() => {
       estudianteEs();
-      pruebaClasesMatricula();
+      getCarreras();
     });
 
-    const pruebaClasesMatricula = async () => {
+    const getCarreras = async () => {
+      //falta mandar el numero de cuenta creo
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/getCarreraMatricula",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              numeroCuenta: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        const nombresCarreras = data.Departamentos.map(
+          (objeto) => objeto.nombreCarrera
+        );
+        console.log(nombresCarreras);
+        departamentoFiltro.value = nombresCarreras;
+        console.log(departamentoFiltro);
+      } catch (error) {
+        console.error("Error al cargar las carreras", error);
+      }
+    };
+
+    const getAsignaturasMatricula = async (carrera) => {
       try {
         const formData = new FormData();
+        formData.append("nombreCarrera", carrera);
         formData.append("cuenta", estudiante.value.numeroCuenta);
         const res = await fetch(
-          "http://localhost:3030/estudiante/clasesMatricula",
+          "http://localhost:3030/estudiante/getAsignaturasMatricula",
           {
             method: "POST",
             body: formData,
           }
         );
         const data = await res.json();
-        clases.value = data.clases;
         console.log(data);
-        console.log(clases);
+         const arregloDeObjetos = Object.values(data.asignaturas).map(
+          (valor) => valor
+        );
+
+        arregloDeObjetos2.value=arregloDeObjetos
+        //  console.log(data.asignaturas);
+        console.log(arregloDeObjetos);
+
+        // const nombresClases = arregloDeObjetos.map((objeto) => objeto.nombreClase);
+        const nombresAsignaturas = arregloDeObjetos.map(
+          (objeto) => objeto.nombreClase
+        );
+        console.log(nombresAsignaturas);
+        asignaturas.value = nombresAsignaturas;
       } catch (error) {
-        console.log(error);
+        console.error("Error al cargar las asignaturas", error);
       }
     };
 
+    const nombreAsignatura=ref('')
+    const nombreSeccion=ref('')
+    const getSecciones = async (asignatura,name,uv) => {
+      try {
+        const formData = new FormData();
+        formData.append("idasignatura", asignatura);
+        const res = await fetch(
+          "http://localhost:3030/estudiante/getSeccionesDisponibles",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        const nombresSecciones = data.secciones.map(
+          (objeto) => objeto
+        );
+        console.log(nombresSecciones);
+        clases.value.splice(0, clases.value.length); 
+      nombresSecciones.forEach(clase=>{
+        clases.value.push({
+          aula:clase.aula,
+          cupos:clase.cupos,
+          dias:clase.dias,
+          edificio:clase.edificio,
+          horaFinal:clase.horaFinal,
+          horaInicial:clase.horaInicial,
+          idAsignatura:clase.idAsignatura,
+          idSeccion:clase.idSeccion,
+          linkVideo:clase.linkVideo,
+          nombreSeccion:clase.nombreSeccion,
+          numeroEmpleadoDocente:clase.numeroEmpleadoDocente,
+          nombre:name,
+          uv:uv,
+          docente:clase.nombre,
+          foto:clase.fotoDocente,
+        }) 
+      })
+        
+        console.log(clases);
+  
+      } catch (error) {
+        console.error("Error al cargar las secciones", error);
+      }
+    };
+
+
+    const selectDepa = ref(null);
+
+    watch(selectDepa, (newValue, oldValue) => {
+      console.log("Cambiamos el valor de ", oldValue, " a ", newValue);
+      getAsignaturasMatricula(newValue);
+    });
+
+    const selectClase = ref(null);
+    
+
+    watch(selectClase, (newValue, oldValue) => {
+      console.log("Cambiamos el valor de ", oldValue, " a ", newValue);
+      let idClase
+      let uv
+      let name
+      arregloDeObjetos2.value.forEach(nestedArray => {
+        if(newValue==nestedArray.nombreClase){
+          idClase=nestedArray.idAsignatura
+          name=nestedArray.nombreClase
+          uv=nestedArray.uv
+        }
+      })
+      console.log(idClase)
+      getSecciones(idClase,name,uv)
+    });
+
     return {
       clases,
+      selectDepa,
+      selectClase,
       estudiante,
-      departamentos,
+      departamentoFiltro,
       asignaturas,
     };
   },

@@ -1,14 +1,14 @@
 <template>
   <v-card class="mx-auto" elevation="1" max-width="290">
     <v-card-title class="py-5 font-weight-black titulo"
-      >{{clase.asignatura}}</v-card-title
+      >{{clase.nombreClase}}</v-card-title
     >
 
     <v-card-text>
       Aula: {{clase.aula}} <br />
       Edificio: {{clase.edificio}} <br />
       Dias: {{clase.dias}} <br />
-      Horas: {{clase.horaInicio}} - {{clase.horaFinal}}
+      Horas: {{clase.horaInicial}} - {{clase.horaFinal}}
     </v-card-text>
 
     <v-card-text>

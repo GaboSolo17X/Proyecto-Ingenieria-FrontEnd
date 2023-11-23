@@ -13,7 +13,7 @@
             </v-col>
           </v-row>
           <v-row>
-            <v-col style="text-align: right">Indice Global aquí</v-col>
+            <v-col style="text-align: right">Indice:{{ ' ' }} {{indiceAcadem }}</v-col>
             <v-col style="text-align: center">{{ datos.centroRegional }}</v-col>
             <v-col style="text-align: left">{{ datos.carrera }}</v-col>
           </v-row>
@@ -84,6 +84,7 @@ export default {
     const isFormValid = ref(false);
     const carreras = ref([]);
     const carrerasTot = ref([]);
+    const indiceAcadem = ref();
     const form = ref({
       justificacion: "",
       carr: null,
@@ -117,11 +118,34 @@ export default {
       }
     };
 
-    
+    const getIndice = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/getIndiceAcademico",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              cuentaEstudiante: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        indiceAcadem.value=data.indiceAcademico;
+        console.log(indiceAcadem);
+      } catch (error) {
+        console.error("Error al cargar el indice del estudiante", error);
+      }
+    };
 
     onMounted(() => {
+      indiceAcadem,
       estudianteEs();
       getCarreras();
+      getIndice();
     });
 
     // const carreraPri = () => {

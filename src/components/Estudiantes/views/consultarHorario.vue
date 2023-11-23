@@ -20,7 +20,7 @@
             <v-row>
               <Clase
                 v-for="clase in clases"
-                :key="clase.nombre"
+                :key="clase.idSeccion"
                 :clase="clase"
                 :card="card"
               />
@@ -42,38 +42,19 @@ import { ref, onMounted } from "vue";
 export default {
   components: { Lateral, Encabezado, Clase, TabClases },
   setup() {
-    const clases = [
-      {
-        asignatura: "Ingenieria del software",
-        aula: "403",
-        edificio: "B2",
-        dias: "Lu, Ma, Mi",
-        horaInicio: "0900",
-        horaFinal: "1000",
-        src: "https://www.youtube.com/embed/6q0JnftlH-I?si=DhrQ64paZ-W8Mc2i",
-        img: require("../assets/ing1.jpeg"),
-      },
-      {
-        asignatura: "Auditoria informatica",
-        aula: "205",
-        edificio: "B1",
-        dias: "Lu, Ma, Mi, Ju",
-        horaInicio: "0700",
-        horaFinal: "0800",
-        src: "https://www.youtube.com/embed/DUT5rEU6pqM?si=FHhwD8VXdVaJ8f_H",
-        img: require("../assets/ing2.jpeg"),
-      },
-      {
-        asignatura: "Disenio de compiladores",
-        aula: "305",
-        edificio: "B2",
-        dias: "Sa",
-        horaInicio: "1400",
-        horaFinal: "1700",
-        src: "https://www.youtube.com/embed/LpoFBlH4wMI?si=ywdhA1YKtU1D81S9",
-        img: require("../assets/ing3.jpeg"),
-      },
-    ];
+    const clases =ref([]);
+    // const clases = [
+    //   {
+    //     asignatura: "Ingenieria del software",
+    //     aula: "403",
+    //     edificio: "B2",
+    //     dias: "Lu, Ma, Mi",
+    //     horaInicio: "0900",
+    //     horaFinal: "1000",
+    //     src: "https://www.youtube.com/embed/6q0JnftlH-I?si=DhrQ64paZ-W8Mc2i",
+    //     img: require("../assets/ing1.jpeg"),
+    //   },
+    // ];
 
     const estudiante = ref();
     const estudianteEs = async () => {
@@ -81,8 +62,37 @@ export default {
       estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
       console.log(estudiante);
     };
+
+    const readMatricula = async () => {
+      //falta mandar el numero de cuenta creo
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/readMatricula",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              numeroCuenta: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        const nombresMatricula = data.clasesMatriculadas.map(
+          (objeto) => objeto
+        );
+        clases.value=nombresMatricula;
+        console.log(nombresMatricula);
+      } catch (error) {
+        console.error("Error al leer la matricula del estudiante :(", error);
+      }
+    };
+
     onMounted(() => {
       estudianteEs();
+      readMatricula();
     });
 
     return {
