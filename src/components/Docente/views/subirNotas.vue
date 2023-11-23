@@ -22,7 +22,7 @@
             <v-col cols="7">
               <div class="observaciones">
                  <span>En las observaciones los unicos campos validos son:</span>
-                 <span>Aprobo = APR, Reprobo = REP, No se Presento = NP, Abandono = ABN</span>
+                 <span>Aprobo = APR, Reprobo = REP, No se Presento = NSP, Abandono = ABN</span>
               </div>
             </v-col>
           </v-row>
@@ -30,7 +30,7 @@
 
         </div>
         <div class="componentesDocentes">
-        <TablaNotas  :datos="alumnosArray" :idSec="idSeccion"/>
+        <TablaNotas  :datos="alumnosArray" :idSec="idSeccion" :docente="numeroEmpleadoDocente" :selec="selectedItem"/>
         </div>
       </v-col>
     </v-row>
@@ -120,6 +120,7 @@ setup(){
 
 
     let idSeccion=ref()
+    let nombreClase=ref()
 
     watch(selectedItem, (newValue, oldValue) => {
       console.log('Cambiamos el valor de ', oldValue, ' a ', newValue);
@@ -130,17 +131,18 @@ setup(){
           console.log(nestedArray.nombreClase)
           console.log(nestedArray.idSeccion)
           idSeccion=nestedArray.idSeccion
+          nombreClase=nestedArray.nombreClase
         }
       })
       console.log('El id seccion donde se cargaran los usuarios es: '+idSeccion)
-      estudiantes(idSeccion)
+      estudiantes(idSeccion,nombreClase)
     });
 
 
 
     const alumnos=ref()
     const alumnosArray=ref([])
-    const estudiantes = async (id) => {
+    const estudiantes = async (id,name) => {
     
       try {
         const res = await fetch(' http://localhost:3000/docente/getEstudiantesSeccion', {
@@ -165,7 +167,8 @@ setup(){
                 numeroCuenta: item.numeroCuenta,
                 nombres: item.nombres,
                 apellidos: item.apellidos,
-                id:id
+                id:id,
+                nombreClase:name
               });
 
         console.log(alumnosArray)
@@ -190,7 +193,9 @@ setup(){
     clasesSelect,
     clasesFilter,
     idSeccion,
-    alumnosArray
+    nombreClase,
+    alumnosArray,
+    numeroEmpleadoDocente
     
    
  
