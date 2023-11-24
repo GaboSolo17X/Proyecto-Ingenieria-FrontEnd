@@ -20,7 +20,7 @@
               ><h3>{{ datos.centroRegional }}</h3></v-col
             >
             <v-col style="text-align: left"
-              ><h3>Insertar indice global</h3></v-col
+              ><h3>Indice: {{ ' ' }} {{ indiceAcadem }}</h3></v-col
             >
             <v-col style="text-align: left"
               ><h3>{{ datos.carrera }}</h3></v-col
@@ -151,6 +151,7 @@ export default {
   },
   components: { CardFoto },
   setup() {
+    const indiceAcadem = ref();
     const isSubirFotoVisible = ref(true);
     const isFormFotoValid = ref(false);
     const isFormdescripValid = ref(false);
@@ -279,6 +280,30 @@ export default {
       }
     };
 
+    const getIndice = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/getIndiceAcademico",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              cuentaEstudiante : estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        indiceAcadem.value=data.indiceAcademico;
+        console.log(indiceAcadem);
+      } catch (error) {
+        console.error("Error al cargar el indice del estudiante", error);
+      }
+    };
+
+
     const handleFileChange = (e) => {
       const file = e.target.files[0];
       formFoto.value.nuevaFoto = file;
@@ -301,6 +326,7 @@ export default {
       estudianteEs();
       getDescripcion();
       getFotos();
+      getIndice();
      
     });
 
@@ -309,6 +335,7 @@ export default {
     };
 
     return {
+      indiceAcadem,
       isSubirFotoVisible,
       form,
       cards,

@@ -323,7 +323,7 @@ export default {
 }
 .cuadrados {
   display: flex;
-  width: 900px;
+  width: 900px !important ;
   min-height: 500px;
   overflow: hidden;
   align-items: center;

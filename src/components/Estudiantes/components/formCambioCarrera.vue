@@ -128,7 +128,7 @@ export default {
               "Content-Type": "application/json",
             },
             body: JSON.stringify({
-              cuentaEstudiante: estudiante.value.numeroCuenta,
+              cuentaEstudiante : estudiante.value.numeroCuenta,
             }),
           }
         );
@@ -142,7 +142,6 @@ export default {
     };
 
     onMounted(() => {
-      indiceAcadem,
       estudianteEs();
       getCarreras();
       getIndice();
@@ -202,6 +201,7 @@ export default {
     return {
       form,
       carreras,
+      indiceAcadem,
       showAlertSuccess,
       goBack,
       onSubmit,

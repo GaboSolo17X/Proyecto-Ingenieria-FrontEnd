@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <body style="background-color: #282832">
       <v-row>
         <v-col cols="3">
@@ -8,16 +7,41 @@
         </v-col>
         <v-col>
           <div class="contenido">
-            <Encabezado title="Consultar horario" v-if="estudiante" :datos="estudiante"/>
+            <Encabezado
+              title="Consultar horario"
+              v-if="estudiante"
+              :datos="estudiante"
+            />
           </div>
           <div class="componentesDocentes">
             <TabClases />
           </div>
           <div class="cuadrados">
-            <v-row>
-              <Clase v-for="clase in clases" :key="clase.nombre" :clase="clase" :card="card" />
+            <v-row class="mt-10 ml-5">
+              <Clase
+                v-for="clase in clases"
+                :key="clase.nombre"
+                :clase="clase"
+                :card="card"
+              />
             </v-row>
           </div>
+          <v-row>
+            <v-col cols=""></v-col>
+            <v-col cols="">
+              <router-link to="/matriculaEstudiantes" class="subrayadoNo">
+                <v-btn
+                  color="white"
+                  variant="flat"
+                  rounded="xl"
+                  class="textBoton py-6 px-10 mt-5"
+                >
+                  VOLVER</v-btn
+                ></router-link
+              >
+            </v-col>
+            <v-col cols=""></v-col>
+          </v-row>
         </v-col>
       </v-row>
     </body>
@@ -27,56 +51,62 @@
 <script>
 import Lateral from "../components/lateral.vue";
 import Encabezado from "../components/encabezado.vue";
-import Clase from '../components/cardEspera.vue';
-import TabClases from '../components/tabClases.vue';
-import { ref,onMounted } from 'vue'
+import Clase from "../components/cardEspera.vue";
+import TabClases from "../components/tabClases.vue";
+import { ref, onMounted } from "vue";
 
 export default {
   components: { Lateral, Encabezado, Clase, TabClases },
   setup() {
-    const clases = [
-      {
-        asignatura: 'Ingenieria del software',
-        aula: '403',
-        edificio: 'B2',
-        dias: 'Lu, Ma, Mi',
-        horaInicio: '0900',
-        horaFinal: '1000',
-        cupos:'0',
-      },
-      {
-        asignatura: 'Auditoria informatica',
-        aula: '205',
-        edificio: 'B1',
-        dias: 'Lu, Ma, Mi, Ju',
-        horaInicio: '0700',
-        horaFinal: '0800',
-        cupos: '0',
-      },
-      {
-        asignatura: 'Disenio de compiladores',
-        aula: '305',
-        edificio: 'B2',
-        dias: 'Sa',
-        horaInicio: '1400',
-        horaFinal: '1700',
-        cupos: '0',
-      }
-    ];
+     const clases = ref([]);
+    // const clases = [
+    //   {
+    //     asignatura: "Ingenieria del software",
+    //     aula: "403",
+    //     edificio: "B2",
+    //     dias: "Lu, Ma, Mi",
+    //     horaInicio: "0900",
+    //     horaFinal: "1000",
+    //     cupos: "0",
+    //   },
+    // ];
 
-    const estudiante=ref()
-    const estudianteEs  = async () => {
-      console.log("El estudiante es")
-      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
-      console.log(estudiante)
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
     };
     onMounted(() => {
-      estudianteEs ();
+      estudianteEs();
+      readListaEspera();
     });
+
+    const readListaEspera = async () => {
+      try {
+        const res = await fetch(
+          " http://localhost:3030/estudiante/getListaEspera",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              numeroCuenta: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+         console.log(data);
+         clases.value= data.ListaDeClasesEnEspera;
+         console.log(clases);
+      } catch (error) {
+        console.error("Error al leer la lista de espera :(", error);
+      }
+    };
 
     return {
       clases,
-      estudiante
+      estudiante,
     };
   },
 };
@@ -84,6 +114,19 @@ export default {
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
+
+.subrayadoNo {
+  text-decoration: none;
+  color: black;
+}
+
+.textBoton {
+  font-family: "Rubik";
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
 
 .boton {
   display: flex;
@@ -139,7 +182,6 @@ export default {
   flex: 1;
   padding: 20px;
 }
-
 
 .rubik {
   font-family: "Rubik";

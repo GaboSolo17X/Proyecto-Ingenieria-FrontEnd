@@ -2,22 +2,6 @@
   <div class="form">
     <v-sheet class="pa-12 mb-12" rounded style="background-color: #282832">
       <v-card class="mx-auto mt-10 rounded-lg bg-color" min-width="810">
-        <div class="encabezadoSolicitud rounded-t-lg">
-          <v-row>
-            <v-col>
-              <v-card-text class="pa-0 text-center">
-                <h1 class="mb-3">Paco Mariachi Almendares Eclesiastico</h1>
-              </v-card-text>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col style="text-align: center">CURLA</v-col>
-            <v-col></v-col>
-            <v-col cols="5" style="text-align: left"
-              >Ingeniería Aeroespacial</v-col
-            >
-          </v-row>
-        </div>
         <v-form class="pa-9 pt-2">
           <p>Listado de asignaturas canceladas</p>
           <v-table fixed-header class="">
@@ -25,7 +9,7 @@
               <tr>
                 <th class="textoTabla">CODIGO</th>
                 <th class="textoTabla">ASIGNATURA</th>
-                <th class="textoTabla">FECHA CANCELACION</th>
+                <th class="textoTabla">PERIODO</th>
               </tr>
             </thead>
             <tbody>

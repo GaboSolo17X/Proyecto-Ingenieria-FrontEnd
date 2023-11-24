@@ -1,13 +1,18 @@
 <template>
-  <v-card class="mx-auto" elevation="1" max-width="290">
-    <v-card-title class="py-5 font-weight-black titulo">{{ clase.asignatura }}</v-card-title>
+  <v-card class="mx-15 mb-5" elevation="1" width="300" height="365">
+    <v-row>
+      <v-col style="text-align: center;">
+        <h3 class="py-5 font-weight-black titulo">{{ clase.nombreClase }}</h3>
+      </v-col>
+    </v-row>
+
 
     <v-card-text>
-      Aula: {{ clase.aula }} <br />
-      Edificio: {{ clase.edificio }} <br />
-      Dias: {{ clase.dias }} <br />
-      Horas: {{ clase.horaInicio }} - {{ clase.horaFinal }}  <br />
-      Cupos: {{ clase.cupos }}
+      Aula: {{ clase.Aula }} <br />
+      Edificio: {{ clase.Edificio }} <br />
+      Dias: {{ clase.Dias }} <br />
+      Horas: {{ clase.HoraInicio }} - {{ clase.HoraFinal }}  <br />
+      Posición: hola 
     </v-card-text>
     <v-card-text class="espera">
     Asignatura en lista de espera
@@ -22,7 +27,8 @@
           size="large"
           variant="flat" 
           v-bind="props" 
-          text="Cancelar"> </v-btn>
+          text="Cancelar"
+          @click="cancelarListaEspera(clase.idListaEspera)"> </v-btn>
       </template>
 
       <template v-slot:default="{ isActive }">
@@ -45,6 +51,33 @@
 export default ({
   name: 'clase',
   props: ['clase'],
+  setup(){
+    const cancelarListaEspera = async (id) => {
+      console.log(id);
+      try {
+        const res = await fetch(
+          "  http://localhost:3030/estudiante/deleteListaEspera",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idListaEspera: id,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        window.location.reload();
+      } catch (error) {
+        console.error("Error al cancelar la lista de espera ", error);
+      }
+    };
+    return{
+      cancelarListaEspera,
+    }
+  }
 })
 </script>
 <style scoped>

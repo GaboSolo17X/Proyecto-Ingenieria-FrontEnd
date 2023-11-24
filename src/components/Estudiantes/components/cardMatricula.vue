@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto my-12" max-width="280" max-height="500" height="430">
+  <v-card class="mx-auto my-12" max-width="" max-height="" height="400">
     <template v-slot:loader="{ isActive }">
       <v-progress-linear
         :active="isActive"
@@ -8,21 +8,21 @@
         indeterminate
       ></v-progress-linear>
     </template>
-    <!-- <v-avatar>
-                <v-img
-                   :src="'http://localhost:3030/'+clase.foto"
-                   alt="John"
-                 ></v-img>
-              </v-avatar>  -->
-    <v-img
-      :src="'http://localhost:3030/' + clase.foto"
-      class="imagen mt-5"
-      width="120"
-      height="120"
-      cover
-    ></v-img>
-    <v-row class="align-center d-flex flex-column" >
-      <v-col >
+    <v-row>
+      <v-col cols="4"></v-col>
+      <v-col class="fotoDocente">
+        <v-img
+          :src="'http://localhost:3030/' + clase.foto"
+          class="imagen mt-5"
+          width="120"
+          height="120"
+          cover
+        ></v-img>
+      </v-col>
+      <v-col cols="4"></v-col>
+    </v-row>
+    <v-row class="align-center d-flex flex-column">
+      <v-col>
         <v-card-item class="justify-center" style="text-align: justify">
           <v-card-title>{{ clase.nombre }}</v-card-title>
         </v-card-item>
@@ -40,27 +40,25 @@
     <v-divider class="mx-4 mb-1"></v-divider>
 
     <div class="px-3 text-center">
-      <v-chip-group label variant="outlined">
-        <v-chip label
-          >Seccion <br />
-          {{ clase.nombreSeccion }}</v-chip
+      <v-row>
+        <v-col
+          ><v-chip label
+            >Seccion <br />
+            {{ clase.nombreSeccion }}</v-chip
+          >
+          <v-chip label
+            >Dias <br />
+            {{ clase.dias }}</v-chip
+          ><v-chip label
+            >Cupos <br />
+            {{ clase.cupos }}
+          </v-chip>
+          <v-chip label
+            >UV <br />
+            {{ clase.uv }}
+          </v-chip></v-col
         >
-
-        <v-chip label
-          >Dias <br />
-          {{ clase.dias }}</v-chip
-        >
-
-        <v-chip label
-          >Cupos <br />
-          {{ clase.cupos }}
-        </v-chip>
-
-        <v-chip label
-          >UV <br />
-          {{ clase.uv }}
-        </v-chip>
-      </v-chip-group>
+      </v-row>
     </div>
     <v-divider class="mx-4 mb-1"></v-divider>
 
@@ -72,9 +70,19 @@
               color="grey-darken-4"
               v-bind="props"
               @click="matricularClase(clase.idAsignatura, clase.idSeccion)"
+              v-show="botonMatricular"
               >Matricular</v-btn
             >
+            <v-btn
+              color="grey-darken-4"
+              v-bind="props"
+              @click="matricularEspera(clase.idSeccion)"
+              v-show="NohayCupos"
+              >Lista Espera</v-btn
+            >
+            <!-- para matricular lista espera solo ocupo el idSeccion -->
           </template>
+          <!-- modal de matricula exitosa -->
           <template v-slot:default="{ isActive }">
             <v-card>
               <v-toolbar
@@ -94,6 +102,8 @@
               </v-card-actions>
             </v-card>
           </template>
+        <!-- modal de lista de espera exitosa -->
+          
         </v-dialog>
       </v-col>
     </v-card-actions>
@@ -104,15 +114,53 @@ import { ref, onMounted } from "vue";
 export default {
   name: "clase",
   props: ["clase"],
-  setup() {
+  setup(props) {
     const estudiante = ref();
+    const NohayCupos = ref(false);
+    const botonMatricular = ref(true);
     const estudianteEs = async () => {
       console.log("El estudiante es");
       estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
     };
     onMounted(() => {
       estudianteEs();
+      calcularCupos(props.clase.cupos);
     });
+
+    const calcularCupos = (cupos) => {
+      console.log(cupos);
+      if (cupos == 0) {
+        NohayCupos.value = true;
+        botonMatricular.value = false;
+      } else {
+        NohayCupos.value = false;
+        botonMatricular.value = true;
+      }
+    };
+
+    const matricularEspera = async ( idSeccion) => {
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/addListaEspera",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              Seccion: idSeccion,
+              cuenta: estudiante.value.numeroCuenta,
+
+            }),
+          }
+        );
+        const data = await res.json();
+        window.location.reload();
+        console.log(data);
+      } catch (error) {
+        console.error("Error al añadir a la lista de espera", error);
+      }
+    };
 
     const matricularClase = async (idAsignatura, idSeccion) => {
       console.log("Asignatura " + idAsignatura);
@@ -134,6 +182,7 @@ export default {
           }
         );
         const data = await res.json();
+        window.location.reload();
         console.log(data);
       } catch (error) {
         console.error("Error al crear la matrícula", error);
@@ -142,6 +191,9 @@ export default {
 
     return {
       matricularClase,
+      matricularEspera,
+      NohayCupos,
+      botonMatricular,
     };
   },
 };
@@ -153,6 +205,9 @@ export default {
   text-align: center;
 }
 
+.fotoDocente {
+  display: flex;
+}
 .v-card {
   background-color: #77181e;
   border-radius: 30px;
@@ -168,10 +223,6 @@ export default {
 .v-card-item + .v-card-text {
   padding-bottom: 0;
   text-align: center;
-}
-
-.v-img {
-  margin-left: 70px;
 }
 
 .imagen {

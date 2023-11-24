@@ -17,7 +17,7 @@
             <TabClases />
           </div>
           <div class="cuadrados">
-            <v-row>
+            <v-row class="mt-10 ml-5">
               <Clase
                 v-for="clase in clases"
                 :key="clase.idSeccion"
@@ -26,6 +26,23 @@
               />
             </v-row>
           </div>
+          
+          <v-row>
+            <v-col cols=""></v-col>
+            <v-col cols="">
+              <router-link to="/matriculaEstudiantes" class="subrayadoNo">
+                <v-btn
+                  color="white"
+                  variant="flat"
+                  rounded="xl"
+                  class="textBoton py-6 px-10 mt-5"
+                >
+                  VOLVER</v-btn
+                ></router-link
+              >
+            </v-col>
+            <v-col cols=""></v-col>
+          </v-row>
         </v-col>
       </v-row>
     </body>
@@ -43,19 +60,6 @@ export default {
   components: { Lateral, Encabezado, Clase, TabClases },
   setup() {
     const clases =ref([]);
-    // const clases = [
-    //   {
-    //     asignatura: "Ingenieria del software",
-    //     aula: "403",
-    //     edificio: "B2",
-    //     dias: "Lu, Ma, Mi",
-    //     horaInicio: "0900",
-    //     horaFinal: "1000",
-    //     src: "https://www.youtube.com/embed/6q0JnftlH-I?si=DhrQ64paZ-W8Mc2i",
-    //     img: require("../assets/ing1.jpeg"),
-    //   },
-    // ];
-
     const estudiante = ref();
     const estudianteEs = async () => {
       console.log("El estudiante es");
@@ -64,7 +68,6 @@ export default {
     };
 
     const readMatricula = async () => {
-      //falta mandar el numero de cuenta creo
       try {
         const res = await fetch(
           "http://localhost:3030/estudiante/readMatricula",
@@ -106,6 +109,18 @@ export default {
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
 
+.subrayadoNo {
+  text-decoration: none;
+  color: black;
+}
+
+.textBoton {
+  font-family: "Rubik";
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
 .boton {
   display: flex;
   justify-content: center;
@@ -117,6 +132,8 @@ export default {
 .card {
   width: 20%;
 }
+
+
 
 .text {
   font-family: "Rubik";
