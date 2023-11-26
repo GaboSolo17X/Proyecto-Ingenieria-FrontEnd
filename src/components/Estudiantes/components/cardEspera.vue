@@ -34,13 +34,13 @@
       <template v-slot:default="{ isActive }">
         <v-card>
           <v-card-text>
-          Clase cancelada con exito
+          <h3>Clase eliminada de la lista de espera</h3>
           </v-card-text>
 
           <v-card-actions>
             <v-spacer></v-spacer>
 
-            <v-btn text="Cerrar" @click="isActive.value = false"></v-btn>
+            <v-btn text="Cerrar" @click="isActive.value = false; recargado()"></v-btn>
           </v-card-actions>
         </v-card>
       </template>
@@ -69,13 +69,18 @@ export default ({
         );
         const data = await res.json();
         console.log(data);
-        window.location.reload();
+        // window.location.reload();
       } catch (error) {
         console.error("Error al cancelar la lista de espera ", error);
       }
     };
+
+    const recargado =()=>{
+      window.location.reload();
+    }
     return{
       cancelarListaEspera,
+      recargado,
     }
   }
 })

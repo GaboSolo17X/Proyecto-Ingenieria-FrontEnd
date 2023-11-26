@@ -25,89 +25,73 @@
           <td class="textoCuerpo">{{ item.obs }}</td>
         </tr>
       </tbody>
-      
     </v-table>
     <v-row>
-        <v-col></v-col><v-col></v-col>
-        
-        <v-col></v-col><v-col></v-col>
-        <v-col class="mt-8">
-              <v-btn
-                block
-                rounded
-                color="#282832"
-                size="large"
-                variant="elevated">
-                <router-link
-                  to="/calificacionesEstudiantes"
-                  class="subrayadoNo">
-                  Volver</router-link>
-              </v-btn>
-            </v-col>
-      </v-row>
+      <v-col></v-col><v-col></v-col>
+
+      <v-col></v-col><v-col></v-col>
+      <v-col class="mt-8">
+        <v-btn block rounded color="#282832" size="large" variant="elevated">
+          <router-link to="/calificacionesEstudiantes" class="subrayadoNo">
+            Volver</router-link
+          >
+        </v-btn>
+      </v-col>
+    </v-row>
   </div>
 </template>
 
 <script>
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 export default {
   setup() {
     let notas = ref([]);
+    // notas = [
+    //   {
+    //     codigo: "IS200",
+    //     asignatura: "Introducción a la Ingeniería en sistemas",
+    //     hI: "1900",
+    //     hF: "2000",
+    //     dias: "Lu,Ma,Mi",
+    //     profesor: "Miguel Eduardo Aguilar ",
+    //     calificacion: "100",
+    //     obs: "APR",
+    //   }
+    // ];
 
-    notas = [
-      {
-        codigo: "IS200",
-        asignatura: "Introducción a la Ingeniería en sistemas",
-        hI: "1900",
-        hF: "2000",
-        dias: "Lu,Ma,Mi",
-        profesor: "Miguel Eduardo Aguilar ",
-        calificacion: "100",
-        obs: "APR",
-      },
-      {
-        codigo: "IS200",
-        asignatura: "Introducción a la Ingeniería en sistemas",
-        hI: "1900",
-        hF: "2000",
-        dias: "Lu,Ma,Mi",
-        profesor: "Miguel Eduardo Aguilar ",
-        calificacion: "100",
-        obs: "APR",
-      },
-      {
-        codigo: "IS200",
-        asignatura: "Introducción a la Ingeniería en sistemas",
-        hI: "1900",
-        hF: "2000",
-        dias: "Lu,Ma,Mi",
-        profesor: "Miguel Eduardo Aguilar ",
-        calificacion: "100",
-        obs: "APR",
-      },
-      {
-        codigo: "IS200",
-        asignatura: "Introducción a la Ingeniería en sistemas",
-        hI: "1900",
-        hF: "2000",
-        dias: "Lu,Ma,Mi",
-        profesor: "Miguel Eduardo Aguilar ",
-        calificacion: "100",
-        obs: "APR",
-      },
-      {
-        codigo: "IS200",
-        asignatura: "Introducción a la Ingeniería en sistemas",
-        hI: "1900",
-        hF: "2000",
-        dias: "Lu,Ma,Mi",
-        profesor: "Miguel Eduardo Aguilar ",
-        calificacion: "100",
-        obs: "APR",
-      },
-    ];
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+    };
+
+    const readNotas = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/notasDespuesEvaluacion",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              numeroCuenta: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.error("Error al leer las calificaciones", error);
+      }
+    };
+
+    onMounted(() => {
+      estudianteEs();
+      readNotas();
+    });
 
     return {
+      estudiante,
       notas,
     };
   },
@@ -125,17 +109,16 @@ export default {
   padding-right: 95px;
   margin-left: -110px;
   margin-top: 50px;
-  
 }
 
 .textoTabla {
   background-color: #a92727 !important;
   color: white !important;
   font-family: "Rubik";
-  text-align: center!important;
+  text-align: center !important;
 }
 
-.textoCuerpo{
+.textoCuerpo {
   font-family: "Rubik";
   text-align: center;
 }

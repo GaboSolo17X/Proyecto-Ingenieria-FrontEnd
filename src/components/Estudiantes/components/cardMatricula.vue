@@ -9,7 +9,7 @@
       ></v-progress-linear>
     </template>
     <v-row>
-      <v-col cols="4"></v-col>
+      <v-col cols="3"></v-col>
       <v-col class="fotoDocente">
         <v-img
           :src="'http://localhost:3030/' + clase.foto"
@@ -19,7 +19,7 @@
           cover
         ></v-img>
       </v-col>
-      <v-col cols="4"></v-col>
+      <v-col cols="3"></v-col>
     </v-row>
     <v-row class="align-center d-flex flex-column">
       <v-col>
@@ -90,20 +90,21 @@
                 title="Registro UNAH"
               ></v-toolbar>
               <v-card-text>
-                <div class="text-h2 pa-6">¡Clase matriculada con exito!</div>
+                <div class="text-h2 pa-6">{{ mensaje }}</div>
               </v-card-text>
               <v-card-actions class="justify-end">
                 <v-btn
                   color="grey-darken-4"
                   variant="text"
-                  @click="isActive.value = false"
+                  @click="
+                    isActive.value = false;
+                    recargado();
+                  "
                   >Cerrar</v-btn
                 >
               </v-card-actions>
             </v-card>
           </template>
-        <!-- modal de lista de espera exitosa -->
-          
         </v-dialog>
       </v-col>
     </v-card-actions>
@@ -116,6 +117,7 @@ export default {
   props: ["clase"],
   setup(props) {
     const estudiante = ref();
+    const mensaje = ref("");
     const NohayCupos = ref(false);
     const botonMatricular = ref(true);
     const estudianteEs = async () => {
@@ -138,7 +140,7 @@ export default {
       }
     };
 
-    const matricularEspera = async ( idSeccion) => {
+    const matricularEspera = async (idSeccion) => {
       try {
         const res = await fetch(
           "http://localhost:3030/estudiante/addListaEspera",
@@ -150,21 +152,37 @@ export default {
             body: JSON.stringify({
               Seccion: idSeccion,
               cuenta: estudiante.value.numeroCuenta,
-
             }),
           }
         );
         const data = await res.json();
-        window.location.reload();
+        // window.location.reload();
         console.log(data);
+        switch (data.message) {
+          case "Se ha registrado en la lista de espera":
+            mensaje.value = "Clase añadida con éxito a la lista de espera";
+            break;
+            case "El estudiante ya tiene esta clase en lista de espera":
+            mensaje.value = "Ya tiene esta clase en lista de espera";
+            break;
+            case "El estudiante ya tiene matriculada esta clase":
+            mensaje.value = "Ya tiene esta clase matriculada";
+            break;
+            case "Conflicto en el horario":
+            mensaje.value = "Ya tiene una clase en este horario";
+            break;
+          default:
+            mensaje.value = "Caso de lista de espera no contemplado";
+            break;
+        }
       } catch (error) {
         console.error("Error al añadir a la lista de espera", error);
       }
     };
 
     const matricularClase = async (idAsignatura, idSeccion) => {
-      console.log("Asignatura " + idAsignatura);
-      console.log("Seccion " + idSeccion);
+      // console.log("Asignatura " + idAsignatura);
+      // console.log("Seccion " + idSeccion);
 
       try {
         const res = await fetch(
@@ -182,16 +200,38 @@ export default {
           }
         );
         const data = await res.json();
-        window.location.reload();
         console.log(data);
+        switch (data.message) {
+          case "Clase matriculada":
+            mensaje.value = "Clase matriculada con éxito";
+            break;
+            case "El estudiante ya tiene matriculada esta clase":
+            mensaje.value = "Ya tiene matriculada esta clase";
+            break;
+            case "El estudiante ya tiene esta clase en lista de espera":
+            mensaje.value = "Ya tiene esta clase en lista de espera";
+            break;
+            case "Conflicto en el horario":
+            mensaje.value = "Ya tiene una clase en este horario";
+            break;
+          default:
+            mensaje.value = "Caso de matricula no contemplado";
+            break;
+        }
       } catch (error) {
         console.error("Error al crear la matrícula", error);
       }
     };
 
+    const recargado = () => {
+      window.location.reload();
+    };
+
     return {
+      mensaje,
       matricularClase,
       matricularEspera,
+      recargado,
       NohayCupos,
       botonMatricular,
     };

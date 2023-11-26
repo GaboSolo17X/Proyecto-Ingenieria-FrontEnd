@@ -167,7 +167,7 @@ export default {
 
     onMounted(() => {
       estudianteEs();
-      getClases(); //probar si no queda solo en el setup
+      getClases(); 
     });
 
     const pruebaCancelacion = async () => {

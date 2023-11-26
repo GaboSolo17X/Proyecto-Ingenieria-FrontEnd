@@ -1,7 +1,7 @@
 <template>
   <v-card class="mx-15 mb-5" elevation="1" width="300" height="365">
     <v-row>
-      <v-col style="text-align: center;">
+      <v-col style="text-align: center">
         <h3 class="py-5 font-weight-black titulo">{{ clase.nombreClase }}</h3>
       </v-col>
     </v-row>
@@ -31,20 +31,33 @@
         </template>
 
         <template v-slot:default="{ isActive }">
-          <v-card title="Introduccion a la clase">
-            <v-divider></v-divider>
+          <v-card>
+            <v-row>
+              <v-col class="Intro my-3"><h2>INTRODUCCION A LA CLASE</h2></v-col>
+            </v-row>
+
+           <hr>
             <v-card-text class="py-0 pt-5">
-              <v-row class="mb-5">{{ infoDocente.nombre }}</v-row>
-              <v-row >
-                <v-col cols="3">
-                  <v-img
+              <v-row>
+                <v-col cols="4"
+                  ><v-img
+                    class="fotoDocente"
                     cover
-                    height="100"
-                    width="100"
+                    height="120"
+                    width="120"
                     :src="'http://localhost:3030/' + infoDocente.fotoDocente"
-                  ></v-img>
-                </v-col>
+                  ></v-img
+                ></v-col>
+                <v-col class="nombre"
+                  ><h2 class="nameDocente">{{ infoDocente.nombre }}</h2></v-col
+                >
               </v-row>
+              <!-- <v-row class="mb-5"></v-row> -->
+              <!-- <v-row>
+                <v-col cols="3">
+                  
+                </v-col>
+              </v-row> -->
             </v-card-text>
             <v-card-text>
               <iframe
@@ -110,6 +123,7 @@ export default {
         );
         const data = await res.json();
         console.log(data);
+        window.alert("Se ha eliminado la clase");
         window.location.reload();
       } catch (error) {
         console.error("Error al cancelar la sección", error);
@@ -153,6 +167,20 @@ export default {
 };
 </script>
 <style scoped>
+.nombre {
+  display: flex;
+  align-items: center;
+}
+.fotoDocente {
+  border-radius: 50%;
+}
+.nameDocente {
+  text-align: left;
+}
+.Intro {
+  text-align: center;
+  color: #fbd411;
+}
 .v-btn {
   border-radius: 30px;
   margin-bottom: 10px;

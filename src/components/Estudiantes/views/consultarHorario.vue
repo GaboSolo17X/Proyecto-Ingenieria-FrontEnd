@@ -20,7 +20,7 @@
             <v-row class="mt-10 ml-5">
               <Clase
                 v-for="clase in clases"
-                :key="clase.idSeccion"
+                :key="clase.idAsignatura"
                 :clase="clase"
                 :card="card"
               />

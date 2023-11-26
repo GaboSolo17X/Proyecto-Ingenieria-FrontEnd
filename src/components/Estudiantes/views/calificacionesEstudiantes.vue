@@ -28,9 +28,9 @@
             <v-row>
               <CardClase
                 v-show="isClaseVisible"
-                v-for="card in cards"
-                :key="card.nombre"
-                :card="card"
+                v-for="clase in clases"
+                :key="clase.idAsignatura"
+                :clase="clase"
                 @mostrar-form="showEvaluacion"
               />
             </v-row>
@@ -75,6 +75,7 @@
             <FormEvaluacion
               :clase="nombreClaseForm"
               :docente="nombreCatedraticoForm"
+              :idSeccion="idSeccionForm"
               v-show="isEvaluacionVisible"
               @mostrar-cards="showCards"
             />
@@ -97,55 +98,28 @@ export default {
   setup() {
     const isEvaluacionVisible = ref(false);
     const isClaseVisible = ref(true);
-    const cards = [
-      {
-        src: require("../assets/principal1.png"),
-        nombre: "IS-410 Programación Orientada a Objetos",
-        catedratico: "Gabriel Omar Solorzano Maquiavelico",
-        horaInicio: "1800",
-        horaFin: "1900",
-        dias: "Lu,Ma,Mi,Ju",
-        seccion: "1801",
-        altura: "400",
-      },
-      {
-        src: require("../assets/principal2.png"),
-        nombre: "IS-100 Introducción a la Ingeniería en Sistemas",
-        catedratico: "Gabriel Omar Solorzano Oliva",
-        horaInicio: "1800",
-        horaFin: "1900",
-        dias: "Lu,Ma,Mi,Ju",
-        seccion: "1801",
-        altura: "400",
-      },
-      {
-        src: require("../assets/principal3.png"),
-        nombre: "IS-200 Arquitectura de computadoras",
-        catedratico: "Gabriel Omar Solorzano Oliva",
-        horaInicio: "1800",
-        horaFin: "1900",
-        dias: "Lu,Ma,Mi,Ju",
-        seccion: "1801",
-        altura: "400",
-      },
-      {
-        src: require("../assets/principal3.png"),
-        nombre: "IS-710 Ecuaciones Diferenciales",
-        catedratico: "Gabriel Omar Solorzano Oliva",
-        horaInicio: "1800",
-        horaFin: "1900",
-        dias: "Lu,Ma,Mi,Ju",
-        seccion: "1801",
-        altura: "400",
-      },
-    ];
+    const clases =ref ([]);
+    // const cards = [
+    //   {
+    //     src: require("../assets/principal2.png"),
+    //     nombre: "IS-100 Introducción a la Ingeniería en Sistemas",
+    //     catedratico: "Gabriel Omar Solorzano Oliva",
+    //     horaInicio: "1800",
+    //     horaFin: "1900",
+    //     dias: "Lu,Ma,Mi,Ju",
+    //     seccion: "1801",
+    //     altura: "400",
+    //   },
+    // ];
 
     const nombreClaseForm = ref("");
     const nombreCatedraticoForm = ref("");
+    const idSeccionForm =ref ();
 
     const showEvaluacion = (payload) => {
-      nombreClaseForm.value = payload.nombre;
-      nombreCatedraticoForm.value = payload.catedratico;
+      nombreClaseForm.value = payload.nombreClase;
+      nombreCatedraticoForm.value = payload.nombreDocente;
+      idSeccionForm.value= payload.id;
       isEvaluacionVisible.value = true;
       isClaseVisible.value = false;
     };
@@ -161,16 +135,44 @@ export default {
       estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
       console.log(estudiante);
     };
+    const readMatricula = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/readMatricula",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              numeroCuenta: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        const nombresMatricula = data.clasesMatriculadas.map(
+          (objeto) => objeto
+        );
+        clases.value=nombresMatricula;
+        console.log(nombresMatricula);
+      } catch (error) {
+        console.error("Error al leer la matricula del estudiante :(", error);
+      }
+    };
+
     onMounted(() => {
       estudianteEs();
+      readMatricula();
     });
 
     return {
-      cards,
+      clases,
       isClaseVisible,
       isEvaluacionVisible,
       nombreClaseForm,
       nombreCatedraticoForm,
+      idSeccionForm,
       estudiante,
       showEvaluacion,
       showCards,
