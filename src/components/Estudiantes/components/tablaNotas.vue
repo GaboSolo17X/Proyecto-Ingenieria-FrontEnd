@@ -77,6 +77,7 @@ export default {
               numeroCuenta: estudiante.value.numeroCuenta,
             }),
           }
+          //hola
         );
         const data = await res.json();
         console.log(data);
