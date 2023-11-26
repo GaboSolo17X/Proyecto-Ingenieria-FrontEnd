@@ -15,6 +15,7 @@
       </thead>
       <tbody>
         <tr v-for="item in notas" :key="item.codigo">
+          <!-- CAMBIAR ACA LOS NOMBRES DE LAS PROPIEDADES SEGUN LA DATA QUE SE IMPRIME AL CARGAR LA TABLA -->
           <td class="textoCuerpo">{{ item.codigo }}</td>
           <td class="textoCuerpo">{{ item.asignatura }}</td>
           <td class="textoCuerpo">{{ item.hI }}</td>
@@ -22,7 +23,7 @@
           <td class="textoCuerpo">{{ item.dias }}</td>
           <td class="textoCuerpo">{{ item.profesor }}</td>
           <td class="textoCuerpo">{{ item.calificacion }}</td>
-          <td class="textoCuerpo">{{ item.obs }}</td>
+          <td class="textoCuerpo">{{ item.estado }}</td>
         </tr>
       </tbody>
     </v-table>
@@ -46,6 +47,7 @@ import { ref, onMounted } from "vue";
 export default {
   setup() {
     let notas = ref([]);
+    let mensaje = ref('');
     // notas = [
     //   {
     //     codigo: "IS200",
@@ -77,13 +79,34 @@ export default {
               numeroCuenta: estudiante.value.numeroCuenta,
             }),
           }
-          //hola
         );
         const data = await res.json();
         console.log(data);
+        switch (data.message) {
+          case "Aun no hay evaluaciones":
+            mensaje.value ="Por favor complete todas las evaluaciones de docente para visualizar sus calificaciones";
+            info(mensaje.value);
+            break;
+          case "Aun no a realizado todas sus evaluaciones":
+            mensaje.value ="Por favor complete todas las evaluaciones de docente para visualizar sus calificaciones";
+            info(mensaje.value);
+            break;
+          case "Notas Disponibles":
+             notas.value=data.notasClases;
+             console.log(notas);
+            break;
+          default:
+            mensaje.value = "Caso de notas no contemplado";
+            info(mensaje.value);
+            break;
+        }
       } catch (error) {
         console.error("Error al leer las calificaciones", error);
       }
+    };
+
+    const info = (mensaje) => {
+      window.alert(mensaje);
     };
 
     onMounted(() => {

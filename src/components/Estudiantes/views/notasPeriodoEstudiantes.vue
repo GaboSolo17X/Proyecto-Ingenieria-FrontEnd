@@ -30,9 +30,7 @@
     setup() {
       const estudiante=ref()
     const estudianteEs  = async () => {
-      console.log("El estudiante es")
       estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
-      console.log(estudiante)
     };
     onMounted(() => {
       estudianteEs ();
