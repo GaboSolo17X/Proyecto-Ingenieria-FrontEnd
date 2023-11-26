@@ -5,7 +5,7 @@
         <v-list color="transparent">
           <div class="logo_center">
             <div class="logo"></div>
-          </div>
+          </div><hr />
           <h6 class="textoUNAH">UNAH</h6>
           <hr />
           <div style="margin-top: 15px">
@@ -94,9 +94,11 @@
 
         <template v-slot:append>
           <div class="pa-2">
+            <v-btn block class="enlace"
+              @click="LimpiarLs()">
             <router-link to="/" class="enlace">
-              <v-btn block class="enlace"> Salir </v-btn>
-            </router-link>
+               Salir 
+            </router-link></v-btn>
           </div>
         </template>
       </v-navigation-drawer>
@@ -107,7 +109,20 @@
 </template>
 
 <script>
-export default {};
+export default {
+  setup(){
+
+
+    const LimpiarLs= ()=>{
+      localStorage.clear();
+    }
+    return{
+      LimpiarLs,
+    }
+  }
+
+
+};
 </script>
 
 <style scoped>
@@ -187,6 +202,6 @@ export default {};
   align-items: center;
   align-content: center !important;
   margin-left: 16px;
-  border-bottom: 2px solid white;
+  /* border-bottom: 2px solid white; */
 }
 </style>
