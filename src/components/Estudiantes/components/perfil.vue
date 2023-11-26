@@ -6,16 +6,26 @@
           <v-row>
             <v-col>
               <v-card-text class="pa-0 text-center">
-                <h1 class="mb-1">Paco Mariachi almendares Rodriguez</h1>
+                <h1 class="mb-1">
+                  {{ datos.nombres }} {{ " " }}{{ datos.apellidos }}
+                </h1>
               </v-card-text>
             </v-col>
           </v-row>
           <v-row class="mb-1">
-            <v-col style="text-align: right"><h3>20200000000</h3></v-col>
-            <v-col style="text-align: center"><h3>CURLA</h3></v-col>
-            <v-col style="text-align: left"
-              ><h3>Ingeniería Aeroespacial</h3></v-col
+            <v-col style="text-align: right"
+              ><h3>{{ datos.numeroCuenta }}</h3></v-col
             >
+            <v-col style="text-align: center"
+              ><h3>{{ datos.centroRegional }}</h3></v-col
+            >
+            <v-col style="text-align: left"
+              ><h3>Indice: {{ ' ' }} {{ indiceAcadem }}</h3></v-col
+            >
+            <v-col style="text-align: left"
+              ><h3>{{ datos.carrera }}</h3></v-col
+            >
+            
           </v-row>
         </div>
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
@@ -25,18 +35,16 @@
             >
             <v-col>
               <p>
-                Insertar descripción aquí Lorem ipsum dolor sit amet consectetur
-                adipisicing elit. Hic illum quidem eos recusandae quos, expedita
-                unde qui veniam officiis ea voluptatibus rem, exercitationem
-                saepe ipsam fuga soluta. Fugit, modi architecto?
+                {{ descripcActual }}
               </p>
             </v-col>
           </v-row>
           <v-row>
             <v-col cols="3"><h3 class="titulos">Nueva descripción:</h3></v-col>
             <v-col>
+              <!-- v-model="form.descripcion" -->
               <v-textarea
-                v-model="form.descripcion"
+              v-model="form.nuevaDescripcion"
                 class="mb-5"
                 label="Cuentanos sobre ti"
                 hide-details="auto"
@@ -51,36 +59,38 @@
               <v-row>
                 <CardFoto
                   v-for="card in cards"
-                  :key="card.Indice"
+                  :key="card.idfotoEstudiante"
                   :card="card"
                 />
                 <!-- esta es la card para subir imagen -->
                 <v-col cols="4">
                   <v-card
+                  v-show="isSubirFotoVisible"
                     class="mx-auto text"
                     color="white"
                     rounded
                     height="230px"
                   >
                     <v-row>
-                      
                       <v-col class="pt-15 px-10">
                         <v-file-input
-                          accept="image/png, image/jpeg, image/bmp"
+                          accept="image.png, image/jpeg, image/bmp image/jfif"
                           placeholder="Sube una nueva imagen"
                           prepend-icon="fa-solid fa-camera"
                           label="Nueva"
                           small-chips
+                          @change="handleFileChange"
                         ></v-file-input>
                       </v-col>
                     </v-row>
-                    
+
                     <v-card-actions class="d-flex flex-column">
                       <v-btn
                         color="#282832"
                         variant="flat"
                         rounded="xl"
                         class="px-10"
+                        @click="subirFoto()"
                       >
                         Subir
                       </v-btn>
@@ -92,7 +102,7 @@
           </v-row>
 
           <v-row>
-            <v-col cols="4"></v-col>
+            <v-col cols="3"></v-col>
             <v-col cols="4">
               <v-btn
                 block
@@ -106,6 +116,26 @@
               </v-btn>
             </v-col>
           </v-row>
+          <v-row>
+            <v-col cols="3"></v-col>
+            <v-col cols="4">
+              <router-link
+                to="/principalEstudiantes"
+                style="text-decoration: none"
+              >
+                <v-btn
+                  block
+                  rounded
+                  color="#282832"
+                  size="large"
+                  type="submit"
+                  variant="elevated"
+                >
+                  Volver
+                </v-btn>
+              </router-link>
+            </v-col>
+          </v-row>
         </v-form>
       </v-card>
     </v-sheet>
@@ -116,66 +146,202 @@
 import { onMounted, ref } from "vue";
 import CardFoto from "./cardPerfil.vue";
 export default {
+  props: {
+    datos: Object,
+  },
   components: { CardFoto },
   setup() {
-    const clases = [
-      { text: "Ecuaciones Diferenciales" },
-      { text: "Dibujo II" },
-      { text: "Ingenieria de Software" },
-    ];
-    const isFormValid = ref(false);
+    const indiceAcadem = ref();
+    const isSubirFotoVisible = ref(true);
+    const isFormFotoValid = ref(false);
+    const isFormdescripValid = ref(false);
+    const descripcActual = ref("");
     const form = ref({
-      clasesSeleccionadas: null,
-      pdf: null,
-      justificacion: "",
+      nuevaDescripcion: "",
     });
 
-    const validateForm = () => {
-      if (
-        form.value.descripcion &&
-        form.value.pdf &&
-        form.value.clasesSeleccionadas
-      ) {
-        isFormValid.value = true;
-        showAlertSuccess();
-      } else {
-        isFormValid.value = false;
+    const formFoto = ref({
+      nuevaFoto: null,
+    });
+    const cards = ref([]);
+
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      console.log(estudiante.value);
+    };
+
+    const subirFoto = async () => {
+      validateFoto(); // Validar el formulario antes de enviar
+    };
+
+    const enviarFoto = async (foto) => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        formData.append("fotoEstudiante", foto);
+        const res = await fetch(
+          " http://localhost:3030/perfilEstudiante/addFoto",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+         console.log(data.message);
+      } catch (error) {
+        console.log(error);
       }
     };
+
+    const actualizarDescripción = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("numeroCuenta", estudiante.value.numeroCuenta);
+        formData.append("idfotoEstudiante", '' );
+        formData.append("descripcion", form.value.nuevaDescripcion);
+        const res = await fetch(
+          " http://localhost:3030/perfilEstudiante/modPerfilEstudiante",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        // console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const validateFoto = () => {
+      if (formFoto.value.nuevaFoto) {
+        isFormFotoValid.value = true;
+        enviarFoto(formFoto.value.nuevaFoto);
+        window.location.reload();
+        //console.log("foto enviada");
+      } else {
+        isFormFotoValid.value = false;
+        window.alert("No ha seleccionado ninguna foto");
+      }
+    };
+
+    const validateDescripcion = () => { //editar esto
+      if (form.value.nuevaDescripcion) {
+        isFormdescripValid.value = true;
+        actualizarDescripción();
+        // console.log("descripción valida");
+         window.location.reload();
+      } else {
+        isFormdescripValid.value = false;
+        window.alert("No hay cambios nuevos en la descripción ");
+      }
+    };
+
+    const getDescripcion = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        const res = await fetch(
+          "http://localhost:3030/perfilEstudiante/perfilEstudianteById",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        descripcActual.value = data.formContenido.descripcion;
+        console.log(descripcActual);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getFotos = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        const res = await fetch(
+          " http://localhost:3030/perfilEstudiante/getFotosEstudianes",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        // console.log(data);
+        cards.value = data.fotos;
+        console.log(cards);
+        console.log(cards.value.length);
+        mostrarSubir();
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const getIndice = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/getIndiceAcademico",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              cuentaEstudiante : estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        indiceAcadem.value=data.indiceAcademico;
+        console.log(indiceAcadem);
+      } catch (error) {
+        console.error("Error al cargar el indice del estudiante", error);
+      }
+    };
+
 
     const handleFileChange = (e) => {
       const file = e.target.files[0];
-      form.value.pdf = file;
+      formFoto.value.nuevaFoto = file;
       console.log(file);
     };
 
-    const showAlertSuccess = () => {
-      window.alert("Se ha enviado la solictud correctamente.");
-      window.history.back();
-    };
+    const mostrarSubir =()=>{
+      if (cards.value.length<3) {
+        isSubirFotoVisible.value = true;
+        console.log("Me muestro")
+        console.log("Mi tamanio "+cards.value.length)
+      } else {
+        isSubirFotoVisible.value = false;
+        console.log("No me muestro")
+        console.log("Mi tamanio "+cards.value.length)
+      }
+    }
+
+    onMounted(() => {
+      estudianteEs();
+      getDescripcion();
+      getFotos();
+      getIndice();
+     
+    });
 
     const onSubmit = async () => {
-      validateForm();
-      if (isFormValid.value) {
-        //te regresa a la pagina principal de solicitudes
-      }
+      validateDescripcion(); // Validar la descripción
     };
 
     return {
-      cards: [
-        {
-          Indice: 1,
-          src: require("../assets/usuarioPic.png"),
-        },
-        {
-          Indice: 2,
-          src: require("../assets/principal1.png"),
-        },
-      ],
+      indiceAcadem,
+      isSubirFotoVisible,
       form,
-      clases,
+      cards,
+      descripcActual,
       handleFileChange,
-      showAlertSuccess,
+      subirFoto,
       onSubmit,
     };
   },

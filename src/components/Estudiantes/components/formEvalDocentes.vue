@@ -172,10 +172,11 @@
 </template>
 
 <script>
-import { onMounted, ref, watch } from "vue";
+import { integer } from "@vuelidate/validators";
+import { onMounted, ref } from "vue";
 export default {
-  props: { clase: String, docente: String },
-  setup() {
+  props: { clase: String, docente: String, idSeccion:Number },
+  setup(props) {
     const isFormValid = ref(false);
     const form = ref({
       pregunta1: null,
@@ -197,11 +198,43 @@ export default {
       ) {
         isFormValid.value = true;
         showAlertSuccess();
+        enviarEvaluacion();
       } else {
         isFormValid.value = false;
         window.alert("Por favor complete todos los campos");
       }
     };
+
+    const enviarEvaluacion = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("pre1",  form.value.pregunta1);
+        formData.append("pre2",  form.value.pregunta2);
+        formData.append("pre3",  form.value.pregunta3);
+        formData.append("pre4",  form.value.pregunta4);
+        formData.append("text1", form.value.pregunta5);
+        formData.append("text2", form.value.pregunta6);
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        formData.append("idseccion", props.idSeccion);
+        const res = await fetch(
+          "http://localhost:3030/estudiante/evalucionDocente",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+    };
+
     const goBack = () => {
       window.history.back();
       form.value.pregunta1 = null;
@@ -212,10 +245,16 @@ export default {
       form.value.pregunta6 = "";
     };
 
+   
+
     const showAlertSuccess = () => {
       window.alert("Se ha completado la evaluación correctamente :).");
       window.location.reload();
     };
+
+    onMounted(() => {
+      estudianteEs();
+    });
 
     const onSubmit = async () => {
       validateForm();

@@ -1,6 +1,5 @@
 <template>
   <div>
-
     <body style="background-color: #282832">
       <v-row>
         <v-col cols="3">
@@ -8,7 +7,11 @@
         </v-col>
         <v-col>
           <div class="contenido">
-            <Encabezado title="Consultar horario" />
+            <Encabezado
+              title="Consultar horario"
+              v-if="estudiante"
+              :datos="estudiante"
+            />
           </div>
           <div class="componentesDocentes">
             <TabClases />
@@ -18,6 +21,22 @@
               <Canceladas />
             </v-row>
           </div>
+          <v-row>
+            <v-col cols=""></v-col>
+            <v-col cols="">
+              <router-link to="/matriculaEstudiantes" class="subrayadoNo">
+                <v-btn
+                  color="white"
+                  variant="flat"
+                  rounded="xl"
+                  class="textBoton py-6 px-10 mt-5"
+                >
+                  VOLVER</v-btn
+                ></router-link
+              >
+            </v-col>
+            <v-col cols=""></v-col>
+          </v-row>
         </v-col>
       </v-row>
     </body>
@@ -27,19 +46,43 @@
 <script>
 import Lateral from "../components/lateral.vue";
 import Encabezado from "../components/encabezado.vue";
-import TabClases from '../components/tabClases.vue'
-import Canceladas from '../components/cardCancelada.vue'
-import { ref } from "vue";
+import TabClases from "../components/tabClases.vue";
+import Canceladas from "../components/cardCancelada.vue";
+import { ref, onMounted } from "vue";
 
 export default {
   components: { Lateral, Encabezado, Canceladas, TabClases },
-  
+  setup() {
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      console.log(estudiante);
+    };
+    onMounted(() => {
+      estudianteEs();
+    });
+    return {
+      estudiante,
+    };
+  },
 };
 </script>
 
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
+.subrayadoNo {
+  text-decoration: none;
+  color: black;
+}
 
+.textBoton {
+  font-family: "Rubik";
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
+}
 .boton {
   display: flex;
   justify-content: center;
@@ -94,7 +137,6 @@ export default {
   flex: 1;
   padding: 20px;
 }
-
 
 .rubik {
   font-family: "Rubik";

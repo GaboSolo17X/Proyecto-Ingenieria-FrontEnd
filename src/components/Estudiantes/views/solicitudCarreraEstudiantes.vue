@@ -7,10 +7,10 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado  title="Cambio de carrera"/>
+          <Encabezado  title="Cambio de carrera" v-if="estudiante" :datos="estudiante"/>
         </div>
         <div class="componentesDocentes">
-          <FormCambiocarrera/>
+          <FormCambiocarrera v-if="estudiante" :datos="estudiante"/>
         </div>
       </v-col>
     </v-row>
@@ -23,14 +23,27 @@
 import Lateral from '../components/lateral.vue'
 import Encabezado from '../components/encabezado.vue'
 import FormCambiocarrera from '../components/formCambioCarrera.vue'
-
+import { ref,onMounted } from 'vue'
 export default {
 components:{Lateral,Encabezado,FormCambiocarrera},
-data(){
-return{
-  
-}
-}
+setup(){
+    
+
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+    return{
+      estudiante
+    }
+
+    
+  }
 }
 </script>
 

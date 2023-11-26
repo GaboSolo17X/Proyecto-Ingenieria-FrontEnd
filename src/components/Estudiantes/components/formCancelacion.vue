@@ -6,16 +6,16 @@
           <v-row>
             <v-col>
               <v-card-text class="pa-0 text-center">
-                <h1 class="mb-3">Paco Mariachi almendares Rodriguez</h1>
+                <h1 class="mb-3">
+                  {{ datos.nombres }} {{ " " }} {{ datos.apellidos }}
+                </h1>
               </v-card-text>
             </v-col>
           </v-row>
           <v-row>
-            <v-col style="text-align: center">CURLA</v-col>
+            <v-col style="text-align: center">{{ datos.centroRegional }}</v-col>
             <v-col></v-col>
-            <v-col cols="5" style="text-align: left"
-              >Ingeniería Aeroespacial</v-col
-            >
+            <v-col cols="5" style="text-align: left">{{ datos.carrera }}</v-col>
           </v-row>
         </div>
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
@@ -28,7 +28,7 @@
                     type="checkbox"
                     v-model="form.clasesSeleccionadas[index]"
                   /><label class="ml-3" style="color: rgb(118, 118, 118)">{{
-                    clase.text
+                    clase.nombreClase
                   }}</label>
                 </v-col>
               </v-row>
@@ -37,10 +37,11 @@
 
           <p>Suba aquí su formato pdf de cancelación de clases:</p>
           <v-file-input
-            v-model="form.pdf"
+            ref="fileInputRef"
+            @change="handleFileChange"
             show-size
             accept=".pdf"
-            :rules="[(v) => !!v || 'Se requiere un archivo ', (v) => true]"
+            :rules="[(v) => !!v || 'Se requiere un archivo ']"
             label="Subir PDF"
             variant="solo-filled"
             prepend-icon="fa-solid fa-file"
@@ -89,21 +90,35 @@
 </template>
 
 <script>
-import { onMounted, ref } from "vue";
+import { onMounted, ref, computed } from "vue";
 export default {
+  props: { datos: Object },
   setup() {
-    const clases = [
-      { text: "Ecuaciones Diferenciales" },
-      { text: "Dibujo II" },
-      { text: "Ingenieria de Software" },
-    ];
-
+    const fileInputRef = ref(null);
+    const clases = ref([]); //ver que ondas con el .text
     const isFormValid = ref(false);
     const form = ref({
       clasesSeleccionadas: [],
       pdf: null,
       justificacion: "",
     });
+
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      if (file.type === "application/pdf") {
+        form.value.pdf = file;
+      } else {
+        window.alert("Por favor, seleccione un archivo PDF.");
+        form.value.pdf = null;
+        clearFileInput();
+      }
+    };
+
+    const clearFileInput = () => {
+      if (fileInputRef.value) {
+        fileInputRef.value.reset(); // Reiniciar el valor del input file
+      }
+    };
 
     const validateForm = () => {
       if (
@@ -124,20 +139,84 @@ export default {
       window.history.back();
     };
 
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      console.log(estudiante);
+    };
+
+    const getClases = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        const res = await fetch(
+          "http://localhost:3030/estudiante/readMatricula",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        clases.value = data.clasesMatriculadas;
+        console.log(clases);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    onMounted(() => {
+      estudianteEs();
+      getClases(); 
+    });
+
+    const pruebaCancelacion = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        // formData.append("clases", selectedClassesNames.value);
+        const nombresSecciones = form.value.clasesSeleccionadas
+          .map((isSelected, index) =>
+            isSelected ? clases.value[index].nombreClase : null
+          )
+          .filter((nombreClase) => nombreClase !== null);
+        formData.append("clases", nombresSecciones.join(", "));
+        formData.append("justificacion", form.value.justificacion);
+        formData.append("cancelacionPdf", form.value.pdf);
+        const res = await fetch(
+          "http://localhost:3030/estudiante/cancelacionExcepcional",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const onSubmit = async () => {
       validateForm();
+
+      if (isFormValid.value) {
+        pruebaCancelacion();
+      }
     };
 
     const goBack = () => {
       window.history.back();
-      form.value.justificacion = "",
-        form.value.pdf = null,
-        form.value.clasesSeleccionadas = []
+      (form.value.justificacion = ""),
+        (form.value.pdf = null),
+        (form.value.clasesSeleccionadas = []);
     };
 
     return {
       form,
       clases,
+      fileInputRef,
+      handleFileChange,
       showAlertSuccess,
       goBack,
       onSubmit,

@@ -7,7 +7,7 @@
           </v-col>
           <v-col>
             <div class="contenido">
-              <Encabezado title="Calificaciones del periodo" />
+              <Encabezado title="Calificaciones del periodo" v-if="estudiante" :datos="estudiante" />
             </div>
             
             <div class="componentesDocentes">
@@ -23,14 +23,23 @@
   import Lateral from "../components/lateral.vue";
   import Encabezado from "../components/encabezado.vue";
   import NotasPeriodo from "../components/tablaNotas.vue";
+  import { ref,onMounted } from 'vue'
+
   export default {
     components: { Lateral, Encabezado, NotasPeriodo },
     setup() {
-     
-      return {
-        
-      };
-    },
+      const estudiante=ref()
+    const estudianteEs  = async () => {
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+    return{
+      estudiante
+    }
+      
+    }
   };
   </script>
   

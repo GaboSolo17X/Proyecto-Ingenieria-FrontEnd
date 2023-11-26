@@ -7,7 +7,11 @@
         </v-col>
         <v-col>
           <div class="contenido">
-            <Encabezado title="Tus Calificaciones" />
+            <Encabezado
+              title="Tus Calificaciones"
+              v-if="estudiante"
+              :datos="estudiante"
+            />
           </div>
           <v-row v-show="isClaseVisible">
             <v-col class="rubik infoEvaluacion align-center d-flex flex-column">
@@ -24,34 +28,54 @@
             <v-row>
               <CardClase
                 v-show="isClaseVisible"
-                v-for="card in cards"
-                :key="card.nombre"
-                :card="card"
+                v-for="clase in clases"
+                :key="clase.idAsignatura"
+                :clase="clase"
                 @mostrar-form="showEvaluacion"
               />
             </v-row>
             <v-row v-show="isClaseVisible">
               <v-col></v-col>
               <v-col>
-                <v-btn
-                  color="white"
-                  variant="flat"
-                  rounded="xl"
-                  class="pa-6 boton"
+                <router-link
+                  to="/notasPeriodoEstudiantes"
+                  class="subrayadoNo text"
                 >
-                  <router-link
-                    to="/notasPeriodoEstudiantes"
-                    class="subrayadoNo text"
+                  <v-btn
+                    color="white"
+                    variant="flat"
+                    rounded="xl"
+                    class="pa-6 boton"
                   >
-                    VER CALIFICACIONES</router-link
-                  >
-                </v-btn>
+                    VER CALIFICACIONES</v-btn
+                  ></router-link
+                >
               </v-col>
               <v-col></v-col>
+            </v-row>
+            <v-row v-show="isClaseVisible">
+              <v-col cols=""></v-col>
+              <v-col cols="" class="text">
+                <router-link
+                  to="/principalEstudiantes"
+                  class="rubik subrayadoNo"
+                >
+                  <v-btn
+                    color="white"
+                    variant="flat"
+                    rounded="xl"
+                    class="py-6 px-10 mt-5 text"
+                  >
+                    VOLVER</v-btn
+                  ></router-link
+                >
+              </v-col>
+              <v-col cols=""></v-col>
             </v-row>
             <FormEvaluacion
               :clase="nombreClaseForm"
               :docente="nombreCatedraticoForm"
+              :idSeccion="idSeccionForm"
               v-show="isEvaluacionVisible"
               @mostrar-cards="showCards"
             />
@@ -67,62 +91,35 @@ import CardClase from "../components/cardClase.vue";
 import Lateral from "../components/lateral.vue";
 import Encabezado from "../components/encabezado.vue";
 import FormEvaluacion from "../components/formEvalDocentes.vue";
-import { ref } from "vue";
+import { ref, onMounted } from "vue";
 
 export default {
   components: { CardClase, Lateral, Encabezado, FormEvaluacion },
   setup() {
     const isEvaluacionVisible = ref(false);
     const isClaseVisible = ref(true);
-    const cards = [
-      {
-        src: require("../assets/principal1.png"),
-        nombre: "IS-410 Programación Orientada a Objetos",
-        catedratico: "Gabriel Omar Solorzano Maquiavelico",
-        horaInicio: "1800",
-        horaFin: "1900",
-        dias: "Lu,Ma,Mi,Ju",
-        seccion: "1801",
-        altura: "400",
-      },
-      {
-        src: require("../assets/principal2.png"),
-        nombre: "IS-100 Introducción a la Ingeniería en Sistemas",
-        catedratico: "Gabriel Omar Solorzano Oliva",
-        horaInicio: "1800",
-        horaFin: "1900",
-        dias: "Lu,Ma,Mi,Ju",
-        seccion: "1801",
-        altura: "400",
-      },
-      {
-        src: require("../assets/principal3.png"),
-        nombre: "IS-200 Arquitectura de computadoras",
-        catedratico: "Gabriel Omar Solorzano Oliva",
-        horaInicio: "1800",
-        horaFin: "1900",
-        dias: "Lu,Ma,Mi,Ju",
-        seccion: "1801",
-        altura: "400",
-      },
-      {
-        src: require("../assets/principal3.png"),
-        nombre: "IS-710 Ecuaciones Diferenciales",
-        catedratico: "Gabriel Omar Solorzano Oliva",
-        horaInicio: "1800",
-        horaFin: "1900",
-        dias: "Lu,Ma,Mi,Ju",
-        seccion: "1801",
-        altura: "400",
-      },
-    ];
+    const clases =ref ([]);
+    // const cards = [
+    //   {
+    //     src: require("../assets/principal2.png"),
+    //     nombre: "IS-100 Introducción a la Ingeniería en Sistemas",
+    //     catedratico: "Gabriel Omar Solorzano Oliva",
+    //     horaInicio: "1800",
+    //     horaFin: "1900",
+    //     dias: "Lu,Ma,Mi,Ju",
+    //     seccion: "1801",
+    //     altura: "400",
+    //   },
+    // ];
 
     const nombreClaseForm = ref("");
     const nombreCatedraticoForm = ref("");
+    const idSeccionForm =ref ();
 
     const showEvaluacion = (payload) => {
-      nombreClaseForm.value = payload.nombre;
-      nombreCatedraticoForm.value = payload.catedratico;
+      nombreClaseForm.value = payload.nombreClase;
+      nombreCatedraticoForm.value = payload.nombreDocente;
+      idSeccionForm.value= payload.id;
       isEvaluacionVisible.value = true;
       isClaseVisible.value = false;
     };
@@ -131,12 +128,52 @@ export default {
       isEvaluacionVisible.value = false;
       isClaseVisible.value = true;
     };
+
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      console.log(estudiante);
+    };
+    const readMatricula = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3030/estudiante/readMatricula",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              numeroCuenta: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        const nombresMatricula = data.clasesMatriculadas.map(
+          (objeto) => objeto
+        );
+        clases.value=nombresMatricula;
+        console.log(nombresMatricula);
+      } catch (error) {
+        console.error("Error al leer la matricula del estudiante :(", error);
+      }
+    };
+
+    onMounted(() => {
+      estudianteEs();
+      readMatricula();
+    });
+
     return {
-      cards,
+      clases,
       isClaseVisible,
       isEvaluacionVisible,
       nombreClaseForm,
       nombreCatedraticoForm,
+      idSeccionForm,
+      estudiante,
       showEvaluacion,
       showCards,
     };
@@ -152,6 +189,10 @@ export default {
 }
 .text {
   font-family: "Rubik";
+  display: flex;
+  justify-content: center;
+  align-content: center;
+  text-align: center;
 }
 
 .subrayadoNo {
