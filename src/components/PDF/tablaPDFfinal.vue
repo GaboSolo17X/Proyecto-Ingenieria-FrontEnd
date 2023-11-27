@@ -2,7 +2,7 @@
   <div class="background-container">
 
     <div>.</div>
-    <div class="numberN">1234569</div>
+    <div class="numberN">{{random}}</div>
     <div class="data">
         <v-row class="estudiante"><p>Este documento pertenece a {{estudiante}}, matriculado(a)</p></v-row>
         <v-row class="cuenta">
@@ -26,7 +26,8 @@ import { ref } from "vue";
     estudiante:String, 
     numCuenta:String, 
     carrera:String,
-    pagina:Number
+    pagina:Number,
+    random:Number,
     },
 
     setup(){

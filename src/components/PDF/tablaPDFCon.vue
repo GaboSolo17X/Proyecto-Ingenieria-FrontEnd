@@ -1,7 +1,7 @@
 <template>
   <div class="background-container">
     <div>.</div>
-    <div class="numberN">1234568</div>
+    <div class="numberN">{{random}}</div>
     <div class="contTable">
       <v-table density="compact" height="685px">
         <tbody>
@@ -38,6 +38,7 @@
 export default {
   props: {
     datos: Object,
+    random:Number
   },
   setup() {
     return {};

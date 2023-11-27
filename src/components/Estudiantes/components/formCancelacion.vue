@@ -151,7 +151,7 @@ export default {
         const formData = new FormData();
         formData.append("cuenta", estudiante.value.numeroCuenta);
         const res = await fetch(
-          "http://localhost:3030/estudiante/readMatricula",
+          "http://localhost:3000/estudiante/readMatricula",
           {
             method: "POST",
             body: formData,
@@ -184,7 +184,7 @@ export default {
         formData.append("justificacion", form.value.justificacion);
         formData.append("cancelacionPdf", form.value.pdf);
         const res = await fetch(
-          "http://localhost:3030/estudiante/cancelacionExcepcional",
+          "http://localhost:3000/estudiante/cancelacionExcepcional",
           {
             method: "POST",
             body: formData,

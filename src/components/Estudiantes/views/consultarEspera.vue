@@ -84,7 +84,7 @@ export default {
     const readListaEspera = async () => {
       try {
         const res = await fetch(
-          " http://localhost:3030/estudiante/getListaEspera",
+          " http://localhost:3000/estudiante/getListaEspera",
           {
             method: "POST",
             headers: {

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="mx-auto my-12" max-width="" max-height="" height="400">
+  <v-card class="mx-auto my-12" width="304px" max-height="" height="400">
     <template v-slot:loader="{ isActive }">
       <v-progress-linear
         :active="isActive"
@@ -12,7 +12,7 @@
       <v-col cols="3"></v-col>
       <v-col class="fotoDocente">
         <v-img
-          :src="'http://localhost:3030/' + clase.foto"
+          :src="'http://localhost:3000/' + clase.foto"
           class="imagen mt-5"
           width="120"
           height="120"
@@ -21,18 +21,28 @@
       </v-col>
       <v-col cols="3"></v-col>
     </v-row>
-    <v-row class="align-center d-flex flex-column">
+
+    
+      <v-row>
+        <v-col style="text-align: center">
+        <h3 class="px-1 font-weight-black titulo">{{ clase.nombre }}</h3>
+      </v-col>
+    </v-row>
+  
+    <!-- <v-row class="align-center d-flex flex-column">
       <v-col>
         <v-card-item class="justify-center" style="text-align: justify">
           <v-card-title>{{ clase.nombre }}</v-card-title>
         </v-card-item>
       </v-col>
-    </v-row>
-
-    <v-card-text>
-      <v-row align="center" class="mx-0"> </v-row>
-
+    </v-row> -->
+    <!-- <v-row> 
       <div class="my-2 text-subtitle-1 gestion">
+        {{ clase.docente }}
+      </div>
+    </v-row> -->
+    <v-card-text class="doc">
+      <div class="my-0 text-subtitle-1 gestion">
         {{ clase.docente }}
       </div>
     </v-card-text>
@@ -143,7 +153,7 @@ export default {
     const matricularEspera = async (idSeccion) => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/addListaEspera",
+          "http://localhost:3000/estudiante/addListaEspera",
           {
             method: "POST",
             headers: {
@@ -186,7 +196,7 @@ export default {
 
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/createMatricula",
+          "http://localhost:3000/estudiante/createMatricula",
           {
             method: "POST",
             headers: {
@@ -267,5 +277,15 @@ export default {
 
 .imagen {
   border-radius: 50%;
+}
+
+.doc{
+  text-align: center;
+}
+
+.cla{
+  text-align: center;
+  /* height: 40px; */
+  flex-wrap: wrap;
 }
 </style>

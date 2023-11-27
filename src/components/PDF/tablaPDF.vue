@@ -1,7 +1,7 @@
 <template>
     <div class="background-container">
         <div>.</div>
-        <div class="numberN">1234567</div>
+        <div class="numberN">{{random}}</div>
         <div class="data">
             <v-row class="saludo">
                 <p>
@@ -111,7 +111,8 @@ export default {
     datos:Object,
     estudiante:String, 
     numCuenta:String, 
-    carrera:String
+    carrera:String,
+    random:String
     },
     setup() {
         //     const datos= [

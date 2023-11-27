@@ -74,7 +74,7 @@ export default {
       //esta es la funcion de getdocente pero con un emit del nombre asignatura y nombredocente para la evaluacion
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/getInfoSeccion",
+          "http://localhost:3000/estudiante/getInfoSeccion",
           {
             method: "POST",
             headers: {
@@ -101,7 +101,7 @@ export default {
     const estadoEvaluado = async (id) => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/getInfoEvaluacion",
+          "http://localhost:3000/estudiante/getInfoEvaluacion",
           {
             method: "POST",
             headers: {

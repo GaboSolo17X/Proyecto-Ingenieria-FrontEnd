@@ -217,7 +217,7 @@ export default {
         formData.append("cuenta", estudiante.value.numeroCuenta);
         formData.append("idseccion", props.idSeccion);
         const res = await fetch(
-          "http://localhost:3030/estudiante/evalucionDocente",
+          "http://localhost:3000/estudiante/evalucionDocente",
           {
             method: "POST",
             body: formData,
@@ -307,7 +307,7 @@ p {
   color: white;
 }
 .form {
-  margin-top: 2%;
+  margin-top: 40px;
   font-family: "Rubik";
   width: 155%;
   padding-right: 100px;

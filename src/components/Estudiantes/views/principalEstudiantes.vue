@@ -59,7 +59,7 @@ return{
       titulo:'SOLICITUDES',
       descripcion:'Realiza aquí tus solicitudes para cambio de carrera, cambio de centro, reposición y cancelaciones excepcionales',
       ruta: '/solicitudesEstudiantes',
-      altura: '370'
+      altura: '380'
     }
   ]
 }

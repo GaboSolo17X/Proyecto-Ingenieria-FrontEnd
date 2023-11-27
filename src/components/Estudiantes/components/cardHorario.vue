@@ -45,7 +45,7 @@
                     cover
                     height="120"
                     width="120"
-                    :src="'http://localhost:3030/' + infoDocente.fotoDocente"
+                    :src="'http://localhost:3000/' + infoDocente.fotoDocente"
                   ></v-img
                 ></v-col>
                 <v-col class="nombre"
@@ -109,7 +109,7 @@ export default {
       console.log(idSeccion);
       try {
         const res = await fetch(
-          " http://localhost:3030/estudiante/deleteMatricula",
+          " http://localhost:3000/estudiante/deleteMatricula",
           {
             method: "POST",
             headers: {
@@ -133,7 +133,7 @@ export default {
     const verDocente = async (id) => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/getInfoSeccion",
+          "http://localhost:3000/estudiante/getInfoSeccion",
           {
             method: "POST",
             headers: {

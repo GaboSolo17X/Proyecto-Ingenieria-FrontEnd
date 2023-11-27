@@ -1,18 +1,20 @@
 <template>
-  <v-btn @click="verHorario()">Consultar horario</v-btn>
+  <v-btn variant="flat" rounded="xl" @click="verHorario()"
+    >Consultar horario</v-btn
+  >
 </template>
 <style scoped>
-.v-btn{
-    background-color: #DEE7E7;
-    font-style: bold;
-    color: black;
-    }
+.v-btn {
+  background-color: #dee7e7;
+  font-style: bold;
+  color: black;
+}
 </style>
 <script>
 export default {
   methods: {
     verHorario() {
-      this.$router.push('/consultarHorario');
+      this.$router.push("/consultarHorario");
     },
   },
 };

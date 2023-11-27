@@ -102,7 +102,7 @@ export default {
 
     const getCarreras = async () => {
       try {
-        const res = await fetch("http://localhost:3030/carreras/", {
+        const res = await fetch("http://localhost:3000/carreras/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
@@ -121,7 +121,7 @@ export default {
     const getIndice = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/getIndiceAcademico",
+          "http://localhost:3000/estudiante/getIndiceAcademico",
           {
             method: "POST",
             headers: {
@@ -178,7 +178,7 @@ export default {
         formData.append("carreraCambio", form.value.carr);
         formData.append("justificacion", form.value.justificacion);
         const res = await fetch(
-          "http://localhost:3030/estudiante/solicitudCambioCarrera",
+          "http://localhost:3000/estudiante/solicitudCambioCarrera",
           {
             method: "POST",
             body: formData,

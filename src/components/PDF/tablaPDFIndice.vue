@@ -1,9 +1,9 @@
 <template>
   <div class="background-container">
     <div>.</div>
-    <div class="numberN">1234569</div>
+    <div class="numberN">{{ random }}</div>
     <div class="data">
-      <v-row class="estudiante"><p>ÍNDICE ACADÉMICO: () / () = 90 %</p></v-row>
+      <v-row class="estudiante"><p>ÍNDICE ACADÉMICO: ({{ sum1 }}) / ({{ sum2 }}) = {{ indice }} %</p></v-row>
 
       <v-row class="msg">
         <p>
@@ -22,6 +22,13 @@
 import { ref } from "vue";
 
 export default {
+
+  props:{
+    random:Number,
+    indice:Number,
+    sum2:Number,
+    sum1:Number,
+  },
   
   setup() {
     function obtenerFechaFormateada() {

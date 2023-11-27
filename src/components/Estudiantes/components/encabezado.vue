@@ -11,7 +11,7 @@
               <p class="nombreUser">{{ datos.nombres }} {{ ' ' }}{{ datos.apellidos }}</p>
               <v-avatar>
                 <v-img
-                   :src="'http://localhost:3030/'+datos.fotoPerfil"
+                   :src="'http://localhost:3000/'+datos.fotoPerfil"
                    alt="Usuario"
                  ></v-img>
               </v-avatar>
