@@ -63,6 +63,9 @@ export default {
         })
         const data =await res.json();
         console.log(data);
+        if(data.message == "El archivo no tiene las columnas correctas, debe tener las columnas Nombres, Apellidos, Identidad, Carrera, CarreraSecundaria, CorreoPersonal, Centro, pasoCarreraPrincipal" || data.message == "El archivo no es un csv, debe enviar un archivo csv"){
+          window.alert(data.message);
+        }
       } catch (error) {
         console.log(error)
       }

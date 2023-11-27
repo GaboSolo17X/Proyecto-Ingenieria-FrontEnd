@@ -77,36 +77,14 @@ export default {
       // email: "",
     });
 
-    const carreras = ref([]);
-    onMounted(async () => {
-      getCarreras();
-    });
-
-    const getCarreras = async () => {
-      try {
-        const res = await fetch("http://localhost:3030/carreras/", {
-          method: "GET",
-          headers: {
-            "Content-Type": "application/json",
-          },
-        });
-        const data = await res.json();
-        //console.log(data.length);
-        for (let index = 0; index < data.length; index++) {
-          carreras.value.push(data[index].nombreCarrera);
-          //console.log(data[index])
-        }
-      } catch (error) {
-        console.log(error);
-      }
-    };
+   
 
     const reinicioContrasenia = async (cuenta) => {
       try {
         // const formData = new FormData();
         // formData.append("numeroCuenta", cuenta);
         const res = await fetch(
-          " http://localhost:3030/estudiante/recuperacionClave",
+          " http://localhost:3000/estudiante/recuperacionClave",
           {
             method: "POST",
             headers: {
@@ -117,6 +95,19 @@ export default {
         );
         const data = await res.json();
          console.log(data.message);
+        //  console.log(msg)
+        switch (data.message) {
+          case 'El estudiante no existe':
+          window.alert("Este numero de cuenta no existe, intentelo de nuevo");
+          // window.location.reload()
+          form.value.cuenta="";
+            break;
+        
+          default:
+          showAlertSuccess(); //Esto si la cuenta existe
+            break;
+        }
+          
       } catch (error) {
         console.log(error);
       }
@@ -128,8 +119,11 @@ export default {
       if (form.value.cuenta) {
         isFormValid.value = true;
         console.log(form.value.cuenta)
-        reinicioContrasenia(form.value.cuenta);
-        showAlertSuccess();
+        reinicioContrasenia(form.value.cuenta)
+          // ms=='El estudiante no existe'
+          // window.alert("Este numero de cuenta no existe");
+        
+        
       } else {
         isFormValid.value = false;
         window.alert("Por favor Ingrese su número de cuenta");
@@ -137,18 +131,18 @@ export default {
     };
 
     const showAlertSuccess = () => {
-      window.history.back();
       window.alert("Se ha enviado un mensaje a tu correo electrónico, sigue las instrucciones para acceder a tu cuenta.");
-      
+      window.history.back();
     };
 
     const onSubmit = async () => {
-      validateForm(); 
+      // console.log(msg)
+          validateForm();
+      
     };
 
     return {
       form,
-      carreras,
       showAlertSuccess,
       onSubmit,
     };

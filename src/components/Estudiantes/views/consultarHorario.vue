@@ -70,7 +70,7 @@ export default {
     const readMatricula = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/readMatricula",
+          "http://localhost:3000/estudiante/readMatricula",
           {
             method: "POST",
             headers: {

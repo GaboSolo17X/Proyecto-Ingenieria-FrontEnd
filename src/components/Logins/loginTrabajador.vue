@@ -188,7 +188,7 @@ export default {
     login: async (numeroEmp, claveEmp,router, nombre,dir) => {
       console.log(numeroEmp, claveEmp, nombre,dir)
       try { 
-        const res = await fetch('http://localhost:3030/'+nombre+'/login', {
+        const res = await fetch('http://localhost:3000/'+nombre+'/login', {
           method: "POST",
           credentials: "include",
           headers: {

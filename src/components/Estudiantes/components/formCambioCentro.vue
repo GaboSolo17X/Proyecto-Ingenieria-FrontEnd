@@ -118,7 +118,7 @@ export default {
         formData.append("centroCambio", form.value.centroRe);
         formData.append("justificacion", form.value.justificacion);
         const res = await fetch(
-          "http://localhost:3030/estudiante/solicitudCambioCentro",
+          "http://localhost:3000/estudiante/solicitudCambioCentro",
           {
             method: "POST",
             body: formData,

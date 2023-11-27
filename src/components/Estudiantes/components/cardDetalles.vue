@@ -38,7 +38,7 @@ export default {
     const getIndice = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/getIndiceAcademico",
+          "http://localhost:3000/estudiante/getIndiceAcademico",
           {
             method: "POST",
             headers: {

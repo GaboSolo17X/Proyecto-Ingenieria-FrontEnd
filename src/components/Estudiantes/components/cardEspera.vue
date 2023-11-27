@@ -12,7 +12,7 @@
       Edificio: {{ clase.Edificio }} <br />
       Dias: {{ clase.Dias }} <br />
       Horas: {{ clase.HoraInicio }} - {{ clase.HoraFinal }}  <br />
-      Posición: hola 
+      <!-- Posición: hola  -->
     </v-card-text>
     <v-card-text class="espera">
     Asignatura en lista de espera
@@ -56,7 +56,7 @@ export default ({
       console.log(id);
       try {
         const res = await fetch(
-          "  http://localhost:3030/estudiante/deleteListaEspera",
+          "  http://localhost:3000/estudiante/deleteListaEspera",
           {
             method: "POST",
             headers: {

@@ -5,7 +5,7 @@
         <v-col cols="3">
           <Lateral />
         </v-col>
-        <v-col>
+        <v-col class="mine">
           <div class="contenido">
             <Encabezado
               title="Tus Calificaciones"
@@ -24,8 +24,8 @@
             </v-col>
           </v-row>
           <div class="componentesDocentes">
-            <v-row> </v-row>
-            <v-row>
+            <div class="contenedorCards">
+              <v-row>
               <CardClase
                 v-show="isClaseVisible"
                 v-for="clase in clases"
@@ -34,6 +34,8 @@
                 @mostrar-form="showEvaluacion"
               />
             </v-row>
+            </div>
+            
             <v-row v-show="isClaseVisible">
               <v-col></v-col>
               <v-col>
@@ -138,7 +140,7 @@ export default {
     const readMatricula = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/readMatricula",
+          "http://localhost:3000/estudiante/readMatricula",
           {
             method: "POST",
             headers: {
@@ -187,6 +189,10 @@ export default {
   display: flex;
   justify-content: center;
 }
+
+.mine{
+  height: 160vh
+}
 .text {
   font-family: "Rubik";
   display: flex;
@@ -201,14 +207,15 @@ export default {
 }
 .infoEvaluacion {
   color: white;
-  margin-top: 90px;
+  margin-top: 70px;
   padding-right: 200px;
   text-align: justify;
   font-size: 20px;
 }
 .componentesDocentes {
-  margin-top: 20px;
-  left: 230px !important;
+  margin-top: 10px;
+  /* left: 230px !important; */
+  margin-left: -15px;
   width: calc((100% - 230px) - 0px);
 }
 
@@ -229,4 +236,35 @@ export default {
   left: 230px;
   width: calc((100% - 230px) - 0px);
 }
+
+.contenedorCards {
+   
+    max-height: 675px;
+    overflow-x:hidden;
+    overflow-y:scroll;
+    margin-bottom: 10px;
+  }
+
+  .contenedorCards::-webkit-scrollbar {
+  width: 12px;
+  
+}
+
+
+.contenedorCards::-webkit-scrollbar-thumb {
+  background-color: rgb(219, 179, 46); 
+  border-radius: 6px
+}
+
+
+.contenedorCards::-webkit-scrollbar-track {
+  background-color: #f1f1f1; 
+  border-radius: 6px
+}
+  /* .scrollable-row {
+    
+    max-width: 100%; 
+    overflow-x: auto; 
+    white-space: nowrap; 
+  } */
 </style>

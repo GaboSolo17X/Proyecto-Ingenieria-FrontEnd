@@ -20,12 +20,12 @@
             </div>
 
 
-            <div class="texto">
+            <!-- <div class="texto">
               <div class="iconos"><v-icon  icon="fa:fas fa-solid fa-book" ></v-icon></div>
               <router-link to="/clasesImpartidas" active-class="amarillo" class="enlace">
                 <v-list-item   title="clases impartidas"></v-list-item>
               </router-link>
-            </div>
+            </div> -->
             <div class="texto">
               <div class="iconos"><v-icon  icon="fa:fas fa-solid fa-book-open" ></v-icon></div>
               <router-link to="/subirNotas" active-class="amarillo" class="enlace">

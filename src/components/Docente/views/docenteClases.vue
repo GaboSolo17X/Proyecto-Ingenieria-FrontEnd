@@ -95,44 +95,11 @@ setup(){
           });
         });
 
-        // const asignaturaIds = asignaturas.value.map(asignatura => asignatura.idAsignatura);
-        // console.log(asignaturaIds)
-        // seccion.value.forEach(seccionItem => {
-        //   // Assuming there is an 'id' property in seccionItem, adjust it according to your data structure
-        //   const seccionId = seccionItem.idAsignatura;
-
-        //   // Check if the seccionId is present in asignaturaIds
-        //   if (asignaturaIds.includes(seccionId)) {
-        //     // Do something when the IDs match
-        //     console.log(`Hay Match`);
-        //   }
-        // });
-
-        // clases.value = data.map(item => ({
-        //   title: item.titulo, // ajusta a la propiedad real
-        //   src: item.src,       // ajusta a la propiedad real
-        //   id: item.id          // ajusta a la propiedad real
-        // }));
-
-
       } catch (error) {
         console.log(error)
 
       }
     };
-
-    // clases =[
-    // {
-    //     title:'0900 - INGENIERIA DEL SOFTWARE',
-    //     src: require('../assets/software.png'),
-    //     id:1
-    //   },
-    //   {
-    //     title:'0800 - SEGURIDAD INFORMATICA',
-    //     src: require('../assets/seguridad.png'),
-    //     id:2
-    //   }
-    // ]
 
     onMounted(() => {
       docenteEs();

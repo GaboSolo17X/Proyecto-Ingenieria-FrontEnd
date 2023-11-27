@@ -5,7 +5,7 @@
         <v-col cols="2"></v-col>
         <v-col
           ><v-img
-            :src="'http://localhost:3030/' + card.fotoEstudiante"
+            :src="'http://localhost:3000/' + card.fotoEstudiante"
             class="imagen"
             width="120"
             height="120"
@@ -67,7 +67,7 @@ export default {
         formData.append("idfotoEstudiante", id);
         formData.append("descripción", "");
         const res = await fetch(
-          " http://localhost:3030/perfilEstudiante/modPerfilEstudiante",
+          " http://localhost:3000/perfilEstudiante/modPerfilEstudiante",
           {
             method: "POST",
             body: formData,
@@ -83,7 +83,7 @@ export default {
     const actualizarLsFoto = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/perfilEstudiante/actualizarLocalStorage",
+          "http://localhost:3000/perfilEstudiante/actualizarLocalStorage",
           {
             method: "POST",
             headers: {
@@ -112,7 +112,7 @@ export default {
         formData.append("cuenta", estudiante.value.numeroCuenta);
         formData.append("idfotoEstudiante", id);
         const res = await fetch(
-          " http://localhost:3030/perfilEstudiante/deleteFoto",
+          " http://localhost:3000/perfilEstudiante/deleteFoto",
           {
             method: "POST",
             body: formData,

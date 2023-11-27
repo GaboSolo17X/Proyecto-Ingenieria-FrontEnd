@@ -172,7 +172,7 @@ export default {
     });
     const login = async (numeroCuenta, claveEstudiante, router, nombre) => {
       try {
-        const res = await fetch("http://localhost:3030/estudiante/login", {
+        const res = await fetch("http://localhost:3000/estudiante/login", {
           method: "POST",
           credentials: "include",
           headers: {
@@ -221,7 +221,7 @@ export default {
 
     const actualizarCarrera = async (nombreCarrera) => {
       const res = await fetch(
-        "http://localhost:3030/estudiante/actualizarCarrera",
+        "http://localhost:3000/estudiante/actualizarCarrera",
         {
           method: "POST",
           headers: {

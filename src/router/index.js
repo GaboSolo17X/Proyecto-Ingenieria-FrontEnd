@@ -47,7 +47,41 @@ const routes = [
     meta:{title:'Coordinador'}
 
   },
+  {
+    path:'/pdfA',
+    name: 'pdfA',
+    component: () => import(/* webpackChunkName: "counter" */ '../components/PDF/pdfAcademico.vue'),
+    meta:{title:'Coordinador'}
 
+  },
+  {
+    path:'/pdfT',
+    name: 'pdfT',
+    component: () => import(/* webpackChunkName: "counter" */ '../components/PDF/tablaPDF.vue'),
+    meta:{title:'Coordinador'}
+
+  },
+  {
+    path:'/pdf2',
+    name: 'pdf2',
+    component: () => import(/* webpackChunkName: "counter" */ '../components/PDF/tablaPDFCon.vue'),
+    meta:{title:'Coordinador'}
+
+  },
+  {
+    path:'/pdfi',
+    name: 'pdfi',
+    component: () => import(/* webpackChunkName: "counter" */ '../components/PDF/tablaPDFIndice.vue'),
+    meta:{title:'Coordinador'}
+
+  },
+  {
+    path:'/pdfF',
+    name: 'pdfF',
+    component: () => import(/* webpackChunkName: "counter" */ '../components/PDF/tablaPDFfinal.vue'),
+    meta:{title:'Coordinador'}
+
+  },
   {
     path: '/login-docentes',
     name: 'login-docentes',

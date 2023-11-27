@@ -37,7 +37,7 @@
                   <!-- v-model="asignatura" -->
                   <v-col cols="" class="formulario">
                     <v-select
-                    v-model="selectClase"
+                      v-model="selectClase"
                       :items="asignaturas"
                       :rules="[
                         (v) => !!v || 'Seleccione una asignatura',
@@ -51,8 +51,21 @@
                   </v-col>
                 </v-row>
               </v-col>
-              <v-col>
+              <v-col class="details">
                 <CardDetalles class="small-card" />
+
+                <BotonHorario class="hour" />
+
+                <router-link to="/principalEstudiantes" class="subrayadoNo">
+                  <v-btn
+                    color="white"
+                    variant="flat"
+                    rounded="xl"
+                    class="text py-6 px-10 mt-5"
+                  >
+                    VOLVER</v-btn
+                  ></router-link
+                >
               </v-col>
             </v-row>
           </div>
@@ -65,19 +78,17 @@
                 :card="card"
               />
             </v-row>
-            <v-row>
+            <!-- <v-row>
               <v-col cols=""></v-col>
-              <v-col cols="">
-                <div class="">
-                  <BotonHorario />
-                </div>
-              </v-col>
+              
               <v-col cols=""></v-col>
-            </v-row>
+            </v-row> -->
           </div>
           <v-row>
-            <v-col cols=""></v-col>
-            <v-col cols="">
+            <!-- <v-col cols="">
+                  <BotonHorario />
+              </v-col> -->
+            <!-- <v-col cols="">
               <router-link to="/principalEstudiantes" class="subrayadoNo">
                 <v-btn
                   color="white"
@@ -88,8 +99,7 @@
                   VOLVER</v-btn
                 ></router-link
               >
-            </v-col>
-            <v-col cols=""></v-col>
+            </v-col> -->
           </v-row>
         </v-col>
       </v-row>
@@ -123,10 +133,12 @@ export default {
     //   dias: "Lu, Ma, Mi",
     //   cupos: 25,
     // },
+    const indiceAcadem = ref();
     const departamentoFiltro = ref([]);
-    const arregloDeObjetos2 =ref([]);
+    const arregloDeObjetos2 = ref([]);
     const asignaturas = ref([]);
     const estudiante = ref();
+    const numCuenta = ref();
     const estudianteEs = async () => {
       console.log("El estudiante es");
       estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
@@ -135,13 +147,56 @@ export default {
     onMounted(() => {
       estudianteEs();
       getCarreras();
+      getIndice();
     });
+
+    const getIndice = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3000/estudiante/getIndiceAcademico",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              cuentaEstudiante: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        indiceAcadem.value = data.indiceAcademico;
+        console.log(indiceAcadem);
+        if (indiceAcadem.value >= 84 && indiceAcadem.value <= 100) {
+          // Rango 84-100
+        } else if (indiceAcadem.value >= 78 && indiceAcadem.value <= 83) {
+          // Rango 78-83
+          window.alert("El proceso de matrícula para su índice actual: "+indiceAcadem.value+" aún no está activo");
+          window.history.back();
+        } else if (indiceAcadem.value >= 73 && indiceAcadem.value <= 77) {
+          // Rango 73-77
+         window.alert("El proceso de matrícula para su índice actual: "+indiceAcadem.value+" aún no está activo");
+         window.history.back();
+        } else if (indiceAcadem.value >= 66 && indiceAcadem.value <= 72) {
+          // Rango 66-72
+          window.alert("El proceso de matrícula para su índice actual: "+indiceAcadem.value+" aún no está activo");
+          window.history.back();
+        } else if (indiceAcadem.value >= 0 && indiceAcadem.value <= 65) {
+          // Rango 0-65
+          window.alert("El proceso de matrícula para su índice actual: "+indiceAcadem.value+" aún no está activo");
+          window.history.back();
+        } 
+      } catch (error) {
+        console.error("Error al cargar el indice del estudiante", error);
+      }
+    };
 
     const getCarreras = async () => {
       //falta mandar el numero de cuenta creo
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/getCarreraMatricula",
+          "http://localhost:3000/estudiante/getCarreraMatricula",
           {
             method: "POST",
             headers: {
@@ -171,7 +226,7 @@ export default {
         formData.append("nombreCarrera", carrera);
         formData.append("cuenta", estudiante.value.numeroCuenta);
         const res = await fetch(
-          "http://localhost:3030/estudiante/getAsignaturasMatricula",
+          "http://localhost:3000/estudiante/getAsignaturasMatricula",
           {
             method: "POST",
             body: formData,
@@ -179,11 +234,11 @@ export default {
         );
         const data = await res.json();
         console.log(data);
-         const arregloDeObjetos = Object.values(data.asignaturas).map(
+        const arregloDeObjetos = Object.values(data.asignaturas).map(
           (valor) => valor
         );
 
-        arregloDeObjetos2.value=arregloDeObjetos
+        arregloDeObjetos2.value = arregloDeObjetos;
         //  console.log(data.asignaturas);
         console.log(arregloDeObjetos);
 
@@ -198,14 +253,15 @@ export default {
       }
     };
 
-    const nombreAsignatura=ref('')
-    const nombreSeccion=ref('')
-    const getSecciones = async (asignatura,name,uv) => {
+    const nombreAsignatura = ref("");
+    const nombreSeccion = ref("");
+    const getSecciones = async (asignatura, name, uv) => {
       try {
         const formData = new FormData();
         formData.append("idasignatura", asignatura);
+        formData.append("cuenta", estudiante.value.numeroCuenta);
         const res = await fetch(
-          "http://localhost:3030/estudiante/getSeccionesDisponibles",
+          "http://localhost:3000/estudiante/getSeccionesDisponibles",
           {
             method: "POST",
             body: formData,
@@ -213,38 +269,34 @@ export default {
         );
         const data = await res.json();
         console.log(data);
-        const nombresSecciones = data.secciones.map(
-          (objeto) => objeto
-        );
+        const nombresSecciones = data.secciones.map((objeto) => objeto);
         console.log(nombresSecciones);
-        clases.value.splice(0, clases.value.length); 
-      nombresSecciones.forEach(clase=>{
-        clases.value.push({
-          aula:clase.aula,
-          cupos:clase.cupos,
-          dias:clase.dias,
-          edificio:clase.edificio,
-          horaFinal:clase.horaFinal,
-          horaInicial:clase.horaInicial,
-          idAsignatura:clase.idAsignatura,
-          idSeccion:clase.idSeccion,
-          linkVideo:clase.linkVideo,
-          nombreSeccion:clase.nombreSeccion,
-          numeroEmpleadoDocente:clase.numeroEmpleadoDocente,
-          nombre:name,
-          uv:uv,
-          docente:clase.nombre,
-          foto:clase.fotoDocente,
-        }) 
-      })
-        
+        clases.value.splice(0, clases.value.length);
+        nombresSecciones.forEach((clase) => {
+          clases.value.push({
+            aula: clase.aula,
+            cupos: clase.cupos,
+            dias: clase.dias,
+            edificio: clase.edificio,
+            horaFinal: clase.horaFinal,
+            horaInicial: clase.horaInicial,
+            idAsignatura: clase.idAsignatura,
+            idSeccion: clase.idSeccion,
+            linkVideo: clase.linkVideo,
+            nombreSeccion: clase.nombreSeccion,
+            numeroEmpleadoDocente: clase.numeroEmpleadoDocente,
+            nombre: name,
+            uv: uv,
+            docente: clase.nombre,
+            foto: clase.fotoDocente,
+          });
+        });
+
         console.log(clases);
-  
       } catch (error) {
         console.error("Error al cargar las secciones", error);
       }
     };
-
 
     const selectDepa = ref(null);
 
@@ -254,25 +306,25 @@ export default {
     });
 
     const selectClase = ref(null);
-    
 
     watch(selectClase, (newValue, oldValue) => {
       console.log("Cambiamos el valor de ", oldValue, " a ", newValue);
-      let idClase
-      let uv
-      let name
-      arregloDeObjetos2.value.forEach(nestedArray => {
-        if(newValue==nestedArray.nombreClase){
-          idClase=nestedArray.idAsignatura
-          name=nestedArray.nombreClase
-          uv=nestedArray.uv
+      let idClase;
+      let uv;
+      let name;
+      arregloDeObjetos2.value.forEach((nestedArray) => {
+        if (newValue == nestedArray.nombreClase) {
+          idClase = nestedArray.idAsignatura;
+          name = nestedArray.nombreClase;
+          uv = nestedArray.uv;
         }
-      })
-      console.log(idClase)
-      getSecciones(idClase,name,uv)
+      });
+      console.log(idClase);
+      getSecciones(idClase, name, uv);
     });
 
     return {
+      indiceAcadem,
       clases,
       selectDepa,
       selectClase,
@@ -340,6 +392,15 @@ export default {
   padding-left: 0;
 }
 
+.details {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.hour {
+  margin-top: 20px;
+}
 .contenido {
   top: 0px;
   z-index: 1004;

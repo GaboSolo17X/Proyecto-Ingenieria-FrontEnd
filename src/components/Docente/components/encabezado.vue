@@ -9,7 +9,7 @@
             <p class="nombreUser">{{ datos.nombres }}</p>
               <v-avatar>
                 <v-img
-                   :src="'http://localhost:3030/'+datos.foto"
+                   :src="'http://localhost:3000/'+datos.foto"
                    alt="John"
                  ></v-img>
               </v-avatar>  

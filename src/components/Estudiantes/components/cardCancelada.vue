@@ -47,7 +47,7 @@ export default {
     const getCanceladas = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/clasesCanceladas",
+          "http://localhost:3000/estudiante/clasesCanceladas",
           {
             method: "POST",
             headers: {

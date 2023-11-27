@@ -181,7 +181,7 @@ export default {
         formData.append("cuenta", estudiante.value.numeroCuenta);
         formData.append("fotoEstudiante", foto);
         const res = await fetch(
-          " http://localhost:3030/perfilEstudiante/addFoto",
+          " http://localhost:3000/perfilEstudiante/addFoto",
           {
             method: "POST",
             body: formData,
@@ -201,7 +201,7 @@ export default {
         formData.append("idfotoEstudiante", '' );
         formData.append("descripcion", form.value.nuevaDescripcion);
         const res = await fetch(
-          " http://localhost:3030/perfilEstudiante/modPerfilEstudiante",
+          " http://localhost:3000/perfilEstudiante/modPerfilEstudiante",
           {
             method: "POST",
             body: formData,
@@ -243,7 +243,7 @@ export default {
         const formData = new FormData();
         formData.append("cuenta", estudiante.value.numeroCuenta);
         const res = await fetch(
-          "http://localhost:3030/perfilEstudiante/perfilEstudianteById",
+          "http://localhost:3000/perfilEstudiante/perfilEstudianteById",
           {
             method: "POST",
             body: formData,
@@ -263,7 +263,7 @@ export default {
         const formData = new FormData();
         formData.append("cuenta", estudiante.value.numeroCuenta);
         const res = await fetch(
-          " http://localhost:3030/perfilEstudiante/getFotosEstudianes",
+          " http://localhost:3000/perfilEstudiante/getFotosEstudianes",
           {
             method: "POST",
             body: formData,
@@ -283,7 +283,7 @@ export default {
     const getIndice = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/getIndiceAcademico",
+          "http://localhost:3000/estudiante/getIndiceAcademico",
           {
             method: "POST",
             headers: {

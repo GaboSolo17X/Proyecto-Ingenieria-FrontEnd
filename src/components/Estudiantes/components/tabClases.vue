@@ -59,7 +59,7 @@ export default {
 }
 
 .active-button {
-  background-color: #021A3E; 
+  background-color: #77181E; 
   color: #ffffff; 
 }
 </style>

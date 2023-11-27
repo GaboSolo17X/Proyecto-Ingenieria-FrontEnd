@@ -109,12 +109,17 @@
 </template>
 
 <script>
+import { useRoute, useRouter } from "vue-router";
+
 export default {
   setup(){
+    const router = useRouter();
 
 
     const LimpiarLs= ()=>{
       localStorage.clear();
+      router.push("/");
+
     }
     return{
       LimpiarLs,

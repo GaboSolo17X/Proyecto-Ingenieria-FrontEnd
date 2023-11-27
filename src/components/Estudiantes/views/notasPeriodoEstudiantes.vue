@@ -65,9 +65,10 @@
     font-size: 20px;
   }
   .componentesDocentes {
-    margin-top: 50px;
-    left: 230px !important;
-    width: calc((100% - 230px) - 0px);
+    margin-top: 120px;
+    margin-left: 10px !important;
+    width: calc((100% - 260px) - 0px);
+    font-family: "Rubik"
   }
   
   .rubik {

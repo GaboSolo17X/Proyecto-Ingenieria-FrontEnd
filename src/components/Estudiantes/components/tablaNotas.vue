@@ -5,9 +5,6 @@
         <tr>
           <th class="textoTabla">CODIGO</th>
           <th class="textoTabla">ASIGNATURA</th>
-          <th class="textoTabla">HI</th>
-          <th class="textoTabla">HF</th>
-          <th class="textoTabla">DIAS</th>
           <th class="textoTabla">PROFESOR</th>
           <th class="textoTabla">CALIFICACION</th>
           <th class="textoTabla">OBS</th>
@@ -18,11 +15,8 @@
           <!-- CAMBIAR ACA LOS NOMBRES DE LAS PROPIEDADES SEGUN LA DATA QUE SE IMPRIME AL CARGAR LA TABLA -->
           <td class="textoCuerpo">{{ item.codigo }}</td>
           <td class="textoCuerpo">{{ item.asignatura }}</td>
-          <td class="textoCuerpo">{{ item.hI }}</td>
-          <td class="textoCuerpo">{{ item.hF }}</td>
-          <td class="textoCuerpo">{{ item.dias }}</td>
           <td class="textoCuerpo">{{ item.profesor }}</td>
-          <td class="textoCuerpo">{{ item.calificacion }}</td>
+          <td class="textoCuerpo">{{ item.calificacion || 'Por Evaluar'}}</td>
           <td class="textoCuerpo">{{ item.estado }}</td>
         </tr>
       </tbody>
@@ -69,7 +63,7 @@ export default {
     const readNotas = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/estudiante/notasDespuesEvaluacion",
+          "http://localhost:3000/estudiante/notasDespuesEvaluacion",
           {
             method: "POST",
             headers: {
