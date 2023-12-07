@@ -424,14 +424,17 @@
   </v-card>
 
   <chatbox v-show="activeChat" :name="sender" class="chatbox" />
+  <groupChat v-show="activeGroupChat" class="groupChat"/>
 </template>
 
 <script>
 import chatbox from "../components/chatBox.vue";
+import groupChat from "../components/groupChatBox.vue";
 import { ref, onMounted } from "vue";
 export default {
   components: {
     chatbox,
+    groupChat,
   },
 
   props: {
@@ -499,6 +502,8 @@ export default {
         });
         const data = await res.json();
         console.log(data.message);
+
+   
 
         // if(data.message=='Solicitud enviada'){
 
@@ -572,10 +577,14 @@ export default {
       console.log(chat);
       activeChat.value = true;
       sender.value = chat.sender;
+      activeGroupChat.value=false;
     };
 
+    const activeGroupChat = ref(false)
     const selectGroup = (group) => {
+      activeGroupChat.value=true;
       console.log(group);
+      activeChat.value=false;
     };
 
     //SOLICITUDES
@@ -651,6 +660,8 @@ export default {
       console.log("Haz enviado una solicitud a " + id);
       usuarios.value[index].solicitudEnviada = true;
       enviarSolicitud(id);
+        obtenerEstudiantes();
+        filterContactos();
     };
 
     //GRUPOS
@@ -740,6 +751,7 @@ export default {
       nombreGrupo,
       usuariosSeleccionados,
       activeChat,
+      activeGroupChat,
       sender,
       submit,
       aceptarSoli,
@@ -1109,5 +1121,11 @@ h3 {
   margin-left: 410px;
   margin-top: 48px;
   height: 92vh;
+}
+.groupChat{
+  margin-left: 410px;
+  margin-top: 48px;
+  height: 92vh;
+
 }
 </style>
