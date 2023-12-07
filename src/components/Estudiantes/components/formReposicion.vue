@@ -1,22 +1,21 @@
 <template>
   <div class="form">
     <v-sheet class="pa-12 mb-12" rounded style="background-color: #282832">
-      <v-card
-        class="mx-auto  mt-10 rounded-lg bg-color"
-        max-width="600 "
-      >
+      <v-card class="mx-auto mt-10 rounded-lg bg-color" max-width="600 ">
         <div class="encabezadoSolicitud rounded-t-lg">
           <v-row>
             <v-col>
               <v-card-text class="pa-0 text-center">
-                <h1 class="mb-3">Paco Mariachi almendares Rodriguez</h1>
+                <h1 class="mb-3">
+                  {{ datos.nombres }} {{ " " }} {{ datos.apellidos }}
+                </h1>
               </v-card-text>
             </v-col>
           </v-row>
           <v-row>
-            <v-col style="text-align: right;">20200000000</v-col>
-            <v-col style="text-align: center;">CURLA</v-col>
-            <v-col style="text-align: left;">Ingeniería Aeroespacial</v-col>
+            <v-col style="text-align: right">{{ datos.numeroCuenta }}</v-col>
+            <v-col style="text-align: center">{{ datos.centroRegional }}</v-col>
+            <v-col style="text-align: left">{{ datos.carrera }}</v-col>
           </v-row>
         </div>
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
@@ -66,11 +65,11 @@
 <script>
 import { onMounted, ref } from "vue";
 export default {
+  props: { datos: Object },
   setup() {
     const form = ref({
-        justificacion: "",
+      justificacion: "",
     });
-
 
     const isFormValid = ref(false);
 
@@ -89,19 +88,53 @@ export default {
       window.history.back();
     };
 
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      console.log(estudiante);
+    };
+
+    onMounted(() => {
+      estudianteEs();
+    });
+
+    const pruebaRepo = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        formData.append("justificacion", form.value.justificacion);
+        const res = await fetch(
+          "http://localhost:3000/estudiante/solicitudReposicion",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const onSubmit = async () => {
       validateForm();
+
+      if (isFormValid.value) {
+        pruebaRepo();
+      }
     };
 
     const goBack = () => {
       window.history.back();
-      form.value.justificacion = ""
+      form.value.justificacion = "";
     };
     return {
       form,
       showAlertSuccess,
       goBack,
-      onSubmit
+      onSubmit,
     };
   },
 };
@@ -110,20 +143,20 @@ export default {
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
 
-.subrayadoNo{
+.subrayadoNo {
   text-decoration: none;
   color: aliceblue;
 }
-p{
-    color: #282832;
-    margin-bottom: 5px;
+p {
+  color: #282832;
+  margin-bottom: 5px;
 }
-.encabezadoSolicitud{
-    background-color: #77181E;
-/* border-top-left-radius: 24px;
+.encabezadoSolicitud {
+  background-color: #77181e;
+  /* border-top-left-radius: 24px;
     border-top-right-radius: 24px; */
-    padding: 10px 15px;
-    padding-top: 35px;
+  padding: 10px 15px;
+  padding-top: 35px;
 }
 .bg-color {
   background-color: #c6d6d6;

@@ -7,10 +7,10 @@
       </v-card-text>
     </v-card>
     <v-card class="mx-auto px-6 py-8 mt-10 rounded-xl bg-color-body" max-width="700 " >
-      <v-form class="pa-9"  @submit.prevent="onSubmit">
+      <v-form class="pa-9 formulario"  @submit.prevent="onSubmit">
         <v-text-field 
           v-model="form.name"
-          :rules="[(v) => !!v || 'No se permiten campos vacios']"
+          :rules="[(v) => !!v || 'Llene el campo', (v) => /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/.test(v) || 'Solo letras permitidas']"
           class="mb-5" 
           label="Nombres" 
           hide-details="auto"
@@ -20,7 +20,7 @@
 
         <v-text-field 
           v-model="form.lastName"
-          :rules="[(v) => !!v || 'No se permiten campos vacios']"
+          :rules="[(v) => !!v || 'Llene el campo', (v) => /^[a-zA-ZáéíóúüñÁÉÍÓÚÜÑ\s]+$/.test(v) || 'Solo letras permitidas']"
           class="mb-5" 
           label="Apellidos" 
           hide-details="auto"
@@ -53,12 +53,14 @@
 
         <v-text-field 
          v-model="form.identidad"
-         :rules="[(v) => /^[0-9-]+$/.test(v) || 'Solo se permiten números y guiones', (v) => v.length <= 15 || 'Máximo 15 caracteres']"
+         :rules="[(v) => !!v || 'No se permiten campos vacios']"
           class="mb-5 numeritos"
           label="Identidad" 
           hide-details="auto"
           variant="solo-filled"
           type="text"
+          @input="formatText"
+          placeholder="0000-0000-00000"
           rounded>
           
         </v-text-field>
@@ -66,11 +68,12 @@
         <v-text-field 
         v-model="form.telefono"
           class="mb-5 numeritos"
-          :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos']"
+          :rules="[(v) => /^\d+$/.test(v) || 'Solo se permiten dígitos',(v) => v.length === 8 || 'Debe tener exactamente 8 dígitos', (v) => !!v || 'No se permiten campos vacios']"
           label="Telefono" 
           hide-details="auto"
           variant="solo-filled"
           type="text"
+          maxlength="8"
           rounded>
         </v-text-field>
 
@@ -129,7 +132,7 @@
 </template>
 
 <script>
-import { ref, onMounted} from 'vue';
+import { ref, onMounted, watch} from 'vue';
 import CardEx from '../components/cardExamen.vue'
 
 
@@ -158,7 +161,7 @@ setup(){
    
    onMounted(async () => {
       try {
-        const res = await fetch('http://localhost:3000/carreras',{
+        const res = await fetch('http://localhost:3030/carreras',{
           method:'GET',
           headers:{
             'Content-Type':'application/json'
@@ -185,6 +188,14 @@ setup(){
 
   
     });
+    // const numericValue=form.value.identidad
+    // const formatText=()=>{
+
+
+    //   numericValue.replace=(/(\d{4}))(\d{4})(\d{5})/,'$1-$2-$3');
+    // };
+
+    // watch(formatText);
 
   
  /*************************************************************************************************************************/
@@ -225,6 +236,7 @@ setup(){
         .filter(carrera => !carrera.examen && carrera.nombreCarrera !== selectedCarrera)
         .map(carrera => carrera.nombreCarrera);
 
+   
       // console.log(carrerasSec);
     };
 
@@ -255,7 +267,12 @@ const validateForm = () => {
   }
 };
 
-console.log(form.value.identidad)
+// console.log(form.value.identidad)
+
+// watch(form.identidad, (newValue) => {
+//       // Añadir guiones automáticamente después de cada grupo de 4 dígitos
+//       form.value.identidad= newValue.replace(/(\d{4})\-?(\d{0,4})\-?(\d{0,5})?/, '$1-$2-$3');
+//     });
 /*************************************************************************************************************************/
  //Mandando a la base de datos el formulario
 
@@ -264,6 +281,13 @@ console.log(form.value.identidad)
   form.value.certificado=file
   console.log(file)
  }
+
+ const isCardExVisible=ref(false)
+    const isFormVisible=ref(true)
+    const showCardEx = () => {
+      isCardExVisible.value = true;
+      isFormVisible.value=false;
+    };
  
  const pruebaRegistro=async()=>{
   try {
@@ -283,6 +307,14 @@ console.log(form.value.identidad)
     });
     const data=await res.json();
     console.log(data)
+
+    if(data.message==="El aspirante ya existe"){
+      window.alert(data.message)
+    window.location.reload();
+
+      isCardExVisible.value = false;
+    }
+
   } catch (error) {
     console.log(error)
     
@@ -302,12 +334,14 @@ const onSubmit = async () => {
   }
 };
 
-    const isCardExVisible=ref(false)
-    const isFormVisible=ref(true)
-    const showCardEx = () => {
-      isCardExVisible.value = true;
-      isFormVisible.value=false;
-    };
+    
+
+  const formatText=()=>{
+    let numericValue=form.value.identidad.replace(/\D/g, '');
+    numericValue= numericValue.substring(0,13);
+    form.value.identidad= numericValue.replace(/(\d{4})(\d{4})(\d{5})/, '$1-$2-$3');
+
+  }
 
  
 
@@ -322,7 +356,8 @@ const onSubmit = async () => {
         mensaje,
         carreraPri,
         handleFileChange,
-        onSubmit
+        onSubmit,
+        formatText
         
 
     }
@@ -345,13 +380,14 @@ const onSubmit = async () => {
   color: white;
 }
 .bg-color-body{
-  background-color:  #C6D6D6;
+  background-color:  #282832;
   color: white;
 }
 
 /* .v-messages{
   color: white !important;
   font-family: 'Rubik', sans-serif;
+  #C6D6D6
 } */
 
 .numeritos >>> input::-webkit-outer-spin-button,
@@ -365,10 +401,19 @@ const onSubmit = async () => {
   margin-top: 100px;
 }
 
-.v-input--error:not(.v-input--disabled) .v-input__details .v-messages{
-  color: white;
+.v-messages{
+  color: white !important;
+}
+/* .v-input--error:not(.v-input--disabled) .v-input__details > .v-icon, .v-input--error:not(.v-input--disabled) .v-input__details .v-messages, .v-input--error:not(.v-input--disabled) .v-input__prepend > .v-icon, .v-input--error:not(.v-input--disabled) .v-input__prepend .v-messages, .v-input--error:not(.v-input--disabled) .v-input__append > .v-icon, .v-input--error:not(.v-input--disabled) .v-input__append .v-messages{
+  color: white !important;
   font-family: 'Rubik', sans-serif;
 
+} */
+.v-input--error:not(.v-input--disabled) .v-input__details > .v-icon, .v-input--error:not(.v-input--disabled) .v-input__details .v-messages, .v-input--error:not(.v-input--disabled) .v-input__prepend > .v-icon, .v-input--error:not(.v-input--disabled) .v-input__prepend .v-messages, .v-input--error:not(.v-input--disabled) .v-input__append > .v-icon, .v-input--error:not(.v-input--disabled) .v-input__append .v-messages {
+    color: white !important;
 }
 
+.formulario :deep(.v-messages){
+  color: yellow !important;
+}
 </style>

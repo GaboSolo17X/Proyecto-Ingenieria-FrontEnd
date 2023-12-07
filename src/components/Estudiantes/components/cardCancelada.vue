@@ -2,22 +2,6 @@
   <div class="form">
     <v-sheet class="pa-12 mb-12" rounded style="background-color: #282832">
       <v-card class="mx-auto mt-10 rounded-lg bg-color" min-width="810">
-        <div class="encabezadoSolicitud rounded-t-lg">
-          <v-row>
-            <v-col>
-              <v-card-text class="pa-0 text-center">
-                <h1 class="mb-3">Paco Mariachi Almendares Eclesiastico</h1>
-              </v-card-text>
-            </v-col>
-          </v-row>
-          <v-row>
-            <v-col style="text-align: center">CURLA</v-col>
-            <v-col></v-col>
-            <v-col cols="5" style="text-align: left"
-              >Ingeniería Aeroespacial</v-col
-            >
-          </v-row>
-        </div>
         <v-form class="pa-9 pt-2">
           <p>Listado de asignaturas canceladas</p>
           <v-table fixed-header class="">
@@ -25,14 +9,14 @@
               <tr>
                 <th class="textoTabla">CODIGO</th>
                 <th class="textoTabla">ASIGNATURA</th>
-                <th class="textoTabla">FECHA CANCELACION</th>
+                <th class="textoTabla">PERIODO</th>
               </tr>
             </thead>
             <tbody>
-              <tr v-for="clase in clases" :key="clase.codigo">
-                <td class="textoCuerpo">{{ clase.codigo }}</td>
-                <td class="textoCuerpo">{{ clase.asignatura }}</td>
-                <td class="textoCuerpo">{{ clase.fecha }}</td>
+              <tr v-for="clase in clases" :key="clase.idMatriculaCancelada">
+                <td class="textoCuerpo">{{ clase.codigoAsignatura }}</td>
+                <td class="textoCuerpo">{{ clase.nombreClase }}</td>
+                <td class="textoCuerpo">{{ clase.periodo }}</td>
               </tr>
             </tbody>
           </v-table>
@@ -43,55 +27,94 @@
 </template>
 
 <script>
-  export default {
-    setup() {
-      const clases = [
-        {
-          codigo: 'IS802',
-          asignatura: 'Ingenieria del software',
-          fecha: '27 de Octubre 2023',
-        },
-        {
-          codigo: 'IS511',
-          asignatura: 'Bases de datos I',
-          fecha: '27 de Octubre 2023',
-        },
-        {
-          codigo: 'IS501',
-          asignatura: 'Redes de datos I',
-          fecha: '27 de Octubre 2023',
-        },
-      ]
-      return {
-        clases,
+import { ref, onMounted } from "vue";
+export default {
+  setup() {
+    const clases = ref([]);
+    const estudiante = ref();
+    // const per =ref();
+    const estudianteEs = async () => {
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+    };
+    // const clases = [
+    //   {
+    //     codigo: 'IS802',
+    //     asignatura: 'Ingenieria del software',
+    //     periodo: '27 de Octubre 2023',
+    //   }
+    // ]
+
+    const getCanceladas = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3000/estudiante/clasesCanceladas",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              numeroCuenta: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        clases.value=data.clases;
+
+        // periodo();
+        console.log(clases);
+      } catch (error) {
+        console.error("Error al cargar las clases canceladas", error);
       }
-    },
-  }
+    };
+
+    // const periodo =()=>{
+    //   if (clases.value.periodo==="I") {
+    //     per.value= "Primero";
+    //   } else {
+    //     if (clases.value.periodo==="II") {
+    //       per.value= "Segundo";
+    //     }else{
+    //       per.value= "Tercero";
+    //     }
+    //   }
+    // }
+
+    onMounted(() => {
+      estudianteEs();
+      getCanceladas();
+    });
+    return {
+      clases,
+      // per,
+    };
+  },
+};
 </script>
 
 <style scoped>
-  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
 
-  .checkboxs {
-    background-color: rgb(246, 246, 246);
-  }
-  .subrayadoNo {
-    text-decoration: none;
-    color: aliceblue;
-  }
-  p {
-    color: white;
-    margin-bottom: 5px;
-  }
-  .encabezadoSolicitud {
-    background-color: #a92727;
-    /* border-top-left-radius: 24px;
+.checkboxs {
+  background-color: rgb(246, 246, 246);
+}
+.subrayadoNo {
+  text-decoration: none;
+  color: aliceblue;
+}
+p {
+  color: white;
+  margin-bottom: 5px;
+}
+.encabezadoSolicitud {
+  background-color: #a92727;
+  /* border-top-left-radius: 24px;
         border-top-right-radius: 24px; */
-    padding: 10px 15px;
-    padding-top: 35px;
-  }
-  .bg-color {
-    background-color: #77181e;
-    color: white;
-  }
+  padding: 10px 15px;
+  padding-top: 35px;
+}
+.bg-color {
+  background-color: #77181e;
+  color: white;
+}
 </style>

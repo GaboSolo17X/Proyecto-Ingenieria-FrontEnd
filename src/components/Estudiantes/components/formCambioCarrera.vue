@@ -6,14 +6,16 @@
           <v-row>
             <v-col>
               <v-card-text class="pa-0 text-center">
-                <h1 class="mb-3">Paco Mariachi almendares Rodriguez</h1>
+                <h1 class="mb-3">
+                  {{ datos.nombres }} {{ " " }} {{ datos.apellidos }}
+                </h1>
               </v-card-text>
             </v-col>
           </v-row>
           <v-row>
-            <v-col style="text-align: right">Indice Global: 100</v-col>
-            <v-col style="text-align: center">CURLA</v-col>
-            <v-col style="text-align: left">Ingeniería Aeroespacial</v-col>
+            <v-col style="text-align: right">Indice:{{ ' ' }} {{indiceAcadem }}</v-col>
+            <v-col style="text-align: center">{{ datos.centroRegional }}</v-col>
+            <v-col style="text-align: left">{{ datos.carrera }}</v-col>
           </v-row>
         </div>
         <v-form class="pa-9 pt-2" @submit.prevent="onSubmit">
@@ -64,7 +66,7 @@
                 variant="elevated"
                 @click="goBack()"
               >
-                Volver 
+                Volver
               </v-btn>
             </v-col>
           </v-row>
@@ -77,36 +79,77 @@
 <script>
 import { onMounted, ref } from "vue";
 export default {
+  props: { datos: Object },
   setup() {
     const isFormValid = ref(false);
     const carreras = ref([]);
+    const carrerasTot = ref([]);
+    const indiceAcadem = ref();
     const form = ref({
       justificacion: "",
       carr: null,
     });
 
-    onMounted(async () => {
-      getCarreras();
-    });
+    const estudiante = ref();
+    const carrPri = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      carrPri.value = estudiante.value.carrera;
+      console.log(estudiante);
+      console.log(carrPri);
+    };
 
     const getCarreras = async () => {
       try {
-        const res = await fetch("http://localhost:3030/carreras/", {
+        const res = await fetch("http://localhost:3000/carreras/", {
           method: "GET",
           headers: {
             "Content-Type": "application/json",
           },
         });
         const data = await res.json();
-        //console.log(data.length);
-        for (let index = 0; index < data.length; index++) {
-          carreras.value.push(data[index].nombreCarrera);
-          //console.log(data[index])
-        }
+        carrerasTot.value = data; // Asigna todas las carreras a carrerasTot.value
+        carreras.value = carrerasTot.value
+          .filter((carrera) => carrera.nombreCarrera !== carrPri.value)
+          .map((carrera) => carrera.nombreCarrera);
       } catch (error) {
         console.log(error);
       }
     };
+
+    const getIndice = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3000/estudiante/getIndiceAcademico",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              cuentaEstudiante : estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        indiceAcadem.value=data.indiceAcademico;
+        console.log(indiceAcadem);
+      } catch (error) {
+        console.error("Error al cargar el indice del estudiante", error);
+      }
+    };
+
+    onMounted(() => {
+      estudianteEs();
+      getCarreras();
+      getIndice();
+    });
+
+    // const carreraPri = () => {
+
+    // };
 
     const validateForm = () => {
       if (form.value.justificacion && form.value.carr) {
@@ -120,8 +163,7 @@ export default {
 
     const goBack = () => {
       window.history.back();
-      form.value.justificacion= "",
-      form.value.carr= null
+      (form.value.justificacion = ""), (form.value.carr = null);
     };
 
     const showAlertSuccess = () => {
@@ -129,13 +171,37 @@ export default {
       window.history.back();
     };
 
+    const pruebaCarrera = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        formData.append("carreraCambio", form.value.carr);
+        formData.append("justificacion", form.value.justificacion);
+        const res = await fetch(
+          "http://localhost:3000/estudiante/solicitudCambioCarrera",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const onSubmit = async () => {
       validateForm();
+      if (isFormValid.value) {
+        pruebaCarrera();
+      }
     };
 
     return {
       form,
       carreras,
+      indiceAcadem,
       showAlertSuccess,
       goBack,
       onSubmit,

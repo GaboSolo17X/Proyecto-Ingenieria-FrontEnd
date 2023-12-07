@@ -8,8 +8,13 @@
   
           <template v-slot:append>
             <router-link to="/perfilEstudiante" active-class="amarillo" class="enlace">
-              <p class="nombreUser">Paco Mariachi</p>
-              <div class="ImgUser"></div>  
+              <p class="nombreUser">{{ datos.nombres }} {{ ' ' }}{{ datos.apellidos }}</p>
+              <v-avatar>
+                <v-img
+                   :src="'http://localhost:3000/'+datos.fotoPerfil"
+                   alt="Usuario"
+                 ></v-img>
+              </v-avatar>
             </router-link>
           </template>
         </v-app-bar>
@@ -19,7 +24,9 @@
   
   <script>
   export default {
-    props:{title:String},
+    props:{title:String,
+    datos:Object
+  },
     setup(){
 
     }

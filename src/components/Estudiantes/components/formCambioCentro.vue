@@ -6,7 +6,9 @@
           <v-row>
             <v-col>
               <v-card-text class="pa-0 text-center">
-                <h1 class="mb-3">Paco Mariachi almendares Rodriguez</h1>
+                <h1 class="mb-3">
+                  {{ datos.nombres }} {{ " " }} {{ datos.apellidos }}
+                </h1>
               </v-card-text>
             </v-col>
           </v-row>
@@ -15,7 +17,7 @@
           <p>Seleccione el centro al que desea hacer el cambio</p>
           <v-select
             v-model="form.centroRe"
-            :items="centros"
+            :items="centroFiltro"
             :rules="[(v) => !!v || 'Seleccione una carrera', (v) => true]"
             label="Centros"
             required
@@ -69,9 +71,12 @@
 <script>
 import { onMounted, ref } from "vue";
 export default {
+  props: { datos: Object },
   setup() {
     const isFormValid = ref(false);
     const centros = ["UNAH-VS", "UNAH-CU", "CURLA"];
+    const centroFiltro = ref([]);
+    const centroActual = ref();
     const form = ref({
       justificacion: "",
       centroRe: null,
@@ -92,8 +97,45 @@ export default {
       window.history.back();
     };
 
+    const estudiante = ref();
+    const estudianteEs = async () => {
+      console.log("El estudiante es");
+      estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
+      centroActual.value = estudiante.value.centroRegional;
+      centroFiltro.value = centros
+        .filter((centro) => centro !== centroActual.value)
+        .map((centro) => centro);
+    };
+
+    onMounted(() => {
+      estudianteEs();
+    });
+
+    const pruebaCentro = async () => {
+      try {
+        const formData = new FormData();
+        formData.append("cuenta", estudiante.value.numeroCuenta);
+        formData.append("centroCambio", form.value.centroRe);
+        formData.append("justificacion", form.value.justificacion);
+        const res = await fetch(
+          "http://localhost:3000/estudiante/solicitudCambioCentro",
+          {
+            method: "POST",
+            body: formData,
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const onSubmit = async () => {
       validateForm();
+      if (isFormValid.value) {
+        pruebaCentro();
+      }
     };
 
     const goBack = () => {
@@ -104,7 +146,7 @@ export default {
 
     return {
       form,
-      centros,
+      centroFiltro,
       showAlertSuccess,
       goBack,
       onSubmit,

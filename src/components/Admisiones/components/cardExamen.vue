@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row align="center" justify="center">
-      <v-card class="mx-auto" max-width="800" height="500px" variant="flat">
+      <v-card class="mx-auto" max-width="800" height="550px" variant="flat">
         <v-card-item>
           <div class="text-overline">
             Muy bien preparate para tus examenes:
@@ -14,6 +14,20 @@
             <v-img src="../assets/study.png" height="200px" width="250px"></v-img>
             <v-img src="../assets/study2.png" height="200px" width="250px"></v-img>
           </v-row>
+          <router-link to="/admision">
+            <v-btn
+          block
+          rounded
+          color="#a92727"
+          size="large"
+          type="submit"
+          variant="elevated"
+          class="return"
+        >
+          Regresar
+        </v-btn>
+          </router-link>
+         
         </v-card-item>
 
       </v-card>
@@ -32,7 +46,7 @@ export default {
 <style scoped>
 .v-card {
   width: 1000px;
-  height: 350px;
+  height: 390px;
   font-family: "Rubik", sans-serif;
   background-color: transparent;
 }
@@ -57,5 +71,14 @@ export default {
   width: 100%;
   padding: 0.5rem;
   justify-content: center;
+}
+
+.return{
+  background-color: #77181E;
+    color: white;
+    width: 300px;
+    font-weight: 800;
+    height: 60px;
+    font-size: 1.1rem;
 }
 </style>

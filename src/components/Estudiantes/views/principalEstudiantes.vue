@@ -7,7 +7,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado  title="Estudiantes"/>
+          <Encabezado  title="Estudiantes" v-if="estudiante" :datos="estudiante"/>
         </div>
         <div class="componentesDocentes">
           <v-row>
@@ -32,6 +32,7 @@
 import CardPrincipal from '../components/cardPrincipal.vue'
 import Lateral from '../components/lateral.vue'
 import Encabezado from '../components/encabezado.vue'
+import { ref,onMounted } from 'vue'
 
 export default {
 components:{CardPrincipal,Lateral,Encabezado},
@@ -58,11 +59,29 @@ return{
       titulo:'SOLICITUDES',
       descripcion:'Realiza aquí tus solicitudes para cambio de carrera, cambio de centro, reposición y cancelaciones excepcionales',
       ruta: '/solicitudesEstudiantes',
-      altura: '370'
+      altura: '380'
     }
   ]
 }
-}
+},
+setup(){
+    
+
+    const estudiante=ref()
+    const estudianteEs  = async () => {
+      console.log("El estudiante es")
+      estudiante.value = JSON.parse(localStorage.getItem('Estudiante'))
+      console.log(estudiante)
+    };
+    onMounted(() => {
+      estudianteEs ();
+    });
+    return{
+      estudiante
+    }
+
+    
+  } 
 }
 </script>
 

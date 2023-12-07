@@ -87,6 +87,9 @@ export default {
         });
         const data = await res.json();
         direccionCSV.value = data.direccion;
+        if(data.message == "El archivo no tiene las columnas correctas, debe tener las columnas Identidad, NotaPAA, TipoExamen, NotaExamen" || data.message == "El archivo no es un csv, debe enviar un archivo csv"){
+          window.alert(data.message);
+        }else
         if (res.status === 200) {
           setTimeout(() => {
             mostrarBoto.value = true;
@@ -94,6 +97,7 @@ export default {
         }
       } catch (error) {
         console.log(error);
+        window.alert(error);
       }
     };
 
