@@ -7,7 +7,7 @@
             <th class="text-left">Número de cuenta</th>
             <th class="text-left">Nombre completo</th>
             <th class="text-left">Nota</th>
-            <th class="text-left">Observacion</th>
+            <th class="text-left">Observación</th>
           </tr>
         </thead>
         <tbody>

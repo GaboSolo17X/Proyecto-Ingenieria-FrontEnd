@@ -36,7 +36,7 @@ export default {
     const cards = [
       {
         src: require("../assets/lista.png"),
-        titulo: "Visualizacion de evaluacion docentes",
+        titulo: "Visualización de evaluación docentes",
         ruta: "/generalEvaluaciones",
         altura: "300",
       },

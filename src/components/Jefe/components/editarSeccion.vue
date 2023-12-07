@@ -4,7 +4,7 @@
       Lista de secciones existentes
     </v-card-title>
     <v-card-text class="font-weight-medium">
-      Ingenieria en sistemas
+      Ingeniería en sistemas
     </v-card-text>
     <v-dialog v-model="dialogDelete" max-width="500px">
       <v-card>
@@ -33,22 +33,22 @@
     </v-dialog>
 
     <div class="tabla">
-      <v-table fixed-header height="400px" class="tabla">
+      <v-table fixed-header height="450px" class="tabla">
         <thead class="encabezado">
           <tr>
-            <th class="text-left">Codigo</th>
+            <th class="text-left">Código</th>
             <th class="text-left">Asignatura</th>
             <th class="text-left">Hi</th>
             <th class="text-left">Hf</th>
             <th class="text-left">Dias</th>
             <th class="text-left">Profesor</th>
-            <th class="text-left">Seccion</th>
+            <th class="text-left">Sección</th>
             <th class="text-left">Cupos</th>
             <th class="text-left"></th>
           </tr>
         </thead>
         <tbody class="tabla">
-          <tr v-for="fila in clases" :key="fila.codigo">
+          <tr v-for="fila in clasesPaginadas" :key="fila.codigo">
             <td>{{ fila.codigo }}</td>
             <td>{{ fila.asignatura }}</td>
             <td>{{ fila.hi }}</td>
@@ -87,6 +87,27 @@
           </tr>
         </tbody>
       </v-table>
+      <v-row class="text-center">
+        <v-col>
+          <v-btn
+            rounded
+            class="mover"
+            @click="previousPage"
+            :disabled="currentPage === 1"
+            ><v-icon left>
+              <i class="fa:fas fa-solid fa-arrow-left"></i> </v-icon
+          ></v-btn>
+          <span class="pagina">{{ currentPage }}</span>
+          <v-btn
+            rounded
+            class="mover"
+            @click="nextPage"
+            :disabled="currentPage * 4 >= clases.length"
+            ><v-icon right>
+              <i class="fa:fas fa-solid fa-arrow-right"></i> </v-icon
+          ></v-btn>
+        </v-col>
+      </v-row>
     </div>
     <v-row class="text-center">
       <v-col>
@@ -115,6 +136,8 @@ export default {
       seccionToDelete: null,
       eliminarJusti: "",
       clases: [],
+      currentPage: 1,
+      recordsPerPage: 4,
     };
   },
   methods: {
@@ -129,6 +152,18 @@ export default {
     },
     guardar() {
       window.alert("guardadito guardadito, no esta, poh");
+    },
+    previousPage() {
+      if (this.currentPage > 1) {
+        this.currentPage--;
+      }
+    },
+
+    nextPage() {
+      const maxPage = Math.ceil(this.clases.length / this.recordsPerPage);
+      if (this.currentPage < maxPage) {
+        this.currentPage++;
+      }
     },
 
     // introduccir un retraso de un segundo para el cambio de cupos en la base de datos
@@ -208,6 +243,13 @@ export default {
           this.itemToDelete = null;
           this.eliminarJusti = "";
         });
+    },
+  },
+  computed: {
+    clasesPaginadas() {
+      const start = (this.currentPage - 1) * this.recordsPerPage;
+      const end = start + this.recordsPerPage;
+      return this.clases.slice(start, end);
     },
   },
   async beforeCreate() {
@@ -324,5 +366,17 @@ export default {
 
 .iconito {
   font-size: 1rem;
+}
+
+.mover {
+  background-color: #282832;
+  color: white;
+  box-shadow: none;
+}
+
+.pagina {
+  padding: 3px;
+  color: #282832;
+  font-weight: bold;
 }
 </style>

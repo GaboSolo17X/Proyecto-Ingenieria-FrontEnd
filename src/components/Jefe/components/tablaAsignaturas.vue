@@ -21,7 +21,7 @@
       <v-table fixed-header height="370px" class="tabla">
         <thead class="encabezado">
           <tr>
-            <th class="text-left">Codigo</th>
+            <th class="text-left">Código</th>
             <th class="text-left">Asignatura</th>
             <th class="text-left">Centro</th>
             <th class="text-left">UV</th>
@@ -39,12 +39,12 @@
                 size="x-small"
                 variant="flat"
                 class="boton"
-                @click="cambiarPagina(fila.asignatura)"
+                @click="cambiarPagina(fila.asignatura, fila.uv)"
               >
                 <v-icon right>
                   <i class="fa:fas fa-solid fa-circle-plus"></i>
                 </v-icon>
-                crear seccion
+                crear sección
               </v-btn>
             </td>
           </tr>
@@ -85,10 +85,10 @@ export default {
     };
   },
   methods: {
-    cambiarPagina(asignatura) {
+    cambiarPagina(asignatura, uv) {
       this.$router.push({
         name: "crearSeccion",
-        params: { asignatura: asignatura },
+        params: { asignatura: asignatura, uv: uv },
       });
     },
     previousPage() {

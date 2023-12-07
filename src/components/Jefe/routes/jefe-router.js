@@ -15,10 +15,10 @@ const jefeRoutes = [
   
   },
   {
-    path: '/crearSeccion:asignatura',
+    path: '/crearSeccion:asignatura&:uv',
     name: 'crearSeccion',
     component: () => import(/* webpackChunkName: "about" */ '../views/crearSeccion.vue'),
-    props: (route) => ({ asignatura: route.params.asignatura }),
+    props: (route) => ({ asignatura: route.params.asignatura, uv: route.params.uv }),
   
   },
   {

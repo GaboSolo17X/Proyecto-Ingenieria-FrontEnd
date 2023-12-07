@@ -1,8 +1,13 @@
 <template>
   <v-card class="cartita">
     <v-card-title class="font-weight-bold"
-      >Evaluacion del estudiante
-      <v-btn @click="regresar" class="regresar"> Regresar </v-btn>
+      >Evaluación del estudiante
+      <v-btn @click="regresar" class="regresar"
+        ><v-icon right>
+          <i class="fa:fas fa-solid fa-circle-left"></i>
+        </v-icon>
+        Regresar
+      </v-btn>
     </v-card-title>
     <v-table class="bordes" width="450px">
       <thead>
