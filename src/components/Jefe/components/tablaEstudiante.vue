@@ -52,6 +52,7 @@ export default {
   async beforeCreate() {
     const historial = JSON.parse(window.localStorage.getItem("historial"));
     console.log(historial.length);
+    console.log("Hola");
     for (let i = 0; i < historial.length; i++) {
       const res = await fetch(
         "http://localhost:3000/coordinador/getAsignatura",
