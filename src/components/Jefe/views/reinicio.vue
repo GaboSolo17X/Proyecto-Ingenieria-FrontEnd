@@ -1,67 +1,84 @@
 <template>
-    <div >
-      <body style="background-color: #C6D6D6">
+  <div>
+    <body style="background-color: #c6d6d6">
       <v-row>
         <v-col cols="3">
-          <Lateral/>
+          <Lateral />
         </v-col>
         <v-col cols="8">
           <div class="contenido">
-            <Encabezado  title="REINICIO DE CLAVE"/>
+            <Encabezado
+              v-if="JefeInfo"
+              :datos="JefeInfo"
+              title="REINICIO DE CLAVE"
+            />
           </div>
-        <div class="componentesDocentes">
-        <TablaDocentes />
-        </div>
-      </v-col>
-    </v-row>
+          <div class="componentesDocentes">
+            <TablaDocentes />
+          </div>
+        </v-col>
+      </v-row>
     </body>
   </div>
-
 </template>
 
 <script>
-import Lateral from '../components/lateral.vue'
-import Encabezado from  '../components/encabezado.vue'
-import TablaDocentes from '../components/tablaDocentes.vue'
+import Lateral from "../components/lateral.vue";
+import Encabezado from "../components/encabezado.vue";
+import TablaDocentes from "../components/tablaDocentes.vue";
+import { ref, onMounted } from "vue";
 
 export default {
-components: {Lateral,Encabezado, TablaDocentes},
-
-}
-
+  components: { Lateral, Encabezado, TablaDocentes },
+  setup() {
+    const JefeInfo = ref();
+    const jefeEs = async () => {
+      console.log("El jefe es");
+      JefeInfo.value = JSON.parse(localStorage.getItem("JefeInfo"));
+      console.log(JefeInfo);
+    };
+    onMounted(() => {
+      jefeEs();
+    });
+    return {
+      JefeInfo,
+    };
+  },
+};
 </script>
 
 <style scoped>
-  @import url('https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
 
-.asignatura{
-    width: 270px;
-    margin-top: 100px;
-    position: relative;
-    right: 100px !important;
+.asignatura {
+  width: 270px;
+  margin-top: 100px;
+  position: relative;
+  right: 100px !important;
 }
 
-.componentesDocentes{
-margin-top: 80px;
-left: 230px !important;
-width: 100%;
+.componentesDocentes {
+  margin-top: 80px;
+  left: 230px !important;
+  width: 100%;
+  height: 479px;
 }
 
-.rubik{
-  font-family: 'Rubik';
+.rubik {
+  font-family: "Rubik";
 }
 
-.navBarCont{
-display: flex;
-flex-direction: column;
+.navBarCont {
+  display: flex;
+  flex-direction: column;
 }
 
-.contenido{
-top: 0px;
-z-index: 1004;
-transform: translateY(0%);
-position: fixed;
-left: 230px;
-width: calc((100% - 230px) - 0px);
+.contenido {
+  top: 0px;
+  z-index: 1004;
+  transform: translateY(0%);
+  position: fixed;
+  left: 230px;
+  width: calc((100% - 230px) - 0px);
 }
 </style>

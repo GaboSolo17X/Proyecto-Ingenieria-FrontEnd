@@ -12,7 +12,12 @@
           >¿Por qué desea cancelar esta sección?</v-card-title
         >
         <v-card-text>
-        <v-text-field v-model="eliminarJusti" label="Escriba una justificacion" :rules="[(v) => !!v || 'Llene el campo']" variant="outlined"></v-text-field>
+          <v-text-field
+            v-model="eliminarJusti"
+            label="Escriba una justificacion"
+            :rules="[(v) => !!v || 'Llene el campo']"
+            variant="outlined"
+          ></v-text-field>
         </v-card-text>
         <v-card-actions>
           <v-spacer></v-spacer>
@@ -53,17 +58,29 @@
             <td>{{ fila.seccion }}</td>
             <td>
               <v-row>
-                <v-btn class="cupos" icon @click="incrementCupos(fila)">
-                  <v-icon class="iconito"><i class="fa:fas fa-solid fa-plus"></i></v-icon>
+                <v-btn
+                  class="cupos"
+                  icon
+                  @click="incrementCupos(fila, fila.idSeccion)"
+                >
+                  <v-icon class="iconito"
+                    ><i class="fa:fas fa-solid fa-plus"></i
+                  ></v-icon>
                 </v-btn>
                 {{ fila.cupos }}
-                <v-btn class="cupos" icon @click="decrementCupos(fila)">
-                  <v-icon class="iconito"><i class="fa:fas fa-solid fa-minus"></i></v-icon>
+                <v-btn
+                  class="cupos"
+                  icon
+                  @click="decrementCupos(fila, fila.idSeccion)"
+                >
+                  <v-icon class="iconito"
+                    ><i class="fa:fas fa-solid fa-minus"></i
+                  ></v-icon>
                 </v-btn>
               </v-row>
             </td>
             <td>
-              <v-icon size="small" @click="deleteItem(fila)">
+              <v-icon size="small" @click="deleteItem(fila, fila.idSeccion)">
                 <i class="fa:fas fa-solid fa-trash"></i>
               </v-icon>
             </td>
@@ -75,165 +92,237 @@
       <v-col>
         <v-btn class="botonRegresar">
           <router-link to="/principalJefe" class="regresar">
-          <v-icon right>
-            <i class="fa:fas fa-solid fa-circle-left"></i>
-          </v-icon>
-          Regresar
+            <v-icon right>
+              <i class="fa:fas fa-solid fa-circle-left"></i>
+            </v-icon>
+            Regresar
           </router-link>
         </v-btn>
+      </v-col>
+      <v-col>
+        <v-btn class="botonRegresar" @click="guardar"> Guardar cambios </v-btn>
       </v-col>
     </v-row>
   </v-card>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        dialogDelete: false,
-        itemToDelete: null,
-        eliminarJusti: '',
-        clases: [
+import _ from "lodash";
+export default {
+  data() {
+    return {
+      dialogDelete: false,
+      itemToDelete: null,
+      seccionToDelete: null,
+      eliminarJusti: "",
+      clases: [],
+    };
+  },
+  methods: {
+    deleteItem(item, idSeccion) {
+      this.dialogDelete = true;
+      this.itemToDelete = item;
+      this.seccionToDelete = idSeccion;
+    },
+    closeDelete() {
+      this.dialogDelete = false;
+      this.itemToDelete = null;
+    },
+    guardar() {
+      window.alert("guardadito guardadito, no esta, poh");
+    },
+
+    // introduccir un retraso de un segundo para el cambio de cupos en la base de datos
+    async incrementCupos(item, idSeccion) {
+      let cupos = item.cupos + 1;
+      item.cupos++;
+      setTimeout(async () => {
+        const res = await fetch(
+          "http://localhost:3000/jefeDepartamento/actualizarCuposSeccion",
           {
-            codigo: 'IS-501',
-            asignatura: 'Bases de datos I',
-            hi: '08:00',
-            hf: '09:00',
-            dias: 'Lu, Ma, Mi, Ju',
-            profesor: 'Weslin Barahona',
-            seccion: 1000,
-            cupos: 25,
-          },
-          {
-            codigo: 'IS-501',
-            asignatura: 'Bases de datos I',
-            hi: '08:00',
-            hf: '09:00',
-            dias: 'Lu, Ma, Mi, Ju',
-            profesor: 'Weslin Barahona',
-            seccion: 1000,
-            cupos: 25,
-          },
-          {
-            codigo: 'IS-501',
-            asignatura: 'Bases de datos I',
-            hi: '08:00',
-            hf: '09:00',
-            dias: 'Lu, Ma, Mi, Ju',
-            profesor: 'Weslin Barahona',
-            seccion: 1000,
-            cupos: 25,
-          },
-          {
-            codigo: 'IS-501',
-            asignatura: 'Bases de datos I',
-            hi: '08:00',
-            hf: '09:00',
-            dias: 'Lu, Ma, Mi, Ju',
-            profesor: 'Weslin Barahona',
-            seccion: 1000,
-            cupos: 25,
-          },
-          {
-            codigo: 'IS-501',
-            asignatura: 'Bases de datos I',
-            hi: '08:00',
-            hf: '09:00',
-            dias: 'Lu, Ma, Mi, Ju',
-            profesor: 'Weslin Barahona',
-            seccion: 1000,
-            cupos: 25,
-          },
-        ],
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idSeccion: idSeccion,
+              cupos: cupos,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log("hola");
+        console.log(data);
+      }, 1000);
+    },
+
+    async decrementCupos(item, idSeccion) {
+      if (item.cupos > 1) {
+        let cupos = item.cupos - 1;
+        item.cupos--;
+        setTimeout(async () => {
+          const res = await fetch(
+            "http://localhost:3000/jefeDepartamento/actualizarCuposSeccion",
+            {
+              method: "POST",
+              headers: {
+                "Content-Type": "application/json",
+              },
+              body: JSON.stringify({
+                idSeccion: idSeccion,
+                cupos: cupos,
+              }),
+            }
+          );
+          const data = await res.json();
+          console.log("hola");
+          console.log(data);
+        }, 1000);
+      } else {
+        window.alert("En las secciones debe haber por lo menos un cupo");
       }
     },
-    methods: {
-      deleteItem(item) {
-        // Show the delete confirmation dialog
-        this.dialogDelete = true
-
-        // Set the item to be deleted
-        this.itemToDelete = item
-      },
-      closeDelete() {
-        // Close the delete confirmation dialog
-        this.dialogDelete = false
-
-        // Clear the item to be deleted
-        this.itemToDelete = null
-      },
-      incrementCupos(item) {
-        // Increment the 'cupos' value
-        item.cupos++
-      },
-
-      decrementCupos(item) {
-        // Ensure 'cupos' doesn't go below 0
-        if (item.cupos > 0) {
-          // Decrement the 'cupos' value
-          item.cupos--
+    async deleteItemConfirm() {
+      const res = await fetch(
+        "http://localhost:3000/jefeDepartamento/cancelacionSeccion",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idSeccion: this.seccionToDelete,
+            motivo: this.eliminarJusti,
+          }),
         }
-      },
-      deleteItemConfirm() {
-        // Perform the actual deletion
-        const index = this.clases.indexOf(this.itemToDelete)
-        if (index !== -1) {
-          this.clases.splice(index, 1)
-        }
-        this.dialogDelete = false
-        console.log('Jutificacion de eliminar seccion:', this.eliminarJusti);
-
-        // borrar la fila
-        this.itemToDelete = null
-        this.eliminarJusti = '';
-      },
+      )
+        .then((res) => res.json())
+        .then((data) => console.log(data))
+        .catch((err) => console.log(err))
+        .finally(() => {
+          const index = this.clases.indexOf(this.itemToDelete);
+          if (index !== -1) {
+            this.clases.splice(index, 1);
+          }
+          this.dialogDelete = false;
+          console.log("Jutificacion de eliminar seccion:", this.eliminarJusti);
+          this.itemToDelete = null;
+          this.eliminarJusti = "";
+        });
     },
-  }
+  },
+  async beforeCreate() {
+    try {
+      const jefe = JSON.parse(window.localStorage.getItem("JefeDep"));
+      const res = await fetch(
+        "http://localhost:3000/jefeDepartamento/obtenerSecciones",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            numeroEmpleadoDocente: jefe.numeroEmpleadoDocente,
+          }),
+        }
+      );
+      const data = await res.json();
+      const { arraySecciones } = data;
+      for (let i = 0; i < arraySecciones.length; i++) {
+        const fechaInicial = new Date(arraySecciones[i].seccion.horaInicial);
+        const horasUTCInicial = fechaInicial
+          .getUTCHours()
+          .toString()
+          .padStart(2, "0");
+        const minutosUTCInicial = fechaInicial
+          .getUTCMinutes()
+          .toString()
+          .padStart(2, "0");
+        const horaFormateadaUTCInicial = `${horasUTCInicial}:${minutosUTCInicial}`;
+        if (arraySecciones[i].seccion.idSeccion < 10) {
+          arraySecciones[i].seccion.idSeccion = arraySecciones[
+            i
+          ].seccion.idSeccion
+            .toString()
+            .padStart(2, "0");
+        } else {
+          arraySecciones[i].seccion.idSeccion =
+            arraySecciones[i].seccion.idSeccion.toString();
+        }
+        const seccionHora = `${horasUTCInicial}${arraySecciones[i].seccion.idSeccion}`;
+
+        const fechaFinal = new Date(arraySecciones[i].seccion.horaFinal);
+        const horasUTCFinal = fechaFinal
+          .getUTCHours()
+          .toString()
+          .padStart(2, "0");
+        const minutosUTCFinal = fechaFinal
+          .getUTCMinutes()
+          .toString()
+          .padStart(2, "0");
+        const horaFormateadaUTCFinal = `${horasUTCFinal}:${minutosUTCFinal}`;
+
+        this.clases.push({
+          codigo: arraySecciones[i].codigoAsignatura,
+          asignatura: arraySecciones[i].nombreClase,
+          hi: horaFormateadaUTCInicial,
+          hf: horaFormateadaUTCFinal,
+          dias: arraySecciones[i].seccion.dias,
+          profesor: arraySecciones[i].nombreCompletoProfesor,
+          seccion: seccionHora,
+          cupos: arraySecciones[i].seccion.cupos,
+          idSeccion: arraySecciones[i].seccion.idSeccion,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
 </script>
 <style scoped>
-  .text-left {
-    background-color: #a92727 !important;
-    color: white !important;
-    font-family: 'Rubik';
-  }
+.text-left {
+  background-color: #a92727 !important;
+  color: white !important;
+  font-family: "Rubik";
+}
 
-  .botonRegresar {
-    background-color: #a92727;
-    color: white;
-    height: 40px;
-    box-shadow: none;
-  }
-  .regresar {
-    color: white;
-    text-decoration: none;
-  }
+.botonRegresar {
+  background-color: #a92727;
+  color: white;
+  height: 40px;
+  box-shadow: none;
+}
+.regresar {
+  color: white;
+  text-decoration: none;
+}
 
-  .cartita {
-    box-shadow: none;
-  }
-  .boton {
-    color: darkred;
-    font-weight: bold;
-    text-decoration: none;
-    background-color: #c6d6d6;
-  }
+.cartita {
+  box-shadow: none;
+}
+.boton {
+  color: darkred;
+  font-weight: bold;
+  text-decoration: none;
+  background-color: #c6d6d6;
+}
 
-  .tbody {
-    background-color: #c6d6d6;
-  }
+.tbody {
+  background-color: #c6d6d6;
+}
 
-  .tabla {
-    background-color: #c6d6d6;
-  }
+.tabla {
+  background-color: #c6d6d6;
+}
 
-  .cupos {
-    height: 1rem;
-    width: 1rem;
-    border-radius: 5px;
-    margin: 3px;
-  }
+.cupos {
+  height: 1rem;
+  width: 1rem;
+  border-radius: 5px;
+  margin: 3px;
+}
 
-  .iconito {
-    font-size: 1rem;
-  }
-
+.iconito {
+  font-size: 1rem;
+}
 </style>

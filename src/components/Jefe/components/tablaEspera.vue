@@ -26,7 +26,16 @@
             <td>{{ fila.cupos }}</td>
             <td>{{ fila.espera }}</td>
             <td>
-              <v-btn size="x-small" @click="verLista(fila.codigo, fila.asignatura, fila.espera)"
+              <v-btn
+                size="x-small"
+                @click="
+                  verLista(
+                    fila.codigo,
+                    fila.asignatura,
+                    fila.espera,
+                    fila.idSeccion
+                  )
+                "
                 >ver lista</v-btn
               >
             </td>
@@ -35,13 +44,13 @@
       </v-table>
     </div>
     <v-row class="text-center">
-     <v-col>
+      <v-col>
         <v-btn>
           <router-link @click="regresar" to="/principalJefe" class="regresar">
-          <v-icon right>
-            <i class="fa:fas fa-solid fa-circle-left"></i>
-          </v-icon>
-          Regresar 
+            <v-icon right>
+              <i class="fa:fas fa-solid fa-circle-left"></i>
+            </v-icon>
+            Regresar
           </router-link>
         </v-btn>
       </v-col>
@@ -49,109 +58,134 @@
   </v-card>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        filas: [
-          {
-            codigo:'IS-501',
-            asignatura: 'Base de datos I',
-            hi: 1000,
-            hf: 1100,
-            dias: 'Lu, Ma, Mi, Ju',
-            docente: 'Weslin Barahona',
-            cupos: 25,
-            espera: 86,
-          },
-          {
-            codigo:'IS-411',
-            asignatura: 'Programacion Orientada',
-            hi: 1000,
-            hf: 1100,
-            dias: 'Lu, Ma, Mi, Ju',
-            docente: 'Weslin Barahona',
-            cupos: 25,
-            espera: 86,
-          },
-          {
-            codigo:'IS-511',
-            asignatura: 'Redes de datos I',
-            hi: 1000,
-            hf: 1100,
-            dias: 'Lu, Ma, Mi, Ju',
-            docente: 'Weslin Barahona',
-            cupos: 25,
-            espera: 86,
-          },
-          {
-            codigo:'IS-511',
-            asignatura: 'Redes de datos I',
-            hi: 1000,
-            hf: 1100,
-            dias: 'Lu, Ma, Mi, Ju',
-            docente: 'Weslin Barahona',
-            cupos: 25,
-            espera: 86,
-          },
-          {
-            codigo:'IS-511',
-            asignatura: 'Redes de datos I',
-            hi: 1000,
-            hf: 1100,
-            dias: 'Lu, Ma, Mi, Ju',
-            docente: 'Weslin Barahona',
-            cupos: 25,
-            espera: 86,
-          },
-          {
-            codigo:'IS-511',
-            asignatura: 'Redes de datos I',
-            hi: 1000,
-            hf: 1100,
-            dias: 'Lu, Ma, Mi, Ju',
-            docente: 'Weslin Barahona',
-            cupos: 25,
-            espera: 86,
-          },
-        ],
-      }
+export default {
+  data() {
+    return {
+      filas: [],
+    };
+  },
+  methods: {
+    verLista(codigo, nombreAsignatura, enEspera, idSeccion) {
+      this.$router.push({
+        name: "detalleEspera",
+        params: {
+          codigo: codigo,
+          nombre: nombreAsignatura,
+          enEspera: enEspera,
+          idSeccion: idSeccion,
+        },
+      });
     },
-    methods: {
-      verLista(codigo, nombreAsignatura, enEspera) {
-        this.$router.push({
-          name: 'detalleEspera',
-          params: { codigo: codigo,
-                    nombre: nombreAsignatura,
-                    enEspera: enEspera,
-           },
-        })
-      },
-      regresar() {
+    regresar() {
       this.$router.back();
     },
-    },
-  }
+  },
+  async beforeCreate() {
+    try {
+      const jefe = JSON.parse(window.localStorage.getItem("JefeDep"));
+      const res = await fetch(
+        "http://localhost:3000/jefeDepartamento/obtenerSecciones",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            numeroEmpleadoDocente: jefe.numeroEmpleadoDocente,
+          }),
+        }
+      );
+      const data = await res.json();
+      const { arraySecciones } = data;
+      for (let i = 0; i < arraySecciones.length; i++) {
+        const fechaInicial = new Date(arraySecciones[i].seccion.horaInicial);
+        const horasUTCInicial = fechaInicial
+          .getUTCHours()
+          .toString()
+          .padStart(2, "0");
+        const minutosUTCInicial = fechaInicial
+          .getUTCMinutes()
+          .toString()
+          .padStart(2, "0");
+        const horaFormateadaUTCInicial = `${horasUTCInicial}:${minutosUTCInicial}`;
+        if (arraySecciones[i].seccion.idSeccion < 10) {
+          arraySecciones[i].seccion.idSeccion = arraySecciones[
+            i
+          ].seccion.idSeccion
+            .toString()
+            .padStart(2, "0");
+        } else {
+          arraySecciones[i].seccion.idSeccion =
+            arraySecciones[i].seccion.idSeccion.toString();
+        }
+        const seccionHora = `${horasUTCInicial}${arraySecciones[i].seccion.idSeccion}`;
+
+        const fechaFinal = new Date(arraySecciones[i].seccion.horaFinal);
+        const horasUTCFinal = fechaFinal
+          .getUTCHours()
+          .toString()
+          .padStart(2, "0");
+        const minutosUTCFinal = fechaFinal
+          .getUTCMinutes()
+          .toString()
+          .padStart(2, "0");
+        const horaFormateadaUTCFinal = `${horasUTCFinal}:${minutosUTCFinal}`;
+
+        const res2 = await fetch(
+          "http://localhost:3000/jefeDepartamento/obtenerListaEspera",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              idSeccion: arraySecciones[i].seccion.idSeccion,
+            }),
+          }
+        );
+        const data2 = await res2.json();
+        const { listaEsperaFound } = data2;
+
+        if (listaEsperaFound == 0) {
+        } else {
+          this.filas.push({
+            codigo: arraySecciones[i].codigoAsignatura,
+            asignatura: arraySecciones[i].nombreClase,
+            hi: horaFormateadaUTCInicial,
+            hf: horaFormateadaUTCFinal,
+            dias: arraySecciones[i].seccion.dias,
+            docente: arraySecciones[i].nombreCompletoProfesor,
+            cupos: arraySecciones[i].seccion.cupos,
+            idSeccion: arraySecciones[i].seccion.idSeccion,
+            espera: listaEsperaFound,
+          });
+        }
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
 </script>
 <style scoped>
-  .text-left {
-    background-color: #a92727 !important;
-    color: white !important;
-    font-family: 'Rubik';
-  }
+.text-left {
+  background-color: #a92727 !important;
+  color: white !important;
+  font-family: "Rubik";
+}
 
-  .v-btn {
-    background-color: #a92727;
-    color: white;
-    height: 40px;
-    box-shadow: none;
-  }
-  .regresar{
-    color: white;
-    text-decoration: none;
-  }
+.v-btn {
+  background-color: #a92727;
+  color: white;
+  height: 40px;
+  box-shadow: none;
+}
+.regresar {
+  color: white;
+  text-decoration: none;
+}
 
-  .tabla {
-    background-color: #c6d6d6;
-  }
-
+.tabla {
+  background-color: #c6d6d6;
+}
 </style>

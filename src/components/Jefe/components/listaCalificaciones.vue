@@ -21,13 +21,13 @@
       </v-table>
     </div>
     <v-row class="text-center">
-     <v-col>
+      <v-col>
         <v-btn>
           <router-link @click="regresar" to="/calificaciones" class="regresar">
-          <v-icon right>
-            <i class="fa:fas fa-solid fa-circle-left"></i>
-          </v-icon>
-          Regresar 
+            <v-icon right>
+              <i class="fa:fas fa-solid fa-circle-left"></i>
+            </v-icon>
+            Regresar
           </router-link>
         </v-btn>
       </v-col>
@@ -35,71 +35,83 @@
   </v-card>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        filas: [
-          {
-            numero:2020201000915,
-            nombre:'Yensi Elisabeth Armijo',
-            nota:98,
-            observacion:'APR',
-          },
-          {
-            numero:2020201002345,
-            nombre:'Gabriel Omar Solorzano',
-            nota:65,
-            observacion:'APR',
-          },
-          {
-            numero:2020201007862,
-            nombre:'Weslin Moises Barahona',
-            nota:20,
-            observacion:'REP',
-          },
-          {
-            numero:2020201007862,
-            nombre:'Victor Miguel Barahona',
-            nota:23,
-            observacion:'REP',
-          },
-        ],
-      }
-    },
-    methods: {
-      regresar() {
+export default {
+  props: {
+    nombre: String,
+    clase: String,
+    seccion: String,
+    idseccion: Number,
+  },
+  data() {
+    return {
+      filas: [],
+    };
+  },
+  methods: {
+    regresar() {
       this.$router.back();
     },
-    },
-  }
+  },
+  async beforeCreate() {
+    console.log(this.nombre, this.clase, this.seccion, this.idseccion);
+    try {
+      const res = await fetch(
+        "http://localhost:3000/jefeDepartamento/obtenerNotasDocenteClase",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            nombreDocente: this.nombre,
+            codigoAsignatura: this.clase,
+            seccion: this.seccion,
+            idseccion: this.idseccion,
+          }),
+        }
+      );
+      const data = await res.json();
+      const { calificaciones } = data;
+      for (let i = 0; i < calificaciones.length; i++) {
+        this.filas.push({
+          numero: calificaciones[i].numeroCuenta,
+          nombre: calificaciones[i].nombreCompleto,
+          nota: calificaciones[i].nota,
+          observacion: calificaciones[i].observacion,
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+  },
+};
 </script>
 <style scoped>
-  .text-left {
-    background-color: #a92727 !important;
-    color: white !important;
-    font-family: 'Rubik';
-  }
-
-  .v-btn {
-    background-color: #a92727;
-    color: white;
-    height: 40px;
-    box-shadow: none;
-  }
-  .regresar{
-    color: white;
-    text-decoration: none;
-  }
-
-  .tabla {
-    background-color: #c6d6d6;
-  }
-
-    .boton{
-    color: darkred;
-    font-weight: bold;
-    text-decoration: none;
-    background-color: #C6D6D6;
+.text-left {
+  background-color: #a92727 !important;
+  color: white !important;
+  font-family: "Rubik";
 }
 
+.v-btn {
+  background-color: #a92727;
+  color: white;
+  height: 40px;
+  box-shadow: none;
+}
+.regresar {
+  color: white;
+  text-decoration: none;
+}
+
+.tabla {
+  background-color: #c6d6d6;
+}
+
+.boton {
+  color: darkred;
+  font-weight: bold;
+  text-decoration: none;
+  background-color: #c6d6d6;
+}
 </style>

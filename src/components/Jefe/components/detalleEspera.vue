@@ -18,25 +18,30 @@
             <td>{{ fila.nombre }}</td>
             <td>{{ fila.indice }}</td>
             <td>
-              <v-btn size="x-small" variant="flat" class="boton" @click="darCupo()">
-          <v-icon right>
-            <i class="fa:fas fa-solid fa-circle-plus"></i>
-          </v-icon>
-          brindar cupo
-        </v-btn>
+              <v-btn
+                size="x-small"
+                variant="flat"
+                class="boton"
+                @click="darCupo(this.idSeccion, fila.numero, fila.no)"
+              >
+                <v-icon right>
+                  <i class="fa:fas fa-solid fa-circle-plus"></i>
+                </v-icon>
+                brindar cupo
+              </v-btn>
             </td>
           </tr>
         </tbody>
       </v-table>
     </div>
     <v-row class="text-center">
-     <v-col>
+      <v-col>
         <v-btn>
           <router-link @click="regresar" to="/principalJefe" class="regresar">
-          <v-icon right>
-            <i class="fa:fas fa-solid fa-circle-left"></i>
-          </v-icon>
-          Regresar 
+            <v-icon right>
+              <i class="fa:fas fa-solid fa-circle-left"></i>
+            </v-icon>
+            Regresar
           </router-link>
         </v-btn>
       </v-col>
@@ -44,95 +49,125 @@
   </v-card>
 </template>
 <script>
-  export default {
-    data() {
-      return {
-        filas: [
-          {
-            no:1,
-            numero: 20201004061,
-            nombre: 'Gabriel Omar Solorzano',
-            indice: 90,
-          },
-          {
-            no:2,
-            numero: 20201004052,
-            nombre: 'Yensi Elisabeth Armijo',
-            indice: 100,
-          },
-          {
-            no:3,
-            numero: 20191004061,
-            nombre: 'Weslin Moises Barahona',
-            indice: 86,
-          },
-          {
-            no:4,
-            numero: 20181004061,
-            nombre: 'Victor Miguel Barahona',
-            indice: 92,
-          },
-          {
-            no:5,
-            numero: 20201005081,
-            nombre: 'Andrea Nicolle Gallardo',
-            indice: 99,
-          },
-          {
-            no:1,
-            numero: 20201004061,
-            nombre: 'Gabriel Omar Solorzano',
-            indice: 90,
-          },
-        ],
-      }
+export default {
+  props: {
+    idSeccion: Number,
+  },
+  data() {
+    return {
+      filas: [],
+    };
+  },
+  methods: {
+    verLista(codigo, nombreAsignatura, enEspera) {
+      this.$router.push({
+        name: "detalleEspera",
+        params: {
+          codigo: codigo,
+          nombre: nombreAsignatura,
+          enEspera: enEspera,
+        },
+      });
     },
-    methods: {
-      verLista(codigo, nombreAsignatura, enEspera) {
-        this.$router.push({
-          name: 'detalleEspera',
-          params: { codigo: codigo,
-                    nombre: nombreAsignatura,
-                    enEspera: enEspera,
-           },
-        })
-      },
-      regresar() {
+    regresar() {
       this.$router.back();
     },
-    darCupo() {
-      window.alert('se le brindo el cupo al estudiante')
+    async darCupo(idSeccion, numeroCuenta, no) {
+      const res = await fetch(
+        "http://localhost:3000/jefeDepartamento/aceptarEstudianteListaEspera",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idSeccion: idSeccion,
+            numeroCuenta: numeroCuenta,
+          }),
+        }
+      );
+      const data = await res.json().finally(() => {
+        this.actualizarTabla();
+      });
     },
+    async actualizarTabla() {
+      this.filas = [];
+      const res = await fetch(
+        "http://localhost:3000/jefeDepartamento/obtenerListaEsperaInfo",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            idSeccion: this.idSeccion,
+          }),
+        }
+      );
+      const data = await res.json();
+      const { listaEsperaInfo } = data;
+      for (let i = 0; i < listaEsperaInfo.length; i++) {
+        this.filas.push({
+          no: i + 1,
+          numero: listaEsperaInfo[i].numeroCuenta,
+          nombre: listaEsperaInfo[i].nombreCompleto,
+          indice: listaEsperaInfo[i].indiceGlobal,
+        });
+      }
     },
-  }
+  },
+  async beforeCreate() {
+    const res = await fetch(
+      "http://localhost:3000/jefeDepartamento/obtenerListaEsperaInfo",
+      {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          idSeccion: this.idSeccion,
+        }),
+      }
+    );
+    const data = await res.json();
+    const { listaEsperaInfo } = data;
+    for (let i = 0; i < listaEsperaInfo.length; i++) {
+      this.filas.push({
+        no: i + 1,
+        numero: listaEsperaInfo[i].numeroCuenta,
+        nombre: listaEsperaInfo[i].nombreCompleto,
+        indice: listaEsperaInfo[i].indiceGlobal,
+      });
+    }
+  },
+};
 </script>
 <style scoped>
-  .text-left {
-    background-color: #a92727 !important;
-    color: white !important;
-    font-family: 'Rubik';
-  }
-
-  .v-btn {
-    background-color: #a92727;
-    color: white;
-    height: 40px;
-    box-shadow: none;
-  }
-  .regresar{
-    color: white;
-    text-decoration: none;
-  }
-
-  .tabla {
-    background-color: #c6d6d6;
-  }
-
-    .boton{
-    color: darkred;
-    font-weight: bold;
-    text-decoration: none;
-    background-color: #C6D6D6;
+.text-left {
+  background-color: #a92727 !important;
+  color: white !important;
+  font-family: "Rubik";
 }
 
+.v-btn {
+  background-color: #a92727;
+  color: white;
+  height: 40px;
+  box-shadow: none;
+}
+.regresar {
+  color: white;
+  text-decoration: none;
+}
+
+.tabla {
+  background-color: #c6d6d6;
+}
+
+.boton {
+  color: darkred;
+  font-weight: bold;
+  text-decoration: none;
+  background-color: #c6d6d6;
+}
 </style>

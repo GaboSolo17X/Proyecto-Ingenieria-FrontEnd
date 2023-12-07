@@ -40,7 +40,7 @@ const jefeRoutes = [
   
   },
   {
-    path: '/enEspera/:codigo&:nombre&:enEspera',
+    path: '/enEspera/:codigo&:nombre&:enEspera&:idSeccion',
     name: 'detalleEspera',
     component: () => import(/* webpackChunkName: "about" */ '../views/detalleEspera.vue'),
     props: true,
@@ -58,7 +58,7 @@ const jefeRoutes = [
   
   },
   {
-    path: '/generalEvaluaciones/:nombre&:clase',
+    path: '/generalEvaluaciones/:numeroEmpleado&:idseccion&:idasignatura',
     name: 'verEvaluaciones',
     component: () => import(/* webpackChunkName: "about" */ '../views/verEvaluaciones.vue'),
     props: true,
@@ -71,7 +71,7 @@ const jefeRoutes = [
   
   },
   {
-    path: '/calificaciones/:nombre&:clase&:asignatura&:seccion',
+    path: '/calificaciones/:nombre&:clase&:asignatura&:seccion&:idseccion',
     name: 'verCalificaciones',
     component: () => import(/* webpackChunkName: "about" */ '../views/verCalificaciones.vue'),
     props: true,
@@ -108,7 +108,7 @@ const jefeRoutes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/matriculados.vue'),
   },
   {
-    path: '/detalleEvaluacion',
+    path: '/detalleEvaluacion/:idEvaluacion',
     name: 'detalleEvaluacion',
     component: () => import(/* webpackChunkName: "about" */ '../views/detalleEvaluacion.vue'),
   

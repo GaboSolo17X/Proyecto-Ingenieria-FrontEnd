@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado  title="Estudiantes"/>
+          <Encabezado  title="Estudiantes" v-if="CoordinadorInfo" :datos="CoordinadorInfo"/>
         </div>
         <div class="cuadrados">
         <h1 class="componentesDocentes">Puedes ver a los estudiantes de la carrera</h1>
@@ -29,10 +29,21 @@
 import Lateral from '../components/lateral.vue'
 import Encabezado from  '../components/encabezado.vue'
 import Clase from  '../components/cardClase.vue'
+import {ref,onMounted} from 'vue'
 
 export default {
 components: {Lateral,Encabezado, Clase},
 setup() {
+
+  const CoordinadorInfo = ref()
+  const coordinadorEs = async () => {
+      console.log("El coordinador es")
+      CoordinadorInfo.value = JSON.parse(localStorage.getItem('CoordinadorInfo'))
+      console.log(CoordinadorInfo)
+  }
+  onMounted(()=>{
+    coordinadorEs()
+  })
     const clases =[
       {
         title:'Historial',
@@ -51,7 +62,7 @@ setup() {
 
     return{
       clases,
-      
+      CoordinadorInfo,
     }
 }
 }

@@ -6,9 +6,15 @@
           <v-app-bar-title>{{title}}</v-app-bar-title>
   
           <template v-slot:append>
-            <p class="nombreUser">Paco Mariachi</p>
-            <div class="ImgUser"></div>  
+            <p class="nombreUser">{{ datos.nombres }}</p>
+              <v-avatar>
+                <v-img
+                   :src="'http://localhost:3000/'+datos.foto"
+                   alt="John"
+                 ></v-img>
+              </v-avatar>
           </template>
+
         </v-app-bar>
       </v-layout>
     </v-card>
@@ -16,7 +22,7 @@
   
   <script>
   export default {
-    props:{title:String},
+    props:{title:String, datos:Object},
     setup(){
 
     }
@@ -33,7 +39,6 @@
   border-bottom-color: #77181E;
   box-shadow: none !important;
 }
-
 
 .contenidoNav{
     width: 50%;
@@ -54,7 +59,7 @@ margin-right: 10px;
   .nombreUser{
     font-family: 'Rubik', sans-serif;
     margin-right: 30px;
-    color: white;
+    color: #77181E;
   }
 
   </style>
