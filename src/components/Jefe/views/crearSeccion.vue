@@ -14,7 +14,7 @@
             />
           </div>
           <div class="componentesDocentes">
-            <FormSeccion />
+            <FormSeccion :uv="$route.params.uv" />
           </div>
         </v-col>
       </v-row>

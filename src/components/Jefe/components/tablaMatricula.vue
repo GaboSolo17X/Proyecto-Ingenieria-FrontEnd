@@ -1,7 +1,7 @@
 <template>
   <v-card class="text-center tarjeta">
     <v-card-title
-      >¡Ya estan matriculados todos los estudiantes del periodo! <br />
+      >¡Ya están matriculados todos los estudiantes del periodo! <br />
       Descargue la lista de los estudiantes matriculados.</v-card-title
     >
     <v-card-actions>

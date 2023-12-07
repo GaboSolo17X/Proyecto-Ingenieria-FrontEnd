@@ -20,7 +20,7 @@
                 <div class="note">{{ $route.params.id }}</div>
               </div>
               <div class="indice">
-                <h4>indice global: {{ $route.params.indice }}</h4>
+                <h4>índice global: {{ $route.params.indice }}</h4>
               </div>
               <div class="botoncito">
                 <BotonRegresar />

@@ -4,10 +4,10 @@
       <v-table fixed-header height="350px" class="tabla">
         <thead class="encabezado">
           <tr>
-            <th class="text-left">Codigo</th>
+            <th class="text-left">Código</th>
             <th class="text-left">Nombre</th>
             <th class="text-left">Nota</th>
-            <th class="text-left">Observacion</th>
+            <th class="text-left">Observación</th>
             <th class="text-left">Periodo</th>
           </tr>
         </thead>

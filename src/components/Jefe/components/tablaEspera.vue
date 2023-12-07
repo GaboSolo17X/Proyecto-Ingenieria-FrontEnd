@@ -1,14 +1,27 @@
 <template>
-  <v-card color="#C6D6D6" flat title="Asignaturas con lista de espera">
+  <v-card color="#C6D6D6" class="cartita">
+    <div class="header-container">
+      <v-card-title class="text-h5 font-weight-bold">
+        Asignaturas con lista de espera
+      </v-card-title>
+      <v-btn class="botonRegresar">
+        <router-link @click="regresar" to="/principalJefe" class="regresar">
+          <v-icon right>
+            <i class="fa:fas fa-solid fa-circle-left"></i>
+          </v-icon>
+          Regresar
+        </router-link>
+      </v-btn>
+    </div>
     <div class="tabla">
       <v-table fixed-header height="500px" class="tabla">
         <thead class="encabezado">
           <tr>
-            <th class="text-left">Codigo</th>
+            <th class="text-left">Código</th>
             <th class="text-left">Asignatura</th>
             <th class="text-left">Hi</th>
             <th class="text-left">Hf</th>
-            <th class="text-left">Dias</th>
+            <th class="text-left">Días</th>
             <th class="text-left">Docente</th>
             <th class="text-left">Cupos</th>
             <th class="text-left">En espera</th>
@@ -43,18 +56,6 @@
         </tbody>
       </v-table>
     </div>
-    <v-row class="text-center">
-      <v-col>
-        <v-btn>
-          <router-link @click="regresar" to="/principalJefe" class="regresar">
-            <v-icon right>
-              <i class="fa:fas fa-solid fa-circle-left"></i>
-            </v-icon>
-            Regresar
-          </router-link>
-        </v-btn>
-      </v-col>
-    </v-row>
   </v-card>
 </template>
 <script>
@@ -174,6 +175,10 @@ export default {
   font-family: "Rubik";
 }
 
+.cartita {
+  box-shadow: none;
+}
+
 .v-btn {
   background-color: #a92727;
   color: white;
@@ -187,5 +192,12 @@ export default {
 
 .tabla {
   background-color: #c6d6d6;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
 }
 </style>
