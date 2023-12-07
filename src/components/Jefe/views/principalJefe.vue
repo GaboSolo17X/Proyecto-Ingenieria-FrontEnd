@@ -45,7 +45,7 @@ export default {
     const cards = [
       {
         src: require("../assets/seguridad.png"),
-        titulo: "Registrar seccion",
+        titulo: "Registrar sección",
         ruta: "/asignaturas",
         altura: "280",
       },

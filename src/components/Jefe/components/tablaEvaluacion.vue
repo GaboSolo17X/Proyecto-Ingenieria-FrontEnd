@@ -34,10 +34,10 @@
       <v-table fixed-header height="300px" class="tabla">
         <thead class="encabezado">
           <tr>
-            <th class="text-left">Numero de empleado</th>
+            <th class="text-left">Número de empleado</th>
             <th class="text-left">Nombre completo</th>
             <th class="text-left">Clase</th>
-            <th class="text-left">Seccion</th>
+            <th class="text-left">Sección</th>
             <th class="text-left"></th>
           </tr>
         </thead>

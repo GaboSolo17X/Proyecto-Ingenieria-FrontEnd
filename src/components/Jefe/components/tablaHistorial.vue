@@ -37,10 +37,10 @@
       <v-table fixed-header height="400px" class="tabla">
         <thead class="encabezado">
           <tr>
-            <th class="text-left">Numero de cuenta</th>
+            <th class="text-left">Número de cuenta</th>
             <th class="text-left">Nombre</th>
             <th class="text-left">Centro</th>
-            <th class="text-left">Indice</th>
+            <th class="text-left">Índice</th>
             <th class="text-left"></th>
           </tr>
         </thead>

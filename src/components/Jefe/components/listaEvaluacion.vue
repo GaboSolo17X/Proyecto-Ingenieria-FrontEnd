@@ -4,8 +4,8 @@
       <v-table fixed-header height="450px" class="tabla">
         <thead class="encabezado">
           <tr>
-            <th class="text-left">Indice</th>
-            <th class="text-left">Evaluacion</th>
+            <th class="text-left">Índice</th>
+            <th class="text-left">Evaluación</th>
           </tr>
         </thead>
         <tbody>
