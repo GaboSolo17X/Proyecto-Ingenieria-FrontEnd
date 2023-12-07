@@ -1,6 +1,6 @@
 <template>
   <v-btn variant="flat" rounded="xl" @click="verHorario()"
-    >Consultar horario</v-btn
+    >Consultar matricula</v-btn
   >
 </template>
 <style scoped>

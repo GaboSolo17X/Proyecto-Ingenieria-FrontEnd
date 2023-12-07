@@ -1,33 +1,51 @@
 <template>
-  <v-container class="text-center">
-    <v-row align="center" justify="center">
-      <v-col cols="12" sm="6" md="4">
+  <v-container >
+    <v-row >
+      <v-col cols="4">
         <v-btn
           @click="verHorario()"
           block
           rounded="xs"
           class="text-none"
           :class="{ 'active-button': $route.path === '/consultarHorario' }"
-          variant="text">Matriculadas</v-btn>
+          variant="elevated">Matriculadas</v-btn>
       </v-col>
-      <v-col cols="12" sm="6" md="4">
+      <v-col cols="4">
         <v-btn 
           @click="verEspera()"
           block
           rounded="xs"
           class="text-none"
           :class="{ 'active-button': $route.path === '/consultarEspera' }"
-          variant="text">En lista de espera</v-btn>
+          variant="elevated">Lista de espera</v-btn>
       </v-col>
 
-      <v-col cols="12" sm="6" md="4">
+      <!-- <v-col cols="3">
         <v-btn
           @click="verCanceladas()"
           block
           rounded="xs"
           class="text-none"
           :class="{ 'active-button': $route.path === '/consultarCanceladas' }"
-          variant="text">Canceladas</v-btn>
+          variant="elevated">Canceladas</v-btn>
+      </v-col> -->
+      <v-col cols="4"> 
+        <router-link
+                to="/principalEstudiantes"
+                style="text-decoration: none"
+              > 
+                <v-btn
+                
+                  block
+                  rounded="xs"
+                  color="#fbd411"
+                  size="large"
+                  type="submit"
+                  variant="elevated"
+                >
+                Volver
+                </v-btn>
+              </router-link>
       </v-col>
     </v-row>
   </v-container>

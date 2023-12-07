@@ -1,8 +1,8 @@
 <template>
-  <v-card class="mx-15 mb-5" elevation="1" width="300" height="365">
+  <v-card class="mx-4 mb-5" elevation="1" width="260" height="305">
     <v-row>
       <v-col style="text-align: center;">
-        <h3 class="py-5 font-weight-black titulo">{{ clase.nombreClase }}</h3>
+        <h4 class="py-4 px-1 font-weight-black titulo">{{ clase.nombreClase }}</h4>
       </v-col>
     </v-row>
 

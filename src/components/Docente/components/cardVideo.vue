@@ -68,7 +68,7 @@ export default {
             const url = window.URL.createObjectURL(blob);
             const a = document.createElement("a");
             a.href = url;
-            a.download = "archivo.csv"; // Nombre del archivo para descargar
+            a.download = "archivo.xlsx"; // Nombre del archivo para descargar
             document.body.appendChild(a);
             a.click();
             window.URL.revokeObjectURL(url);

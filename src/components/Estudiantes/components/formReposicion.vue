@@ -29,6 +29,18 @@
             variant="solo-filled"
           >
           </v-textarea>
+
+          <p>Suba aqui la fotografía de su recibo de reposición</p>
+          <v-file-input
+            show-size
+            accept=".png, .jpg, .jpeg"
+            :rules="[(v) => !!v || 'Se requiere una imagen']"
+            label="Recibo"
+            variant="solo-filled"
+            prepend-icon="fa-solid fa-image"
+            inner-append-icon="fa-solid fa-circle-xmark"
+            @change="handleFileChange"
+          ></v-file-input>
           <br />
           <v-row>
             <v-col>
@@ -69,6 +81,7 @@ export default {
   setup() {
     const form = ref({
       justificacion: "",
+      recibo : null,
     });
 
     const isFormValid = ref(false);
@@ -88,6 +101,12 @@ export default {
       window.history.back();
     };
 
+    const handleFileChange = (e) => {
+      const file = e.target.files[0];
+      form.value.recibo = file;
+      console.log(file);
+    };
+
     const estudiante = ref();
     const estudianteEs = async () => {
       console.log("El estudiante es");
@@ -104,6 +123,7 @@ export default {
         const formData = new FormData();
         formData.append("cuenta", estudiante.value.numeroCuenta);
         formData.append("justificacion", form.value.justificacion);
+        formData.append("pagoReposicion", form.value.recibo);
         const res = await fetch(
           "http://localhost:3000/estudiante/solicitudReposicion",
           {
@@ -135,6 +155,7 @@ export default {
       showAlertSuccess,
       goBack,
       onSubmit,
+      handleFileChange,
     };
   },
 };

@@ -21,22 +21,7 @@
               <Canceladas />
             </v-row>
           </div>
-          <v-row>
-            <v-col cols=""></v-col>
-            <v-col cols="">
-              <router-link to="/matriculaEstudiantes" class="subrayadoNo">
-                <v-btn
-                  color="white"
-                  variant="flat"
-                  rounded="xl"
-                  class="textBoton py-6 px-10 mt-5"
-                >
-                  VOLVER</v-btn
-                ></router-link
-              >
-            </v-col>
-            <v-col cols=""></v-col>
-          </v-row>
+          
         </v-col>
       </v-row>
     </body>

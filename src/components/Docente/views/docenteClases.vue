@@ -40,6 +40,8 @@ setup(){
     const clases = ref([])
     const asignaturas = ref([])
     const seccion = ref([])
+    const nombreSeccion = ref([])
+    const contador = ref(0)
     const docenteEs = async () => {
       console.log("El docente es")
       docente.value = JSON.parse(localStorage.getItem('DocentePrueba'))
@@ -65,18 +67,29 @@ setup(){
         seccion.value = data.secciones;
 
         console.log(asignaturas)
-        console.log(seccion)
+        console.log(seccion.value.nombreSeccion)
 
+        console.log("Asignaturas")
+        
+        seccion.value.forEach( array => {
+          nombreSeccion.value.push(array.nombreSeccion)
+        })
 
         asignaturas.value.forEach(nestedArray => {
           nestedArray.forEach(item => {
             // Now 'item' contains the information inside the nested array
             console.log(item);
-
-           console.log (item.idAsignatura)
             seccion.value.forEach(seccionItem=>{
               const seccionID=seccionItem.idAsignatura
-              if(item.idAsignatura===(seccionID)){
+              const nombreSeccionMatch = seccionItem.nombreSeccion
+              console.log(seccionID)
+              console.log(nombreSeccionMatch)
+              console.log('que pedo chaval')
+              console.log(item)
+
+              let existe = clases.value.some(clase => clase.nombre === seccionItem.nombreSeccion);
+              if(!existe && item.idAsignatura===(seccionID) ){
+                
                 console.log("Tenemos un match con "+item.nombreClase)
                 clases.value.push({
                 id: item.idAsignatura,
@@ -91,7 +104,44 @@ setup(){
 
               }
 
-            });
+              contador.value = contador.value + 1
+              console.log(contador.value)
+              
+
+              // clases.value.forEach(repeat=>{
+              //   if(clases.value.nombre==clases.value.nombre){
+              //     clases.value.push({
+
+              //     })
+              //   }
+              // })
+
+               // Limpiar el array antes de llenarlo nuevamente
+  // clases.value = [];
+
+// // Iterar sobre las secciones y agregar información de asignaturas correspondientes
+// seccion.value.forEach(seccionItem => {
+//   const asignaturaCorrespondiente = asignaturas.value.find(
+//     asignatura => asignatura.idAsignatura === seccionItem.idAsignatura
+//   );
+
+//   if (asignaturaCorrespondiente) {
+//     console.log("Tenemos un match con " + asignaturaCorrespondiente.nombreClase);
+//     clases.value.push({
+//       id: asignaturaCorrespondiente.idAsignatura,
+//       idSeccion: seccionItem.idSeccion,
+//       nombreClase: asignaturaCorrespondiente.nombreClase,
+//       banner: 'http://localhost:3000/' + asignaturaCorrespondiente.bannerAsignatura,
+//       horaIni: seccionItem.horaInicial,
+//       facultad: asignaturaCorrespondiente.nombreCarrera,
+//       nombre: seccionItem.nombreSeccion
+//       // Agrega otras propiedades que desees mostrar
+//     });
+//   }
+// });
+
+            })
+            contador.value = 0;
           });
         });
 

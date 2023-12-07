@@ -1,5 +1,5 @@
 <template>
-  <v-sheet class="pa-10" rounded >
+  <v-sheet class="pa-15 " rounded style="background-color: #77181e;" height="600px">
     <v-card class="mx-auto px-6 py-8 rounded-xl bg-color" max-width="700">
       <v-card-text class="pa-0 text-center">
         <h1 class="mb-5">Por favor ingrese su número de cuenta </h1>
@@ -24,36 +24,12 @@
         >
         </v-text-field>
 
-        <!-- <v-select
-          v-model="form.carrPri"
-          :items="carreras"
-          :rules="[(v) => !!v || 'Seleccione una carrera', (v) => true]"
-          label="Carrera Principal"
-          required
-          variant="solo-filled"
-          rounded
-        ></v-select>
-
-        <v-text-field
-          v-model="form.email"
-          :rules="[
-            (v) =>
-              /^[a-z0-9+.-]+@[a-z.-]+\.[a-z]+$/i.test(v) ||
-              'Ingrese un correo electrónico válido',
-            (v) => true,
-          ]"
-          class="mb-2"
-          clearable
-          label="Correo Personal"
-          variant="solo-filled"
-          rounded
-        ></v-text-field> -->
-
+        
         <br />
         <v-btn
           block
           rounded
-          color="#77181E"
+          color="#282832"
           size="large"
           type="submit"
           variant="elevated"
@@ -162,12 +138,12 @@ export default {
 }
 
 .bg-color {
-  background-color: #282832;
+  background-color: #a92727;
   color: white;
 }
 
 .bg-color-body {
-  background-color: #282832;
+  background-color: #a92727;
   color: white;
 }
 

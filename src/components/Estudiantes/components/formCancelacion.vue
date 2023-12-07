@@ -46,7 +46,7 @@
             variant="solo-filled"
             prepend-icon="fa-solid fa-file"
           ></v-file-input>
-          <p>Ingrese la justificacion de su cancelación excepcional:</p>
+          <!-- <p>Ingrese la justificacion de su cancelación excepcional:</p>
           <v-textarea
             v-model="form.justificacion"
             :rules="[(v) => !!v || 'Campo Vacio', (v) => true]"
@@ -55,7 +55,7 @@
             hide-details="auto"
             variant="solo-filled"
           >
-          </v-textarea>
+          </v-textarea> -->
           <br />
           <v-row>
             <v-col>
@@ -100,7 +100,7 @@ export default {
     const form = ref({
       clasesSeleccionadas: [],
       pdf: null,
-      justificacion: "",
+      
     });
 
     const handleFileChange = (e) => {
@@ -122,7 +122,6 @@ export default {
 
     const validateForm = () => {
       if (
-        form.value.justificacion &&
         form.value.pdf &&
         form.value.clasesSeleccionadas.length > 0
       ) {
@@ -181,7 +180,6 @@ export default {
           )
           .filter((nombreClase) => nombreClase !== null);
         formData.append("clases", nombresSecciones.join(", "));
-        formData.append("justificacion", form.value.justificacion);
         formData.append("cancelacionPdf", form.value.pdf);
         const res = await fetch(
           "http://localhost:3000/estudiante/cancelacionExcepcional",
@@ -207,7 +205,6 @@ export default {
 
     const goBack = () => {
       window.history.back();
-      (form.value.justificacion = ""),
         (form.value.pdf = null),
         (form.value.clasesSeleccionadas = []);
     };

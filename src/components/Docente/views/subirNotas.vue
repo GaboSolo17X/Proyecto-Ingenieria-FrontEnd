@@ -88,7 +88,8 @@ setup(){
            console.log (item.idAsignatura)
             seccion.value.forEach(seccionItem=>{
               const seccionID=seccionItem.idAsignatura
-              if(item.idAsignatura===(seccionID)){
+              let existe = clasesFilter.value.some(clase => clase.nombreSeccion === seccionItem.nombreSeccion && clase.nombreClase === item.nombreClase);
+              if(item.idAsignatura===(seccionID) && !existe){
                 console.log("Tenemos un match con "+item.nombreClase)
                 
                 clasesFilter.value.push({
@@ -127,14 +128,14 @@ setup(){
 
       console.log(clasesFilter)
       clasesFilter.value.forEach(nestedArray => {
-        if(newValue!=nestedArray.nombreSeccion+'-'+nestedArray.nombreClase){
+        if(newValue==nestedArray.nombreSeccion+'-'+nestedArray.nombreClase){
           console.log(nestedArray.nombreClase)
           console.log(nestedArray.idSeccion)
           idSeccion=nestedArray.idSeccion
           nombreClase=nestedArray.nombreClase
         }
       })
-      console.log('El id seccion donde se cargaran los usuarios es: '+idSeccion)
+      console.log(idSeccion)
       estudiantes(idSeccion,nombreClase)
     });
 

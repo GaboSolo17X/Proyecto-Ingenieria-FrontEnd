@@ -38,14 +38,14 @@
           <div>
             <v-row>
               <v-col cols="4" class="iconoscenter">
-                <router-link to="/" active-class="amarillo" class="enlace">
+                <router-link to="/principalChats" active-class="amarillo" class="enlace">
                 <div class="iconos">
                   <v-icon icon="fa:fas fa-solid fa-comment"></v-icon>
                 </div></router-link>
               </v-col>
               <v-col>
                 <div>
-                  <router-link to="/" active-class="amarillo" class="enlace">
+                  <router-link to="/principalChats" active-class="amarillo" class="enlace">
                     <v-list-item title="Mis chats"> </v-list-item
                   ></router-link>
                 </div>

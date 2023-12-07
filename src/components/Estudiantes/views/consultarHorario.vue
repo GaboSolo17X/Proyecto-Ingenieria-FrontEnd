@@ -17,7 +17,7 @@
             <TabClases />
           </div>
           <div class="cuadrados">
-            <v-row class="mt-10 ml-5">
+            <v-row class="mt-0 ml-4">
               <Clase
                 v-for="clase in clases"
                 :key="clase.idAsignatura"
@@ -27,22 +27,6 @@
             </v-row>
           </div>
           
-          <v-row>
-            <v-col cols=""></v-col>
-            <v-col cols="">
-              <router-link to="/matriculaEstudiantes" class="subrayadoNo">
-                <v-btn
-                  color="white"
-                  variant="flat"
-                  rounded="xl"
-                  class="textBoton py-6 px-10 mt-5"
-                >
-                  VOLVER</v-btn
-                ></router-link
-              >
-            </v-col>
-            <v-col cols=""></v-col>
-          </v-row>
         </v-col>
       </v-row>
     </body>

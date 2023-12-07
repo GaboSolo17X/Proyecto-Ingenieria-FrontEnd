@@ -55,10 +55,8 @@ export default {
       estudiante.value = JSON.parse(localStorage.getItem("Estudiante"));
     };
     const recargar = () => {
-      window.location.reload()
-    }
-
-    
+      window.location.reload();
+    };
 
     const actualizarFotoPrincipal = async (id) => {
       try {
@@ -95,7 +93,7 @@ export default {
           }
         );
         const data = await res.json();
-        console.log(data)
+        console.log(data);
         const infoUsuario = JSON.stringify(data.infoEstudiante);
         console.log(infoUsuario);
         localStorage.clear();
@@ -119,8 +117,16 @@ export default {
           }
         );
         const data = await res.json();
-         console.log(data.message);
-         window.location.reload()
+        console.log(data.message);
+        //esto se ejecuta cuando la foto eliminada
+        //es la foto que esta seleccionada en el encabezado
+        if (data.message == "Foto eliminada y actualizada") {
+          const infoUsuario = JSON.stringify(data.infoEstudiante);
+          console.log(infoUsuario);
+          localStorage.clear();
+          localStorage.setItem("Estudiante", infoUsuario);
+        }
+         window.location.reload();
       } catch (error) {
         console.log(error);
       }
@@ -134,7 +140,6 @@ export default {
       // isSelected,
       seleccionarFoto,
       eliminarFoto,
-      
     };
   },
 };
