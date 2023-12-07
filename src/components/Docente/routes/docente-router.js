@@ -21,9 +21,9 @@ const docenteRoutes = [
   
   },
   {
-    path: '/reinicioClave',
-    name: 'reinicioClave',
-    component: () => import(/* webpackChunkName: "about" */ '../../../components/Docente/views/reinicioClave.vue'),
+    path: '/reiniciarClave/:numeroEmpleadoDocente',
+    name: 'reiniciarClave',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Docente/views/reiniciarClave.vue'),
   
   },
    {
