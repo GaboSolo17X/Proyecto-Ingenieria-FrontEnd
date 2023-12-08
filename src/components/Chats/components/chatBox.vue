@@ -108,15 +108,27 @@
 </template>
 
 <script>
+import { socket, connectSocket, sendMessage, privado } from "../socket/socket";
 import { ref, onMounted } from "vue";
+
 
 export default {
     props:{
-        name:String
+        name:String,
+        recibe:String,
     },
-  setup() {
+  setup(props) {
     const activeFile = ref(false);
     const activeChat = ref(true);
+
+    
+
+
+    // const connect = ()=>  {
+    //   console.log('MIERDA')
+    //   socket.connect();
+    // }
+
 
     const BTNarchivo = () => {
       activeChat.value = false;
@@ -141,13 +153,34 @@ export default {
 
     const newMessage = ref(""); 
 
+
+    const datos = ref({})
+
     const enviarMensaje = () => {
       if (activeChat.value) {
         console.log("Mensaje enviado:", newMessage.value);
+   
+        // socket.emit("mensaje",newMessage.value)
+
+        datos.value = {
+          destinatario: props.recibe,
+          mensaje: newMessage.value
+        }
+
+        console.log(datos.value)
+        // sendMessage(newMessage.value)
+        privado(datos.value)
+
+        // newMensaje(newMessage)
       } else if (activeFile.value) {
         const fileInput = document.getElementById("fileInput");
         const selectedFile = fileInput.files[0];
         console.log("Archivo seleccionado:", selectedFile);
+
+        datos.value = {
+          destinatario: props.recibe,
+          mensaje: selectedFile
+        }
 
         
       }
@@ -167,6 +200,7 @@ export default {
       BTNchat,
       enviarMensaje,
       newMessage,
+
     };
   },
 };

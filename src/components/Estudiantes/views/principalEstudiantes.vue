@@ -42,7 +42,7 @@ return{
     {
       src:require('../assets/principal1.png'),
       titulo:'MATRICULA DEL PERIODO',
-      descripcion:'Se ha habilitado el proceso de matricula,  ingresa para realizar el proceso de adición de asignaturas.',
+      descripcion:'Se ha habilitado el proceso de matrícula,  ingresa para realizar el proceso de adición de asignaturas.',
       ruta: '/matriculaEstudiantes',
       altura: '370'
 

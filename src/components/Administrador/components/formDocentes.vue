@@ -97,6 +97,18 @@
         >
           Guardar
         </v-btn>
+      
+              <v-btn class="mt-3"
+                block
+                rounded
+                color="#D3E3F7"
+                size="large"
+                variant="elevated"
+                @click="goBack()"
+              >
+                Volver
+              </v-btn>
+          
       </v-form>
     </v-card>
   </v-sheet>
@@ -151,6 +163,9 @@ export default {
 
     }
 
+    const goBack = () => {
+      window.location.reload();
+    };
 
     const validateForm = () => {
         if (
@@ -221,7 +236,7 @@ export default {
         form,
         centros,
         carreras,
-
+        goBack,
         handleFileChange,
         pruebaRegistro,
         getCarreras,

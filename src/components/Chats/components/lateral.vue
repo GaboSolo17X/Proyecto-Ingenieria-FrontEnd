@@ -8,34 +8,20 @@
           </v-list-item>
           <hr />
           <v-list-item class="iconoscenter">
-            <router-link
-              to="/principalEstudiantes"
-              active-class="amarillo"
-              class="enlace"
-            >
+            <router-link to="/principalEstudiantes" active-class="amarillo" class="enlace">
               <v-icon class="iconos" icon="fa:fas fa-solid fa-house"></v-icon>
             </router-link>
           </v-list-item>
 
           <v-list-item class="iconoscenter">
             <router-link to="/" class="enlace">
-              <v-icon
-                class="iconos amarillo"
-                icon="fa:fas fa-solid fa-comment"
-              ></v-icon>
+              <v-icon class="iconos amarillo" icon="fa:fas fa-solid fa-comment"></v-icon>
             </router-link>
           </v-list-item>
 
           <v-list-item class="iconoscenter">
-            <router-link
-              to="/certificadoEstudiantes"
-              active-class="amarillo"
-              class="enlace"
-            >
-              <v-icon
-                class="iconos"
-                icon="fa:fas fa-solid fa-certificate"
-              ></v-icon>
+            <router-link to="/certificadoEstudiantes" active-class="amarillo" class="enlace">
+              <v-icon class="iconos" icon="fa:fas fa-solid fa-certificate"></v-icon>
             </router-link>
           </v-list-item>
         </v-list>
@@ -52,81 +38,123 @@
         <template v-slot:prepend>
           <v-row class="cat">
             <v-col cols="4" class="colsc">
-              <v-btn
-                class="btn"
-                :class="{ btnSel: selectedTab === 'chats' }"
-                @click="selectTab('chats')"
-                variant="outlined"
-                rounded="xl"
-                >Chats</v-btn
-              >
+              <v-btn class="btn" :class="{ btnSel: selectedTab === 'chats' }" @click="selectTab('chats')"
+                variant="outlined" rounded="xl">Chats</v-btn>
             </v-col>
             <v-col cols="4" class="colsc">
-              <v-btn
-                class="btn"
-                :class="{ btnSel: selectedTab === 'grupos' }"
-                @click="selectTab('grupos')"
-                variant="outlined"
-                rounded="xl"
-                >Grupos</v-btn
-              >
+              <v-btn class="btn" :class="{ btnSel: selectedTab === 'grupos' }" @click="selectTab('grupos')"
+                variant="outlined" rounded="xl">Grupos</v-btn>
             </v-col>
             <v-col cols="4" class="colsc">
-              <v-btn
-                class="btn"
-                :class="{ btnSel: selectedTab === 'solicitudes' }"
-                @click="selectTab('solicitudes')"
-                variant="outlined"
-                rounded="xl"
-                >Solicitudes</v-btn
-              >
+              <v-btn class="btn" :class="{ btnSel: selectedTab === 'solicitudes' }" @click="selectTab('solicitudes')"
+                variant="outlined" rounded="xl">Solicitudes</v-btn>
             </v-col>
           </v-row>
           <hr />
         </template>
 
-        <v-card
-          v-show="selectedTab === 'chats'"
-          class="myChats"
-          color="transparent"
-        >
-          <div v-for="chat in chats" :key="chat.id" @click="selectedChat(chat)">
+        <v-card v-show="selectedTab === 'chats'" class="myChats" color="transparent">
+          <template v-slot:prepend>
+            <v-row class="new">
+              <v-row justify="center">
+                <v-dialog v-model="dialogContactos" fullscreen :scrim="false" transition="dialog-bottom-transition">
+                  <template v-slot:activator="{ props }">
+                    <!-- <v-btn color="primary" dark v-bind="props"> Open Dialog </v-btn> -->
+                    <v-btn variant="text" dark v-bind="props">
+                      <v-icon class="more" icon="fa-solid fa-circle-plus"></v-icon>
+                      <span class="title">Tus Contactos</span>
+                    </v-btn>
+                  </template>
+                  <v-card class="prime2">
+                    <form @submit.prevent="submit">
+                      <v-toolbar dark class="prime">
+                        <v-btn icon dark @click="dialog = false">
+                          <v-icon>mdi-close</v-icon>
+                        </v-btn>
+                        <v-toolbar-title class="titles">TUS CONTACTOS</v-toolbar-title>
+                        <v-spacer></v-spacer>
+                        <v-toolbar-items>
+                          <v-btn variant="text" class="titles" @click="dialogContactos = false">
+                            Cerrar
+                          </v-btn>
+                        </v-toolbar-items>
+                      </v-toolbar>
+                      <v-row class="m-0">
+                        <v-col class="form">
+                          <h2>
+                            ¿Quieres iniciar un chat o eliminar algun contacto?
+                          </h2>
+                          <v-text-field v-model="searchQuery2" label="Buscar" @input="filterContactos2" class="mt-5"
+                            append-inner-icon="fa-solid fa-magnifying-glass" single-line hide-details rounded="xl"
+                            variant="outlined"></v-text-field>
+                          <v-icon class="plus" icon="fa-solid fa-person-circle-question"></v-icon>
+
+                          <!-- <v-btn @click="handleReset">
+                            clear
+                          </v-btn> -->
+                        </v-col>
+                        <v-col class="contactos">
+                          <h2>Estos son tus contactos</h2>
+                          <v-card class="myCont" color="transparent">
+                            <div v-for="contact in filteredContactos2" :key="contact.numeroCuenta">
+                              <v-card rounded="xl" class="conta">
+                                <v-row class="rows">
+                                  <v-col cols="2">
+                                    <v-avatar>
+                                      <v-img :src="'http://localhost:3000/' +
+                                        contact.foto
+                                        " alt="John"></v-img>
+                                    </v-avatar>
+                                  </v-col>
+                                  <v-col cols="7" class="names">
+                                    <span>{{ contact.nombre }}</span>
+                                  </v-col>
+                                  <v-col cols="3" class="grate">
+                                    <v-btn density="compact" variant="text" icon="fa-solid fa-comment" class="btnC"
+                                      @click="nuevoChat(contact.numeroCuenta)"></v-btn>
+                                    <v-btn density="compact" variant="text" icon="fa-solid fa-trash-can" class="btnE"
+                                      @click="
+                                        eliminarContacto(contact.numeroCuenta)
+                                        "></v-btn>
+                                  </v-col>
+                                </v-row>
+                              </v-card>
+                            </div>
+                          </v-card>
+                        </v-col>
+                      </v-row>
+                    </form>
+                  </v-card>
+                </v-dialog>
+              </v-row>
+            </v-row>
+          </template>
+          <hr />
+          <div v-for="chat in chats" :key="chat.numeroCuenta" @click="selectedChat(chat.numeroCuenta,chat.nombre)">
             <v-card rounded="xl" class="chats">
               <v-row class="rows">
                 <v-col cols="4">
                   <v-avatar>
-                    <v-img :src="chat.img" alt="John"></v-img>
+                    <v-img :src="'http://localhost:3000/'+ chat.foto" alt="John"></v-img>
                   </v-avatar>
                 </v-col>
                 <v-col class="names">
-                  <span>{{ chat.sender }}</span>
+                  <span>{{ chat.nombre }}</span>
                 </v-col>
               </v-row>
             </v-card>
           </div>
         </v-card>
 
-        <v-card
-          v-show="selectedTab === 'grupos'"
-          class="myGroups"
-          color="transparent"
-        >
+        <v-card v-show="selectedTab === 'grupos'" class="myGrupos" color="transparent">
           <template v-slot:prepend>
             <v-row class="new">
               <v-row justify="center">
-                <v-dialog
-                  v-model="dialogCrearGrupo"
-                  fullscreen
-                  :scrim="false"
-                  transition="dialog-bottom-transition"
-                >
+                <v-dialog v-model="dialogCrearGrupo" fullscreen :scrim="false" transition="dialog-bottom-transition">
                   <template v-slot:activator="{ props }">
                     <!-- <v-btn color="primary" dark v-bind="props"> Open Dialog </v-btn> -->
                     <v-btn variant="text" dark v-bind="props">
-                      <v-icon
-                        class="more"
-                        icon="fa-solid fa-circle-plus"
-                      ></v-icon>
+                      <v-icon class="more" icon="fa-solid fa-circle-plus"></v-icon>
                       <span class="title">Crear Grupo</span>
                     </v-btn>
                   </template>
@@ -136,24 +164,13 @@
                         <v-btn icon dark @click="dialog = false">
                           <v-icon>mdi-close</v-icon>
                         </v-btn>
-                        <v-toolbar-title class="titles"
-                          >CREAR GRUPO</v-toolbar-title
-                        >
+                        <v-toolbar-title class="titles">CREAR GRUPO</v-toolbar-title>
                         <v-spacer></v-spacer>
                         <v-toolbar-items>
-                          <v-btn
-                            variant="text"
-                            class="titles"
-                            @click="dialogCrearGrupo = false"
-                          >
+                          <v-btn variant="text" class="titles" @click="dialogCrearGrupo = false">
                             Cerrar
                           </v-btn>
-                          <v-btn
-                            variant="text"
-                            type="submit"
-                            class="titles"
-                            @click="dialogCrearGrupo = false"
-                          >
+                          <v-btn variant="text" type="submit" class="titles" @click="dialogCrearGrupo = false">
                             Guardar
                           </v-btn>
                         </v-toolbar-items>
@@ -161,17 +178,9 @@
                       <v-row class="m-0">
                         <v-col class="form">
                           <h2>Ponle un nombre al grupo</h2>
-                          <v-text-field
-                            v-model="nombreGrupo"
-                            label="Nombre"
-                            class="mt-5"
-                            :rules="[(v) => !!v || 'Este campo es requerido']"
-                            variant="outlined"
-                          ></v-text-field>
-                          <v-icon
-                            class="plus"
-                            icon="fa-solid fa-people-group"
-                          ></v-icon>
+                          <v-text-field v-model="nombreGrupo" label="Nombre" class="mt-5"
+                            :rules="[(v) => !!v || 'Este campo es requerido']" variant="outlined"></v-text-field>
+                          <v-icon class="plus" icon="fa-solid fa-people-group"></v-icon>
 
                           <!-- <v-btn @click="handleReset">
                             clear
@@ -180,32 +189,22 @@
                         <v-col class="contactos">
                           <h2>Selecciona a los integrantes</h2>
                           <v-card class="myCont" color="transparent">
-                            <div
-                              v-for="contact in contactos"
-                              :key="contact.idUsuario"
-                            >
+                            <div v-for="contact in contactos" :key="contact.numeroCuenta">
                               <v-card rounded="xl" class="conta">
                                 <v-row class="rows">
                                   <v-col cols="3">
                                     <v-avatar>
-                                      <v-img
-                                        :src="
-                                          'http://localhost:3000/' +
-                                          contact.foto
-                                        "
-                                        alt="John"
-                                      ></v-img>
+                                      <v-img :src="'http://localhost:3000/' +
+                                        contact.foto
+                                        " alt="John"></v-img>
                                     </v-avatar>
                                   </v-col>
                                   <v-col cols="7" class="names">
                                     <span>{{ contact.nombre }}</span>
                                   </v-col>
                                   <v-col cols="2" class="check">
-                                    <input
-                                      type="checkbox"
-                                      :value="contact.idUsuario"
-                                      v-model="usuariosSeleccionados"
-                                    />
+                                    <input type="checkbox" :value="contact.numeroCuenta"
+                                      v-model="usuariosSeleccionados" />
                                   </v-col>
                                 </v-row>
                               </v-card>
@@ -221,50 +220,34 @@
           </template>
           <hr />
           <h3 class="ml-5 mt-2">Tus Grupos</h3>
-          <div
-            v-for="grupo in grupos"
-            :key="grupo.id"
-            @click="selectGroup(grupo.idGrupo)"
-          >
-            <v-card rounded="xl" class="chats">
-              <v-row class="rows">
-                <v-col cols="3">
-                  <v-avatar>
-                    <v-img
-                      :src="'http://localhost:3000/' + grupo.fotoGrupo"
-                      alt="John"
-                    ></v-img>
-                  </v-avatar>
-                </v-col>
-                <v-col cols="9" class="groups">
-                  <span>{{ grupo.nombreGrupo }}</span>
-                </v-col>
-              </v-row>
-            </v-card>
-          </div>
+          <v-card class="myGroups" color="transparent">
+            <div v-for="grupo in grupos" :key="grupo.id" @click="selectGroup(grupo.idGrupo, grupo.nombreGrupo)">
+              <v-card rounded="xl" class="chats">
+                <v-row class="rows">
+                  <v-col cols="3">
+                    <v-avatar>
+                      <v-img :src="'http://localhost:3000/' + grupo.fotoGrupo" alt="John"></v-img>
+                    </v-avatar>
+                  </v-col>
+                  <v-col cols="9" class="groups">
+                    <span>{{ grupo.nombreGrupo }}</span>
+                  </v-col>
+                </v-row>
+              </v-card>
+            </div>
+          </v-card>
         </v-card>
 
-        <v-card
-          v-show="selectedTab === 'solicitudes'"
-          class="myRequest"
-          color="transparent"
-        >
+        <v-card v-show="selectedTab === 'solicitudes'" class="myRequest" color="transparent">
           <template v-slot:prepend>
             <v-row class="new">
               <v-row justify="center">
-                <v-dialog
-                  v-model="dialogAgregarEstudiante"
-                  fullscreen
-                  :scrim="false"
-                  transition="dialog-bottom-transition"
-                >
+                <v-dialog v-model="dialogAgregarEstudiante" fullscreen :scrim="false"
+                  transition="dialog-bottom-transition">
                   <template v-slot:activator="{ props }">
                     <!-- <v-btn color="primary" dark v-bind="props"> Open Dialog </v-btn> -->
                     <v-btn variant="text" dark v-bind="props">
-                      <v-icon
-                        class="more"
-                        icon="fa-solid fa-circle-plus"
-                      ></v-icon>
+                      <v-icon class="more" icon="fa-solid fa-circle-plus"></v-icon>
                       <span class="title">Agregar Estudiante</span>
                     </v-btn>
                   </template>
@@ -273,17 +256,10 @@
                       <v-btn icon dark @click="dialog = false">
                         <v-icon>mdi-close</v-icon>
                       </v-btn>
-                      <v-toolbar-title class="titles"
-                        >SOLICITUDES AMISTAD</v-toolbar-title
-                      >
+                      <v-toolbar-title class="titles">SOLICITUDES DE AMISTAD</v-toolbar-title>
                       <v-spacer></v-spacer>
                       <v-toolbar-items>
-                        <v-btn
-                          variant="text"
-                          type="submit"
-                          class="titles"
-                          @click="dialogAgregarEstudiante = false"
-                        >
+                        <v-btn variant="text" type="submit" class="titles" @click="dialogAgregarEstudiante = false">
                           Cerrar
                         </v-btn>
                       </v-toolbar-items>
@@ -291,18 +267,10 @@
 
                     <v-row class="m-0">
                       <v-col class="form">
-                        <h2>Busca a la persona</h2>
-                        <v-text-field
-                          v-model="searchQuery"
-                          label="Buscar"
-                          @input="filterContactos"
-                          class="mt-5"
-                          append-inner-icon="fa-solid fa-magnifying-glass"
-                          single-line
-                          hide-details
-                          rounded="xl"
-                          variant="outlined"
-                        ></v-text-field>
+                        <h2>Buscar estudiante</h2>
+                        <v-text-field v-model="searchQuery" label="Buscar" @input="filterContactos" class="mt-5"
+                          append-inner-icon="fa-solid fa-magnifying-glass" single-line hide-details rounded="xl"
+                          variant="outlined"></v-text-field>
 
                         <v-icon class="plus">fa-solid fa-user-plus</v-icon>
                         <!-- <v-btn @click="handleReset">
@@ -311,23 +279,16 @@
                       </v-col>
 
                       <v-col class="contactos">
-                        <h2>Gente del Campus Universitario</h2>
+                        <h2>Estudiantes del Campus Universitario</h2>
                         <v-card class="myCont" color="transparent">
-                          <div
-                            v-for="(user, index) in filteredContactos"
-                            :key="user.numeroCuenta"
-                          >
+                          <div v-for="(user, index) in filteredContactos" :key="user.numeroCuenta">
                             <v-card rounded="xl" class="conta">
                               <v-row class="rows">
                                 <v-col cols="2">
                                   <v-avatar>
-                                    <v-img
-                                      :src="
-                                        'http://localhost:3000/' +
-                                        user.fotoPerfil
-                                      "
-                                      alt="John"
-                                    ></v-img>
+                                    <v-img :src="'http://localhost:3000/' +
+                                      user.fotoPerfil
+                                      " alt="John"></v-img>
                                   </v-avatar>
                                 </v-col>
                                 <v-col cols="8" class="names">
@@ -337,16 +298,9 @@
                                   }}</span>
                                 </v-col>
                                 <v-col cols="2" class="check">
-                                  <v-btn
-                                    class="btnA2"
-                                    variant="outlined"
-                                    rounded="xl"
-                                    @click="
-                                      solicitudEnviada(user.numeroCuenta, index)
-                                    "
-                                    :disabled="user.solicitudEnviada"
-                                    >Enviar</v-btn
-                                  >
+                                  <v-btn class="btnA2" variant="outlined" rounded="xl" @click="
+                                    solicitudEnviada(user.numeroCuenta, index)
+                                    " :disabled="user.solicitudEnviada">Enviar</v-btn>
                                   <!-- <v-btn
                                     class="btnA2"
                                     v-show="btnEnviado"
@@ -376,10 +330,7 @@
               <v-row class="rows">
                 <v-col cols="4">
                   <v-avatar>
-                    <v-img
-                      :src="'http://localhost:3000/' + solicitud.foto"
-                      alt="John"
-                    ></v-img>
+                    <v-img :src="'http://localhost:3000/' + solicitud.foto" alt="John"></v-img>
                   </v-avatar>
                 </v-col>
                 <v-col class="nombres">
@@ -387,32 +338,20 @@
                   {{ solicitud.idUsuario }}
                 </v-col>
                 <v-col class="soliciBTN">
-                  <v-btn
-                    class="btnA"
-                    variant="outlined"
-                    rounded="xl"
-                    @click="
-                      aceptarSoli(
-                        solicitud.idUsuario,
-                        solicitud.idUsuario2,
-                        solicitud.idSolicitud
-                      )
-                    "
-                    >Aceptar</v-btn
-                  >
-                  <v-btn
-                    class="btnR"
-                    variant="outlined"
-                    rounded="xl"
-                    @click="
-                      rechazarSoli(
-                        solicitud.idUsuario,
-                        solicitud.idUsuario2,
-                        solicitud.idSolicitud
-                      )
-                    "
-                    >Rechazar</v-btn
-                  >
+                  <v-btn class="btnA" variant="outlined" rounded="xl" @click="
+                    aceptarSoli(
+                      solicitud.idUsuario,
+                      solicitud.idUsuario2,
+                      solicitud.idSolicitud
+                    )
+                    ">Aceptar</v-btn>
+                  <v-btn class="btnR" variant="outlined" rounded="xl" @click="
+                    rechazarSoli(
+                      solicitud.idUsuario,
+                      solicitud.idUsuario2,
+                      solicitud.idSolicitud
+                    )
+                    ">Rechazar</v-btn>
                 </v-col>
               </v-row>
             </v-card>
@@ -423,14 +362,16 @@
     </v-layout>
   </v-card>
 
-  <chatbox v-show="activeChat" :name="sender" class="chatbox" />
-  <groupChat v-show="activeGroupChat" class="groupChat"/>
+  <chatbox v-show="activeChat" :name="sender" :recibe="recibe" class="chatbox" />
+  <groupChat v-show="activeGroupChat" class="groupChat" v-if="usuariosGrupos" :users="usuariosGrupos" :name="chatName" />
 </template>
 
 <script>
 import chatbox from "../components/chatBox.vue";
 import groupChat from "../components/groupChatBox.vue";
+import { socket, connectSocket, actualizar } from "../socket/socket";
 import { ref, onMounted } from "vue";
+
 export default {
   components: {
     chatbox,
@@ -447,9 +388,56 @@ export default {
     const usuariosSeleccionados = ref([]);
     const activeChat = ref(false);
     const sender = ref("");
+    const chatName = ref("");
     const usuarios = ref([]);
     const solicitudes = ref([]);
     const contactos = ref([]);
+
+    //  const connect = ()=>  {
+    //    socket.connect();
+    //  }
+
+    // const disconnect = ()=> {
+    //   socket.disconnect();
+    // }
+
+    //CONTACTOS
+
+    const eliminarCon = async (id) => {
+      console.log(centro);
+      try {
+        const res = await fetch("http://localhost:3000/chat/eliminarContacto", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cuentaEstu: cuenta,
+            cuentaOtro: id,
+          }),
+        });
+        const data = await res.json();
+        console.log(data.message);
+
+        // if(data.message=='Solicitud enviada'){
+
+        // }
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const eliminarContacto = (cuenta) => {
+      console.log("Eliminaste a " + cuenta);
+      eliminarCon(cuenta);
+      getContactos();
+      filterContactos2();
+      searchQuery2.value = "";
+    };
+
+    const nuevoChat = (cuenta) => {
+      console.log("Creaste chat con " + cuenta);
+    };
 
     // const btnEnviar = ref(true);
     // const btnEnviado = ref(false);
@@ -503,8 +491,6 @@ export default {
         const data = await res.json();
         console.log(data.message);
 
-   
-
         // if(data.message=='Solicitud enviada'){
 
         // }
@@ -514,7 +500,9 @@ export default {
     };
 
     const filteredContactos = ref([]);
+    const filteredContactos2 = ref([]);
     const searchQuery = ref("");
+    const searchQuery2 = ref("");
 
     const filterContactos = () => {
       const query = searchQuery.value.toLowerCase();
@@ -524,6 +512,17 @@ export default {
           nombreInicial === query ||
           contacto.nombre.toLowerCase().includes(query) ||
           contacto.numeroCuenta.includes(query)
+        );
+      });
+    };
+
+    const filterContactos2 = () => {
+      const query = searchQuery2.value.toLowerCase();
+      filteredContactos2.value = contactos.value.filter((contacto) => {
+        const nombreInicial = contacto.nombre.charAt(0).toLowerCase();
+        return (
+          nombreInicial === query ||
+          contacto.nombre.toLowerCase().includes(query)
         );
       });
     };
@@ -573,18 +572,70 @@ export default {
 
     //ABRIR CHATS
 
-    const selectedChat = (chat) => {
-      console.log(chat);
-      activeChat.value = true;
-      sender.value = chat.sender;
-      activeGroupChat.value=false;
+    const chats = ref([])
+
+    const obtenerChats = async () => {
+      console.log(centro);
+      try {
+        const res = await fetch("http://localhost:3000/chat/getChats", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            cuentaEstu: cuenta,
+          }),
+        });
+        const data = await res.json();
+        console.log(data);
+        chats.value = data.chats
+
+        // if(data.message=='Solicitud enviada'){
+
+        // }
+      } catch (error) {
+        console.log(error);
+      }
     };
 
-    const activeGroupChat = ref(false)
-    const selectGroup = (group) => {
-      activeGroupChat.value=true;
+    const recibe=ref()
+    const selectedChat = (chat,name) => {
+      console.log(chat);
+      activeChat.value = true;
+      sender.value = name;
+      activeGroupChat.value = false;
+      recibe.value=chat
+    };
+
+    
+    const usuariosGrupos = ref([]);
+    const obtenerEstuGrupos = async (grupoID) => {
+      console.log(centro);
+      try {
+        const res = await fetch("http://localhost:3000/chat/getMiembrosGrupo", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            grupoId: grupoID,
+          }),
+        });
+        const data = await res.json();
+        console.log(data);
+        usuariosGrupos.value = data.perfilesGrupo;
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const activeGroupChat = ref(false);
+    const selectGroup = (group, name) => {
+      activeGroupChat.value = true;
       console.log(group);
-      activeChat.value=false;
+      activeChat.value = false;
+      obtenerEstuGrupos(group);
+      chatName.value = name;
     };
 
     //SOLICITUDES
@@ -660,8 +711,8 @@ export default {
       console.log("Haz enviado una solicitud a " + id);
       usuarios.value[index].solicitudEnviada = true;
       enviarSolicitud(id);
-        obtenerEstudiantes();
-        filterContactos();
+      obtenerEstudiantes();
+      filterContactos();
     };
 
     //GRUPOS
@@ -745,6 +796,9 @@ export default {
       getSolicitud();
       getContactos();
       getGrupos();
+      obtenerChats();
+      actualizar(cuenta);
+      // connect()
     });
 
     return {
@@ -761,11 +815,20 @@ export default {
       selectGroup,
       usuarios,
       filteredContactos,
+      filteredContactos2,
       searchQuery,
+      searchQuery2,
       filterContactos,
+      filterContactos2,
       solicitudes,
       contactos,
       grupos,
+      eliminarContacto,
+      nuevoChat,
+      usuariosGrupos,
+      chatName,
+      chats,
+      recibe
       // btnEnviar,
       // btnEnviado,
     };
@@ -778,25 +841,13 @@ export default {
       widgets: false,
       dialogCrearGrupo: false,
       dialogAgregarEstudiante: false,
+      dialogContactos: false,
 
-      chats: [
-        {
-          id: 1,
-          sender: "Usuario1",
-          message: "Hola, ¿cómo estás?",
-          img: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-        },
-        {
-          id: 2,
-          sender: "Usuario2",
-          message: "¡Hola! Estoy bien, gracias.",
-          img: "https://cdn.vuetifyjs.com/images/lists/1.jpg",
-        },
-      ],
-      selectedTab: "chats",
-     
-      selectedTab: "grupos",
       
+      selectedTab: "chats",
+
+      selectedTab: "grupos",
+
       selectedTab: "solicitud",
 
       selectedPop: null,
@@ -810,19 +861,6 @@ export default {
     selectPop(pop) {
       this.selectedPop = pop;
     },
-    // filterContactos() {
-    //   const query = this.searchQuery.toLowerCase();
-    //   this.filteredContactos = this.usuarios.filter((contacto) => {
-    //     // Filtrar por inicial del nombre
-    //     const nombreInicial = contacto.sender.charAt(0).toLowerCase();
-    //     // Filtrar por nombre o número de cuenta
-    //     return (
-    //       nombreInicial === query ||
-    //       contacto.nombre.toLowerCase().includes(query) ||
-    //       contacto.numeroCuenta.includes(query)
-    //     );
-    //   });
-    // },
   },
 };
 </script>
@@ -980,8 +1018,8 @@ h3 {
 
 .names {
   font-size: 20px;
-    margin-left: 10px;
-    font-family: "Rubik", sans-serif
+  margin-left: 10px;
+  font-family: "Rubik", sans-serif;
 }
 
 .groups {
@@ -1076,6 +1114,7 @@ h3 {
   padding: 60px;
   text-align: center;
 }
+
 .plus {
   font-size: 9rem;
   color: #77181e;
@@ -1122,10 +1161,17 @@ h3 {
   margin-top: 48px;
   height: 92vh;
 }
-.groupChat{
+
+.groupChat {
   margin-left: 410px;
   margin-top: 48px;
   height: 92vh;
-
 }
+
+.grate {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.btnC {}
 </style>

@@ -6,7 +6,7 @@
       </v-col>
       <v-col cols="8">
         <div class="contenido">
-          <Encabezado  title="Docentes" v-if="trabajador" :datos="trabajador"/>
+          <Encabezado  title="Listado de Docentes" v-if="trabajador" :datos="trabajador"/>
         </div>
         <div class="componentesDocentes">
           <TablaDocentes />

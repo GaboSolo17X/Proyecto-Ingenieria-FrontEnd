@@ -27,7 +27,7 @@
                 </v-img>
               </v-col>
               <v-col cols="12" lg="12" md="12">
-                <h1 class="bien text-center">¡Bienvenidos Pumas {{puesto}}!</h1>
+                <h1 class="bien text-center">¡Bienvenido, puma {{puesto}}!</h1>
               </v-col>
               <v-col cols="12" lg="12" md="12">
                 <router-link to="/"
@@ -45,7 +45,7 @@
             </v-row>
             <v-row justify="center">
               <v-col class="pt-0">
-                <h2>Iniciar Sesion</h2>
+                <h2>Iniciar Sesión</h2>
               </v-col>
             </v-row>
             <v-row justify="center">
@@ -127,10 +127,10 @@ export default {
       
       // Mapea las rutas a los saludos correspondientes
       const puestos = {
-        '/login-docentes': 'Docentes',
-        '/login-coordinador': 'Coordinadores',
-        '/login-administrador': 'Administradores',
-        '/login-jefeDep': '  Jefe de Departamentos',
+        '/login-docentes': 'Docente',
+        '/login-coordinador': 'Coordinador',
+        '/login-administrador': 'Administrador',
+        '/login-jefeDep': '  Jefe de Departamento',
       };
 
       const direcciones={

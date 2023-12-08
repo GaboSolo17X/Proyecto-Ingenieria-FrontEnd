@@ -98,53 +98,14 @@
     <v-card class="integrantes">
       <h3>Integrantes</h3>
       <hr>
-      <!-- <div class="nombreInt">
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-        <span>Marco Tulio</span>
-        <span>Ramon Villeda</span>
-
-      </div> -->
 
       <div class="nombreInt">
-        <div v-for="(integrante, index) in integrantes" :key="index">
+        <div v-for="(integrante, index) in users" :key="index">
           <v-card class="request">
             <v-row class="rows">
               <v-col cols="1" class="img">
                 <v-avatar size="22">
-                  <v-img :src="integrante.foto" alt="John"></v-img>
+                  <v-img :src="'http://localhost:3000/'+integrante.foto" alt="John"></v-img>
                   <!-- <v-img :src="'http://localhost:3000/' + integrante.foto" alt="John"></v-img> -->
 
                 </v-avatar>
@@ -171,93 +132,19 @@ import { ref, onMounted } from "vue";
 export default {
   props: {
     name: String,
+    users:Array,
   },
-  setup() {
+  setup(props) {
     const activeFile = ref(false);
     const activeChat = ref(true);
 
-    const integrantes = [
-      {
-        nombre: "Maria teresa",
-        foto: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      },
-      {
-        nombre: "Maria teresa",
-        foto: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      },
-      {
-        nombre: "Maria teresa",
-        foto: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      },
-      {
-        nombre: "Maria teresa",
-        foto: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      },
-      {
-        nombre: "Maria teresa",
-        foto: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      },
-      {
-        nombre: "Maria teresa",
-        foto: "https://cdn.vuetifyjs.com/images/lists/4.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-      {
-        nombre: "Gabriel Solorzano",
-        foto: "https://cdn.vuetifyjs.com/images/lists/3.jpg",
-      },
-    ]
+
+
+    const integrantes = ref([])
+
+    integrantes.value=props.users
+    console.log(integrantes.value)
+     
 
     const BTNarchivo = () => {
       activeChat.value = false;
