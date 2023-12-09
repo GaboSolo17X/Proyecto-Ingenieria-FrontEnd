@@ -1,6 +1,8 @@
 import { reactive } from "vue";
 import { io } from "socket.io-client";
 
+// import bus from '../socket/bus.js';
+
 export const state = reactive({
   connected: false,
   fooEvents: [],
@@ -9,7 +11,7 @@ export const state = reactive({
 
 // "undefined" means the URL will be computed from the `window.location` object
 const URL = "http://localhost:3000";
-
+ 
 export const socket = io(URL);
 
 socket.on("connect", () => {
@@ -30,10 +32,9 @@ socket.on("bar", (...args) => {
 });
 
 socket.on("mensaje", (msg) => {
-  console.log(msg)
- 
   // state.barEvents.push(args);
 });
+
 
 socket.on("privado", (msg) => {
   console.log("hay mensaje")
@@ -41,10 +42,41 @@ socket.on("privado", (msg) => {
   
 });
 
+// socket.on("VerificacionSala", (msg) => {
+//   console.log(msg)
+//   console.log('Mensaje desde el servidor:', msg)
+
+//   // bus.emit('mensajeDesdeServidor', msg);
+  
+// });
+
+
+// let miVariableLet = "Hola desde archivo1!";
+// export function modificarVariable(valor) {
+//   return valor
+// }
+ 
+//  export { miVariableLet };
+
+let verificacion = null;
+
 socket.on("VerificacionSala", (msg) => {
   console.log(msg)
-  
+  verificacion = msg;
 });
+
+
+socket.on("VerificacionGrupo", (msg) => {
+  console.log(msg)
+  verificacion = msg;
+});
+
+socket.on("mensajeGrupo", (msg) => {
+  console.log("hay mensaje grupal")
+  console.log(msg)
+});
+
+
 
 export function connectSocket() {
   socket.emit('connect')
@@ -70,7 +102,7 @@ export function actualizar(numeroCuenta) {
   socket.emit("actualizacion",numeroCuenta);
 }
 
-//0.sala 1.mensaje
+//0.sala 1.mensaje 2.numeroCuenta
 export function privado(data) {
   socket.emit("privado",data);
 }
@@ -84,6 +116,25 @@ export function joinSala(sala) {
 export function verificacionSala(cuentas) {
   socket.emit("VerificacionSala",cuentas);
 }
+
+
+//para grupos
+
+//0.cuentas
+export function joinGrupo(arrayUsuarios) {
+  socket.emit("joinGrupo",arrayUsuarios);
+}
+//0.cuentas
+export function VerificacionGrupo(cuentas) {
+  socket.emit("VerificacionGrupo",cuentas);
+}
+
+//0.sala 1.mensaje 2.numeroCuenta
+export function mensajeGrupo(data) {
+  socket.emit("mensajeGrupo",data);
+}
+
+
 
 
 // socket.on("mensaje", (...msg) => {

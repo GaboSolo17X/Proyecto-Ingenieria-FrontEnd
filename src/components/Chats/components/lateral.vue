@@ -60,7 +60,7 @@
                 <v-dialog v-model="dialogContactos" fullscreen :scrim="false" transition="dialog-bottom-transition">
                   <template v-slot:activator="{ props }">
                     <!-- <v-btn color="primary" dark v-bind="props"> Open Dialog </v-btn> -->
-                    <v-btn variant="text" dark v-bind="props">
+                    <v-btn class="dial" variant="text" dark v-bind="props">
                       <v-icon class="more" icon="fa-solid fa-circle-plus"></v-icon>
                       <span class="title">Tus Contactos</span>
                     </v-btn>
@@ -131,12 +131,20 @@
           </template>
           <hr />
           <h3 class="ml-5 mt-2">Tus Chats</h3>
-          <div v-for="chat in chats" :key="chat.numeroCuenta" @click="selectedChat(chat.numeroCuenta,chat.nombre,chat.idUsuario,chat.idUsuario2)">
+          <div v-for="chat in chats" :key="chat.numeroCuenta" @click="
+            selectedChat(
+              chat.numeroCuenta,
+              chat.nombre,
+              chat.idUsuario,
+              chat.idUsuario2,
+              chat.idChat
+            )
+            ">
             <v-card rounded="xl" class="chats">
               <v-row class="rows">
                 <v-col cols="4">
                   <v-avatar>
-                    <v-img :src="'http://localhost:3000/'+ chat.foto" alt="John"></v-img>
+                    <v-img :src="'http://localhost:3000/' + chat.foto" alt="John"></v-img>
                   </v-avatar>
                 </v-col>
                 <v-col class="names">
@@ -154,7 +162,7 @@
                 <v-dialog v-model="dialogCrearGrupo" fullscreen :scrim="false" transition="dialog-bottom-transition">
                   <template v-slot:activator="{ props }">
                     <!-- <v-btn color="primary" dark v-bind="props"> Open Dialog </v-btn> -->
-                    <v-btn variant="text" dark v-bind="props">
+                    <v-btn class="dial" variant="text" dark v-bind="props">
                       <v-icon class="more" icon="fa-solid fa-circle-plus"></v-icon>
                       <span class="title">Crear Grupo</span>
                     </v-btn>
@@ -247,7 +255,7 @@
                   transition="dialog-bottom-transition">
                   <template v-slot:activator="{ props }">
                     <!-- <v-btn color="primary" dark v-bind="props"> Open Dialog </v-btn> -->
-                    <v-btn variant="text" dark v-bind="props">
+                    <v-btn class="dial" variant="text" dark v-bind="props">
                       <v-icon class="more" icon="fa-solid fa-circle-plus"></v-icon>
                       <span class="title">Agregar Estudiante</span>
                     </v-btn>
@@ -363,16 +371,32 @@
     </v-layout>
   </v-card>
 
-  <chatbox v-show="activeChat" :name="sender" :recibe="recibe" :sal="salas" class="chatbox" />
+  <chatbox v-show="activeChat" ref="componenteHijo" :id="idChats" :name="sender" :log="cuenta" :recibe="recibe" :sal="salas" :salaEs="valorObtenido" :mensajes="mensaje" class="chatbox" />
   <groupChat v-show="activeGroupChat" class="groupChat" v-if="usuariosGrupos" :users="usuariosGrupos" :name="chatName" />
 </template>
 
 <script>
 import chatbox from "../components/chatBox.vue";
 import groupChat from "../components/groupChatBox.vue";
-import { socket, connectSocket, actualizar,joinSala,verificacionSala} from "../socket/socket";
+import {
+  socket,
+  connectSocket,
+  actualizar,
+  joinSala,
+  verificacionSala,
+  obtenerVerificacion,
+  getVerificacionSala
+  
+} from "../socket/socket";
 import { ref, onMounted } from "vue";
 
+//miVariableLet, modificarVariable
+  
+// import bus from '../socket/bus.js';
+
+// export const setVerificacionSalaCallback = (callback) => {
+//   verificacionSalaCallback = callback;
+// };
 
 export default {
   components: {
@@ -386,6 +410,7 @@ export default {
   },
 
   setup(props) {
+
     const nombreGrupo = ref("");
     const usuariosSeleccionados = ref([]);
     const activeChat = ref(false);
@@ -574,7 +599,7 @@ export default {
 
     //ABRIR CHATS
 
-    const chats = ref([])
+    const chats = ref([]);
 
     const obtenerChats = async () => {
       console.log(centro);
@@ -590,7 +615,7 @@ export default {
         });
         const data = await res.json();
         console.log(data);
-        chats.value = data.chats
+        chats.value = data.chats;
 
         // if(data.message=='Solicitud enviada'){
 
@@ -600,36 +625,81 @@ export default {
       }
     };
 
-    const recibe=ref()
+    const recibe = ref();
+    const valorObtenido=ref()
 
-    const salas=ref({})
-    const verSala=ref({})
-    const selectedChat = (chat,name,us1,us2) => {
-      console.log(chat);
+    const salas = ref({});
+    const verSala = ref({});
+    const idChats = ref();
+    const mensaje = ref([]);
+
+  //   const mensajes = async (id) => {
+     
+  //    try {
+  //      const res = await fetch("http://localhost:3000/chat/getMensajes", {
+  //        method: "POST",
+  //        headers: {
+  //          "Content-Type": "application/json",
+  //        },
+  //        body: JSON.stringify({
+  //          idchat: id,
+  //          numeroCuenta: cuenta,
+           
+  //        }),
+  //      });
+  //      const data = await res.json();
+  //      console.log(data);
+  //      mensaje.value=data.mensajes
+
+  
+  //    } catch (error) {
+  //      console.log(error);
+  //    }
+  //  };
+
+    const selectedChat = (chat, name, us1, us2,id) => {
+      
       activeChat.value = true;
       sender.value = name;
       activeGroupChat.value = false;
-      recibe.value=chat
+      recibe.value = chat;
+      idChats.value=id;
+      console.log(idChats.value);
 
-      salas.value={
-        sala:us1+"-"+us2
-      }
+      salas.value = {
+        sala: us1 + "-" + us2,
+      };
 
-      verSala.value={
-        usuario:us1,
-        usuario1:us2,
-      }
+      verSala.value = {
+        usuario: us1,
+        usuario1: us2,
+      };
 
-      console.log(salas.value)
-      console.log(verSala.value)
-      joinSala(salas.value)
+      console.log(salas.value);
+      console.log(verSala.value);
+      joinSala(salas.value);
+      
 
-      verificacionSala(verSala)
+      verificacionSala(verSala);
+
+
+      socket.on("VerificacionSala", (data) => {
+        console.log('Que ondas chaval' + data)
+        valorObtenido.value=data
+      })
+
+
+      // mensajes(id)
+
+
 
 
     };
 
     
+
+    
+
     const usuariosGrupos = ref([]);
     const obtenerEstuGrupos = async (grupoID) => {
       console.log(centro);
@@ -852,6 +922,12 @@ export default {
       chats,
       recibe,
       salas,
+      valorObtenido,
+      cuenta,
+      centro,
+      mensaje,
+      // mensajes,
+      idChats,
       // btnEnviar,
       // btnEnviado,
     };
@@ -866,7 +942,6 @@ export default {
       dialogAgregarEstudiante: false,
       dialogContactos: false,
 
-      
       selectedTab: "chats",
 
       selectedTab: "grupos",
@@ -1196,5 +1271,50 @@ h3 {
   justify-content: space-evenly;
 }
 
-.btnC {}
+@media only screen and (max-width: 741px) {
+  .secondBar {
+    width: 160px !important; /* Ajusta el ancho del secondBar según tu preferencia */
+  }
+
+  .chatbox {
+  margin-left: 260px;
+  margin-top: 48px;
+  height: 92vh;
+}
+
+.btn {
+  color: white;
+  font-size: 6px;
+  font-family: "Rubik", sans-serif;
+  border-color: white;
+  font-weight: 800;
+  border-radius: 100%;
+}
+
+.btnSel {
+  background-color: white;
+  color: black;
+  font-family: "Rubik", sans-serif !important;
+  font-size: 6px;
+  border-color: white;
+  font-weight: 800;
+
+}
+
+.names {
+  font-size: 15px;
+  margin-left: 10px;
+  font-family: "Rubik", sans-serif;
+}
+
+.title{
+  width: 100%;
+}
+
+.dial{
+  font-size: 12px;
+
+}
+
+}
 </style>
