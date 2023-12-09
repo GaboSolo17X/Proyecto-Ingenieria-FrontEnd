@@ -10,7 +10,7 @@
         </div>
         <div class="componentesDocentes">
           <CardMatricula 
-          pregunta="¿Desea habilitar el proceso de matrícula? esto permitirá a los estudiante la adición de asignaturas para el periodo actual" 
+          pregunta="Seleccione las fechas de inicio y finalización para habilitar el proceso de matrícula." 
           />
         </div>
         
@@ -48,7 +48,7 @@ setup(){
 
 <style scoped>
 .componentesDocentes{
-margin-top: 110px;
+margin-top: 100px;
 left: 230px !important;
 width: calc((100% - 230px) - 0px);
 }

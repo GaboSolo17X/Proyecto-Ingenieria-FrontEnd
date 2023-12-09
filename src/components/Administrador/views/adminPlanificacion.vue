@@ -1,14 +1,16 @@
 <template>
   <div >
     <v-row>
-      <v-col cols="4">
+      <v-col cols="3">
         <Lateral/>
       </v-col>
       <v-col cols="8">
         <div class="contenido">
           <Encabezado title="Planificación Académica" v-if="trabajador" :datos="trabajador" />
         </div>
-        <h1 class="componentesDocentes">Cargar interfaz de planificacion</h1>
+        <h1 class="componentesDocentes">
+          <Planificacion/>
+        </h1>
       </v-col>
     </v-row>
   </div>
@@ -17,10 +19,11 @@
 
 <script>
 import Lateral from '../components/lateral.vue'
+import Planificacion from '../components/cardPlanificacion.vue'
 import Encabezado from  '../components/encabezado.vue'
 import { ref,onMounted } from 'vue';
 export default {
-components: {Lateral,Encabezado},
+components: {Lateral,Encabezado,Planificacion},
 setup(){
       const trabajador=ref()
       const docenteEs = async () => {
