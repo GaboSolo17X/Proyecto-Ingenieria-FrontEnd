@@ -139,7 +139,10 @@ export default {
           limpiarInputs();
         } else {
           //2. condición de que escoja fechas posteriores a la fecha del sistema
-          if (isBefore( parseISO(fechaInicio.value), new Date()) ||  parseISO(fechaInicio.value) === new Date()) {
+          if (
+            isBefore(parseISO(fechaInicio.value), new Date()) ||
+            parseISO(fechaInicio.value) === new Date()
+          ) {
             showAlertFail(
               "La fecha de Inicio de planificación académica no puede asignarse a días anteriores a la fecha actual: " +
                 new Date() +
@@ -149,35 +152,50 @@ export default {
           } else {
             //3. condicion de rango de 2 semanas
             const rangoDias = calcularRangoDias(
-                    fechaInicio.value,
-                    fechaFin.value
-                  );
+              fechaInicio.value,
+              fechaFin.value
+            );
             if (rangoDias > 14 || rangoDias < 14) {
               showAlertFail(
-                      "El rango de fechas seleccionado para el proceso de planificación académica debe tener estrictamente 14 días, " +
-                        " rango actual seleccionado: " +
-                        rangoDias +
-                        " días"
-                    );
-                    limpiarInputs();
-            } else {
-              const res = await fetch(
-                "http://localhost:3030/administrador/actualizarEstadoProceso",
-                {
-                  method: "POST",
-                  headers: {
-                    "Content-Type": "application/json",
-                  },
-                  body: JSON.stringify({
-                    fechaInicio: fechaInicio.value,
-                    fechaFin: fechaFin.value,
-                    idProceso: 4,
-                  }),
-                }
+                "El rango de fechas seleccionado para el proceso de planificación académica debe tener estrictamente 14 días, " +
+                  " rango actual seleccionado: " +
+                  rangoDias +
+                  " días"
               );
-              const data = await res.json();
-              console.log(data);
-              showAlertSuccess();
+              limpiarInputs();
+            } else {
+              //4. evaluar si ya hay una fecha existente y mostrar alerta
+              if (fechaInicioProcesoPlanificacion.value!== null && fechaFinProcesoPlanificacion.value!==null) {
+                var resultado = window.confirm("Ya existe un rango de fechas para el proceso de Planificación académica, "+
+                "si continua se reestablecerá la fecha de la planificación y tendrá que establecer nuevamente las fechas para "+
+                "los procesos de matrícula, cancelaciones excepcionales y registro de calificaciones.");
+                if (resultado) {//api de reseteo
+
+                  limpiarInputs();
+                  showAlertSuccess();
+                } else { // no hace nada si presiona cancelar
+                  limpiarInputs();
+                }
+              } else {
+                //guardado de fecha por default
+                const res = await fetch(
+                  "http://localhost:3030/administrador/actualizarEstadoProceso",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      fechaInicio: fechaInicio.value,
+                      fechaFin: fechaFin.value,
+                      idProceso: 4,
+                    }),
+                  }
+                );
+                const data = await res.json();
+                console.log(data);
+                showAlertSuccess();
+              }
             }
           }
         }
@@ -227,10 +245,10 @@ export default {
       }
     };
 
-    const limpiarInputs =()=>{
-      form.value.fechaInicio=null;
-      form.value.fechaFin=null;
-    }
+    const limpiarInputs = () => {
+      form.value.fechaInicio = null;
+      form.value.fechaFin = null;
+    };
 
     onMounted(() => {
       obtenerProcesos();
