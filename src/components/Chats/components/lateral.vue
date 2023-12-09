@@ -130,7 +130,8 @@
             </v-row>
           </template>
           <hr />
-          <div v-for="chat in chats" :key="chat.numeroCuenta" @click="selectedChat(chat.numeroCuenta,chat.nombre)">
+          <h3 class="ml-5 mt-2">Tus Chats</h3>
+          <div v-for="chat in chats" :key="chat.numeroCuenta" @click="selectedChat(chat.numeroCuenta,chat.nombre,chat.idUsuario,chat.idUsuario2)">
             <v-card rounded="xl" class="chats">
               <v-row class="rows">
                 <v-col cols="4">
@@ -362,15 +363,16 @@
     </v-layout>
   </v-card>
 
-  <chatbox v-show="activeChat" :name="sender" :recibe="recibe" class="chatbox" />
+  <chatbox v-show="activeChat" :name="sender" :recibe="recibe" :sal="salas" class="chatbox" />
   <groupChat v-show="activeGroupChat" class="groupChat" v-if="usuariosGrupos" :users="usuariosGrupos" :name="chatName" />
 </template>
 
 <script>
 import chatbox from "../components/chatBox.vue";
 import groupChat from "../components/groupChatBox.vue";
-import { socket, connectSocket, actualizar } from "../socket/socket";
+import { socket, connectSocket, actualizar,joinSala,verificacionSala} from "../socket/socket";
 import { ref, onMounted } from "vue";
+
 
 export default {
   components: {
@@ -599,12 +601,32 @@ export default {
     };
 
     const recibe=ref()
-    const selectedChat = (chat,name) => {
+
+    const salas=ref({})
+    const verSala=ref({})
+    const selectedChat = (chat,name,us1,us2) => {
       console.log(chat);
       activeChat.value = true;
       sender.value = name;
       activeGroupChat.value = false;
       recibe.value=chat
+
+      salas.value={
+        sala:us1+"-"+us2
+      }
+
+      verSala.value={
+        usuario:us1,
+        usuario1:us2,
+      }
+
+      console.log(salas.value)
+      console.log(verSala.value)
+      joinSala(salas.value)
+
+      verificacionSala(verSala)
+
+
     };
 
     
@@ -828,7 +850,8 @@ export default {
       usuariosGrupos,
       chatName,
       chats,
-      recibe
+      recibe,
+      salas,
       // btnEnviar,
       // btnEnviado,
     };

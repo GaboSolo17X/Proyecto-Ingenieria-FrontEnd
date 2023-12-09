@@ -31,10 +31,17 @@ socket.on("bar", (...args) => {
 
 socket.on("mensaje", (msg) => {
   console.log(msg)
+ 
   // state.barEvents.push(args);
 });
 
 socket.on("privado", (msg) => {
+  console.log("hay mensaje")
+  console.log(msg)
+  
+});
+
+socket.on("VerificacionSala", (msg) => {
   console.log(msg)
   
 });
@@ -63,15 +70,20 @@ export function actualizar(numeroCuenta) {
   socket.emit("actualizacion",numeroCuenta);
 }
 
-//0.destinatario 1.mensaje
+//0.sala 1.mensaje
 export function privado(data) {
   socket.emit("privado",data);
 }
 
+//0.sala <idusuario>-<idusuario2>
 export function joinSala(sala) {
   socket.emit("joinSala",sala);
 }
 
+//0.usuario 1.usuario1
+export function verificacionSala(cuentas) {
+  socket.emit("VerificacionSala",cuentas);
+}
 
 
 // socket.on("mensaje", (...msg) => {

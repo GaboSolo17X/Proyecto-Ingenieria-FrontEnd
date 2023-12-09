@@ -116,10 +116,13 @@ export default {
     props:{
         name:String,
         recibe:String,
+        sal:Object,
     },
   setup(props) {
     const activeFile = ref(false);
     const activeChat = ref(true);
+
+    
 
     
 
@@ -163,11 +166,13 @@ export default {
         // socket.emit("mensaje",newMessage.value)
 
         datos.value = {
-          destinatario: props.recibe,
+          destinatario: props.sal.sala,
           mensaje: newMessage.value
         }
 
         console.log(datos.value)
+
+        
         // sendMessage(newMessage.value)
         privado(datos.value)
 
