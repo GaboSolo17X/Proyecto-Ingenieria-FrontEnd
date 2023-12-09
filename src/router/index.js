@@ -6,6 +6,7 @@ import estudianteRouter from "../components/Estudiantes/routes/estudiantes-route
 import chatRouter from "../components/Chats/routes/chat-router";
 import coordinadorRouter from "../components/Coordinador/routes/coordinador-router";
 import chats from "../components/Chats/routes/chat-router";
+import jefeRouter from '../components/Jefe/routes/jefe-router';
 
 
 const routes = [
@@ -120,6 +121,7 @@ const routes = [
   ...chatRouter.options.routes,
   ...coordinadorRouter.options.routes,
   ...chats.options.routes,
+  ...jefeRouter.options.routes,
 
 ]
 
