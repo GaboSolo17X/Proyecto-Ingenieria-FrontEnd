@@ -371,8 +371,10 @@
     </v-layout>
   </v-card>
 
-  <chatbox v-show="activeChat" ref="componenteHijo" :id="idChats" :name="sender" :log="cuenta" :recibe="recibe" :sal="salas" :salaEs="valorObtenido" :mensajes="mensaje" class="chatbox" />
-  <groupChat v-show="activeGroupChat" class="groupChat" v-if="usuariosGrupos" :users="usuariosGrupos" :name="chatName" />
+  <chatbox v-show="activeChat" ref="componenteHijo" :linea="online" :id="idChats" :name="sender" :log="cuenta"
+    :recibe="recibe" :sal="salas" :salaEs="valorObtenido" :mensajes="mensaje" class="chatbox" />
+  <groupChat v-show="activeGroupChat" :salaEs="valorSalaGrupo" :log="cuenta" :id="idGrupo" class="groupChat"
+    v-if="usuariosGrupos" :users="usuariosGrupos" :name="chatName" />
 </template>
 
 <script>
@@ -384,14 +386,14 @@ import {
   actualizar,
   joinSala,
   verificacionSala,
-  obtenerVerificacion,
-  getVerificacionSala
-  
+  joinGrupo,
+  VerificacionGrupo,
+  verLinea
 } from "../socket/socket";
-import { ref, onMounted } from "vue";
+import { ref, onMounted, onUnmounted } from "vue";
 
 //miVariableLet, modificarVariable
-  
+
 // import bus from '../socket/bus.js';
 
 // export const setVerificacionSalaCallback = (callback) => {
@@ -419,6 +421,7 @@ export default {
     const usuarios = ref([]);
     const solicitudes = ref([]);
     const contactos = ref([]);
+    const online = ref();
 
     //  const connect = ()=>  {
     //    socket.connect();
@@ -462,8 +465,35 @@ export default {
       searchQuery2.value = "";
     };
 
+    const newChat = async (otro) => {
+      console.log(centro);
+      try {
+        const res = await fetch(
+          "http://localhost:3000/chat/nuevoChat",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              centroEstu: cuenta,
+              cuentaEstu: otro,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
     const nuevoChat = (cuenta) => {
       console.log("Creaste chat con " + cuenta);
+      newChat(cuenta)
+      window.location.reload();
+
     };
 
     // const btnEnviar = ref(true);
@@ -597,6 +627,33 @@ export default {
       }
     };
 
+
+
+    // const verificarEstado = () => {
+    //   // Lógica para verificar el valor, por ejemplo, consulta a una API o una variable global.
+    //   // Debes implementar esta función según tus necesidades.
+    //   verLinea();
+    //   socket.on("usuariosEnSala", (msg) => {
+    //     console.log(msg)
+    //     online.value=msg
+    //   });
+
+    //   console.log("Me Reinicio " + online.value)
+    //   console.log(online.value)
+    //   // Actualiza el estado según el nuevo valor.
+    // };
+
+    // // Configura un bucle de setInterval para verificar periódicamente el estado.
+    // const intervalo = setInterval(verificarEstado, 5000); // Verifica cada 5 segundos.
+
+    // // Asegúrate de limpiar el intervalo cuando el componente se destruye.
+    // onUnmounted(() => {
+    //   clearInterval(intervalo);
+    // });
+
+    // Puedes realizar la primera verificación al montar el componente.
+
+
     //ABRIR CHATS
 
     const chats = ref([]);
@@ -626,44 +683,22 @@ export default {
     };
 
     const recibe = ref();
-    const valorObtenido=ref()
+    const valorObtenido = ref()
 
     const salas = ref({});
     const verSala = ref({});
     const idChats = ref();
     const mensaje = ref([]);
+    
 
-  //   const mensajes = async (id) => {
-     
-  //    try {
-  //      const res = await fetch("http://localhost:3000/chat/getMensajes", {
-  //        method: "POST",
-  //        headers: {
-  //          "Content-Type": "application/json",
-  //        },
-  //        body: JSON.stringify({
-  //          idchat: id,
-  //          numeroCuenta: cuenta,
-           
-  //        }),
-  //      });
-  //      const data = await res.json();
-  //      console.log(data);
-  //      mensaje.value=data.mensajes
 
-  
-  //    } catch (error) {
-  //      console.log(error);
-  //    }
-  //  };
+    const selectedChat = (chat, name, us1, us2, id) => {
 
-    const selectedChat = (chat, name, us1, us2,id) => {
-      
       activeChat.value = true;
       sender.value = name;
       activeGroupChat.value = false;
       recibe.value = chat;
-      idChats.value=id;
+      idChats.value = id;
       console.log(idChats.value);
 
       salas.value = {
@@ -678,15 +713,28 @@ export default {
       console.log(salas.value);
       console.log(verSala.value);
       joinSala(salas.value);
-      
+
 
       verificacionSala(verSala);
 
 
       socket.on("VerificacionSala", (data) => {
         console.log('Que ondas chaval' + data)
-        valorObtenido.value=data
+        valorObtenido.value = data
       })
+
+      socket.on("usuariosEnSala", (msg) => {
+        console.log(msg)
+        online.value = msg
+      });
+
+      // verificarEstado();
+
+
+
+
+
+
 
 
       // mensajes(id)
@@ -696,11 +744,15 @@ export default {
 
     };
 
-    
 
-    
 
+
+
+    const cuentasGrupo = ref([])
     const usuariosGrupos = ref([]);
+    const veriGrupo = ref({})
+    const idGrupo = ref();
+    const valorSalaGrupo = ref()
     const obtenerEstuGrupos = async (grupoID) => {
       console.log(centro);
       try {
@@ -716,6 +768,7 @@ export default {
         const data = await res.json();
         console.log(data);
         usuariosGrupos.value = data.perfilesGrupo;
+
       } catch (error) {
         console.log(error);
       }
@@ -728,6 +781,27 @@ export default {
       activeChat.value = false;
       obtenerEstuGrupos(group);
       chatName.value = name;
+      idGrupo.value = group;
+
+      console.log(usuariosGrupos.value)
+
+      cuentasGrupo.value = usuariosGrupos.value.map((usuario) => usuario.numeroCuenta);
+
+      console.log('a')
+      console.log(cuentasGrupo.value)
+      joinGrupo(cuentasGrupo.value);
+
+
+      veriGrupo.value = {
+        integrantes: cuentasGrupo.value,
+        usuario: cuenta
+      }
+      VerificacionGrupo(veriGrupo.value);
+
+      socket.on("VerificacionGrupo", (msg) => {
+        console.log(msg)
+        valorSalaGrupo.value = msg
+      });
     };
 
     //SOLICITUDES
@@ -890,7 +964,9 @@ export default {
       getGrupos();
       obtenerChats();
       actualizar(cuenta);
+      // verificarEstado();
       // connect()
+
     });
 
     return {
@@ -930,6 +1006,9 @@ export default {
       idChats,
       // btnEnviar,
       // btnEnviado,
+      valorSalaGrupo,
+      idGrupo,
+      online,
     };
   },
   data() {
@@ -1273,48 +1352,55 @@ h3 {
 
 @media only screen and (max-width: 741px) {
   .secondBar {
-    width: 160px !important; /* Ajusta el ancho del secondBar según tu preferencia */
+    width: 160px !important;
+    /* Ajusta el ancho del secondBar según tu preferencia */
   }
 
   .chatbox {
-  margin-left: 260px;
-  margin-top: 48px;
-  height: 92vh;
-}
+    margin-left: 260px;
+    margin-top: 48px;
+    height: 92vh;
+  }
 
-.btn {
-  color: white;
-  font-size: 6px;
-  font-family: "Rubik", sans-serif;
-  border-color: white;
-  font-weight: 800;
-  border-radius: 100%;
-}
+  .btn {
+    color: white;
+    font-size: 6px;
+    font-family: "Rubik", sans-serif;
+    border-color: white;
+    font-weight: 800;
+    border-radius: 100%;
+  }
 
-.btnSel {
-  background-color: white;
-  color: black;
-  font-family: "Rubik", sans-serif !important;
-  font-size: 6px;
-  border-color: white;
-  font-weight: 800;
+  .btnSel {
+    background-color: white;
+    color: black;
+    font-family: "Rubik", sans-serif !important;
+    font-size: 6px;
+    border-color: white;
+    font-weight: 800;
 
-}
+  }
 
-.names {
-  font-size: 15px;
-  margin-left: 10px;
-  font-family: "Rubik", sans-serif;
-}
+  .names {
+    font-size: 15px;
+    margin-left: 10px;
+    font-family: "Rubik", sans-serif;
+  }
 
-.title{
-  width: 100%;
-}
+  .title {
+    width: 100%;
+  }
 
-.dial{
-  font-size: 12px;
+  .dial {
+    font-size: 12px;
 
-}
+  }
+
+  .groupChat {
+    margin-left: 210px;
+    margin-top: 48px;
+    height: 92vh;
+  }
 
 }
 </style>

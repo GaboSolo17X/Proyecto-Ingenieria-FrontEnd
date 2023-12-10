@@ -2,58 +2,128 @@
   <div>
     <v-row class="name">
       <v-icon>fa-solid fa-comments</v-icon>
-      <span class="user"> {{ name }}</span>
+      <span class="user"> {{ name }} - {{ linea }}</span>
     </v-row>
     <v-row class="chat">
-      <v-col cols="12" class="chats">
+      <v-col cols="12" class="chats" @click="act">
 
         <div v-for="(mensaje, index) in mensajesChat" :key="index">
-          <v-card v-if="mensaje.sender == true" class="sender">
-            <v-row class="men">
-              <span>{{ mensaje.mensaje }}</span>
-            </v-row>
+          <v-card v-if="mensaje.sender == true && mensaje.mensaje  && mensaje.tipo != 'imagen' && mensaje.tipo != 'pdf' && mensaje.tipo != 'docx' && mensaje.tipo != 'xlsx' && mensaje.tipo != 'txt' && mensaje.tipo != 'pptx' && mensaje.tipo != 'mp4'"  class="sender">
+            <span>{{ mensaje.mensaje }}</span>
           </v-card>
 
-          <v-card v-if="mensaje.reciver == true" class="receive">
-            <v-row class="men">
-              <span>{{ mensaje.mensaje }}</span>
-            </v-row>
+          <v-card v-if="mensaje.reciver == true && mensaje.mensaje && mensaje.tipo != 'imagen' && mensaje.tipo != 'pdf' && mensaje.tipo != 'docx' && mensaje.tipo != 'xlsx' && mensaje.tipo != 'txt' && mensaje.tipo != 'pptx' && mensaje.tipo != 'mp4'"  class="receive">
+            <span>{{ mensaje.mensaje }}</span>
           </v-card>
+
+          <v-card v-if="mensaje.tipo == 'imagen' && mensaje.reciver == true" class="receive">
+            <v-img :src="'http://localhost:3000/' + mensaje.mensaje"></v-img>
+          </v-card>
+
+
+          <v-card v-if="mensaje.tipo == 'imagen' && mensaje.sender == true" class="sender">
+            <v-img :src="'http://localhost:3000/' + mensaje.mensaje"></v-img>
+          </v-card>
+
+          <!-- PDF -->
+          <v-card v-if="mensaje.tipo == 'pdf' && mensaje.reciver == true" class="receive">
+            <div class="spaceR" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-pdf</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+
+          <v-card v-if="mensaje.tipo == 'pdf' && mensaje.sender == true" class="sender">
+            <div class="space" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-pdf</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+
+          <!-- EXCEL -->
+          <v-card v-if="mensaje.tipo == 'xlsx' && mensaje.reciver == true" class="receive">
+            <div class="spaceR" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-excel</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+          
+          <v-card v-if="mensaje.tipo == 'xlsx' && mensaje.sender == true" class="sender">
+            <div class="space" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-excel</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+
+          <!-- WORD -->
+          <v-card v-if="mensaje.tipo == 'docx' && mensaje.reciver == true" class="receive">
+            <div class="spaceR" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-word</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+          
+
+          <v-card v-if="mensaje.tipo == 'docx' && mensaje.sender == true" class="sender">
+            <div class="space" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-word</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+
+          <!-- VIDEO -->
+          <v-card v-if="mensaje.tipo == 'mp4' && mensaje.reciver == true" class="receive">
+            <div class="spaceR" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-video</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+          
+
+          <v-card v-if="mensaje.tipo == 'mp4' && mensaje.sender == true" class="sender">
+            <div class="space" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-video</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+
+          <!-- TXT -->
+          <v-card v-if="mensaje.tipo == 'txt' && mensaje.reciver == true" class="receive">
+            <div class="spaceR" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-lines</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+     
+
+          <v-card v-if="mensaje.tipo == 'txt' && mensaje.sender == true" class="sender">
+            <div class="space" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-lines</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+
+          <!-- POWERPOINT -->
+          <v-card v-if="mensaje.tipo == 'pptx' && mensaje.reciver == true" class="receive">
+            <div class="spaceR" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-powerpoint</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+          
+          
+          <v-card v-if="mensaje.tipo == 'pptx' && mensaje.sender == true" class="sender">
+            <div class="space" @click="descargar(mensaje.mensaje,mensaje.nombre,mensaje.tipo)">
+              <v-icon>fa-solid fa-file-powerpoint</v-icon>
+              <span>{{ mensaje.nombre }}</span>
+            </div>
+          </v-card>
+
+
 
         </div>
 
-        <!-- <v-card class="sender">
-          <v-row class="men">
-            <span>Hola Gabriel te saludo queria consultar algo</span>
-          </v-row>
-        </v-card>
 
-
-        <v-card class="receive">
-          <v-row class="men">
-            <span>Hola que tal?</span>
-          </v-row>
-        </v-card> -->
-
-
-        <!-- 
-        <v-card class="receive">
-          <v-row class="men">
-            <span>Hola que tal?</span>
-          </v-row>
-        </v-card>
-
-        <v-card class="receive">
-          <v-row class="men">
-            <span>Si me parece tu idea bastante cool </span>
-          </v-row>
-        </v-card>
-
-        <v-card class="receive">
-          <v-row class="men">
-            <span>Hola que tal?</span>
-          </v-row>
-        </v-card>  -->
       </v-col>
     </v-row>
     <v-row class="newMess">
@@ -68,20 +138,13 @@
       </v-col>
 
       <v-col cols="8" class="side">
-        <!-- <textarea v-model="newMessage" placeholder="Escribe un mensaje" class="messa"></textarea> -->
-        <textarea v-model="newMessage" placeholder="Escribe un mensaje" class="messa" v-show="activeChat"></textarea>
-        <!-- <v-file-input
-          clearable
-          placeholder="Subir Archivo"
-          variant="outlined"
-          rounded="xl"
-          v-show="activeFile"
-        ></v-file-input> -->
+        <textarea v-model="newMessage" placeholder="Escribe un mensaje" class="messa" v-show="activeChat"
+          @keydown.enter.prevent="enviarMensaje"></textarea>
+
         <div class="messa" v-show="activeFile">
-          <input type="file" id="fileInput" ref="fileInput" class="hidden" @change="handleFileInputChange" />
+          <input type="file" id="fileInput" ref="fileInput" class="hidden" @change="handleFileInputChange" accept=".png, .jpg, .jpeg, .gif, .svg, .pdf, .xlsx, .docx, .txt, .mp4, .pptx" />
         </div>
       </v-col>
-      <!-- <v-textarea append-inner-icon="fa-solid fa-play" class="mx-2" placeholder="Enviar Mensaje" rows="1"></v-textarea> -->
       <v-col cols="2" class="side2">
         <v-btn class="send" icon @click="enviarMensaje">
           <v-icon>fa-solid fa-paper-plane</v-icon>
@@ -92,7 +155,7 @@
 </template>
 
 <script>
-import { socket, connectSocket, sendMessage, privado } from "../socket/socket";
+import { socket, connectSocket, sendMessage, privado, confirmacion, archivo } from "../socket/socket";
 import { ref, onUpdated } from "vue";
 
 
@@ -105,6 +168,7 @@ export default {
     log: String,
     mensajes: Array,
     id: Number,
+    linea:String,
   },
   setup(props) {
     const activeFile = ref(false);
@@ -112,30 +176,107 @@ export default {
 
     // console.log(props.mensajes)
     const mensajesChat = ref([]);
-    // // mensajesChat.value = props.mensajes
-    // // console.log("HOLA" +mensajesChat.value)
 
-    // const cargar=()=>{
-    //   mensajesChat.value = props.mensajes
-    //   console.log("HOLA" +mensajesChat.value)
-    // }
+    const act = () => {
+      mensajes();
+    }
 
-    // onMounted(() => {
-    //   cargar()
-    // });
+    const form = ref({
 
-    // const cargarMensajes = () => {
-    //   mensajesChat.value = props.mensajes;
-    //   console.log("Mensajes cargados:", mensajesChat.value);
-    // };
+      idchat: '',
+      numeroCuenta: '',
+      archivo: '',
+      //  certificado: null,
+    });
 
-    // onMounted(() => {
-    //   // Cargar mensajes al inicio
-    //   cargarMensajes();
-    // });
 
-    // Exponer la función cargarMensajes al componente padre
 
+
+    const subirArchivos = async (archivo) => {
+
+      try {
+        const formData = new FormData();
+        formData.append('idchat', props.id);
+        formData.append('numeroCuenta', props.log);
+        formData.append('archivo', archivo);
+        const res = await fetch("http://localhost:3000/chat/envioArchivos", {
+          method: "POST",
+          body: formData
+        });
+        const data = await res.json();
+        console.log(data.message);
+
+
+
+      } catch (error) {
+        console.log(error);
+      }
+    };
+
+    const descargar = async (recurso, nombre, tipo) => {
+      console.log(recurso);
+      console.log(nombre);
+      console.log(tipo);
+      try {
+        let ruta =
+          //"public/solicitudes/1700271462922-cancelacion-plan de estudios organigrama.pdf";
+          recurso;
+        const urlDescarga = `http://localhost:3000/descargar/${encodeURIComponent(ruta)}`;
+        // const urlDescarga = `http://localhost:3000/`+ruta;
+
+        // const urlDescarga = `http://localhost:3000/descargar/${encodeURIComponent(
+        //   ruta
+        // )}`;
+        fetch(urlDescarga, {
+          method: "GET",
+        })
+          .then((response) => response.blob())
+          .then((blob) => {
+            // Crear un enlace temporal para iniciar la descarga
+            const enlaceDescarga = document.createElement("a");
+            enlaceDescarga.href = URL.createObjectURL(blob);
+
+
+            // if (tipo == 'pdf') {
+            //   enlaceDescarga.download = nombre ;
+            //   enlaceDescarga.click();
+            // } 
+
+            switch (tipo) {
+              case 'pdf':
+                enlaceDescarga.download = nombre;
+                enlaceDescarga.click();
+                break;
+              case 'docx':
+                enlaceDescarga.download = nombre ;
+                enlaceDescarga.click();
+                break;
+              case 'txt':
+                enlaceDescarga.download = nombre;
+                enlaceDescarga.click();
+                break;
+              case 'mp4':
+                enlaceDescarga.download = nombre ;
+                enlaceDescarga.click();
+                break;
+              case 'pptx':
+                enlaceDescarga.download = nombre ;
+                enlaceDescarga.click();
+                break;
+              case 'xlsx':
+                enlaceDescarga.download = nombre ;
+                enlaceDescarga.click();
+                break;
+              default:
+                "nada";
+            }
+          })
+  
+
+      } catch (error) {
+        console.error("Error:", error);
+      }
+    }
 
     const mensajes = async () => {
 
@@ -164,8 +305,9 @@ export default {
 
     onUpdated(() => {
       // text content should be the same as current `count.value`
-      console.log('SI entre')
+      console.log('SI entre chat personal')
       mensajes();
+
 
     });
 
@@ -198,9 +340,12 @@ export default {
 
 
     const datos = ref({})
+    const mensajeConfirma = ref('');
+
+
 
     const enviarMensaje = async () => {
-      if (activeChat.value) {
+      if (activeChat.value && newMessage.value.trim() !== "") {
         console.log("Mensaje enviado:", newMessage.value);
 
         // socket.emit("mensaje",newMessage.value)
@@ -219,32 +364,60 @@ export default {
 
         mensajesChat.value.push({
           sender: true, // or reciver: true, depending on the case
-          reciver:false,
+          reciver: false,
           mensaje: newMessage.value,
         });
 
         console.log(mensajesChat.value)
 
         // Call mensajes function asynchronously without waiting for it to complete
-        await mensajes();
+
 
         // await mensajes();
         // console.log( mensajesChat.value)
 
 
+        socket.on("confirmacion", async (msg) => {
+          console.log("Confirmacion para actualizar chats " + msg)
 
+          if (msg) {
+            console.log('Aqui entro')
+            setTimeout(async () => {
+              await mensajes();
+            }, 1000);
 
-
+          }
+        }
+        )
         // newMensaje(newMessage)
-      } else if (activeFile.value) {
+      } else if (activeFile.value && selectedFileName.value) {
         const fileInput = document.getElementById("fileInput");
         const selectedFile = fileInput.files[0];
         console.log("Archivo seleccionado:", selectedFile);
 
-        datos.value = {
-          destinatario: props.salaEs,
-          mensaje: selectedFile
-        }
+        
+
+        // datos.value = {
+        //   destinatario: props.salaEs,
+        //   mensaje: selectedFile
+        // }
+
+
+        subirArchivos(selectedFile)
+        archivo()
+
+        fileInput.value = "";
+
+        socket.on("archivo", (msg) => {
+          console.log(msg)
+
+          if (msg) {
+            setTimeout(async () => {
+              await mensajes();
+            }, 1000);
+
+          }
+        });
 
 
       }
@@ -268,6 +441,8 @@ export default {
       enviarMensaje,
       newMessage,
       mensajesChat,
+      act,
+      descargar,
 
     };
   },
@@ -292,6 +467,7 @@ export default {
   background-color: white;
   height: 77vh;
   overflow-y: scroll;
+
 }
 
 .chat::-webkit-scrollbar {
@@ -307,6 +483,7 @@ export default {
   padding: 60px;
   display: flex;
   flex-direction: column;
+
 }
 
 .newMess {
@@ -351,18 +528,32 @@ export default {
 
 .receive {
   width: 250px;
-  background-color: #cccccc;
+  background-color: #aeaeae;
   margin-bottom: 10px;
   padding: 5px;
   margin-top: 10px;
+
+}
+
+.spaceR{
+  background-color: rgb(221, 221, 221);
+  display: flex;
+  flex-direction:row;
 }
 
 .sender {
   width: 250px;
-  background-color: #fcaeae;
+  background-color: #f88b8b;
   margin-top: 10px;
   margin-left: 620px;
   padding: 5px;
+
+}
+
+.space{
+  background-color: #f2bcbc;
+  display: flex;
+  flex-direction:row;
 }
 
 .hour {
@@ -391,20 +582,20 @@ export default {
 @media only screen and (max-width: 741px) {
 
   .receive {
-    width: 230px;
-    background-color: #cccccc;
-    margin-bottom: 10px;
-    padding: 5px;
-    margin-top: 10px;
-  }
+  width: 230px;
+  background-color: #aeaeae;
+  margin-bottom: 10px;
+  padding: 5px;
+  margin-top: 10px;
+}
 
-  .sender {
-    width: 250px;
-    background-color: #fcaeae;
-    margin-top: 10px;
-    margin-left: 120px;
-    padding: 5px;
-  }
+.sender {
+  width: 250px;
+  background-color: #f88b8b;
+  margin-top: 10px;
+  margin-left: 120px;
+  padding: 5px;
+}
 
   .chats {
     padding: 40px;

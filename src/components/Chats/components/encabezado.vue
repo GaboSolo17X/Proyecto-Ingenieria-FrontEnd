@@ -72,4 +72,18 @@ export default {
   color: white;
   font-weight: 800;
 }
+
+
+@media only screen and (max-width: 741px) {
+  .v-app-bar-title {
+  font-size: 20px;
+
+}
+
+.nombreUser {
+  font-size: 11px;
+  margin-top: 7px;
+}
+
+}
 </style>

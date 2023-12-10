@@ -35,11 +35,23 @@ socket.on("mensaje", (msg) => {
   // state.barEvents.push(args);
 });
 
-
 socket.on("privado", (msg) => {
   console.log("hay mensaje")
   console.log(msg)
   
+});
+
+socket.on("joinSala", (msg) => {
+  console.log(msg)
+});
+
+socket.on("confirmacion", (msg) => {
+  console.log(msg) 
+}
+)
+
+socket.on("usuariosEnSala", (msg) => {
+  console.log(msg)
 });
 
 // socket.on("VerificacionSala", (msg) => {
@@ -68,11 +80,15 @@ socket.on("VerificacionSala", (msg) => {
 
 socket.on("VerificacionGrupo", (msg) => {
   console.log(msg)
-  verificacion = msg;
 });
 
+//0.grupoDestino 1.mensaje 2.numeroCuenta }
 socket.on("mensajeGrupo", (msg) => {
   console.log("hay mensaje grupal")
+  console.log(msg)
+});
+
+socket.on("archivo", (msg) => {
   console.log(msg)
 });
 
@@ -107,14 +123,18 @@ export function privado(data) {
   socket.emit("privado",data);
 }
 
-//0.sala <idusuario>-<idusuario2>
+//0.sala <idusuario>-<idusuario2> 1.numeroCuenta
 export function joinSala(sala) {
   socket.emit("joinSala",sala);
 }
 
-//0.usuario 1.usuario1
+//0.usuario 
 export function verificacionSala(cuentas) {
   socket.emit("VerificacionSala",cuentas);
+}
+
+export function archivo(){
+  socket.emit("archivo",true);
 }
 
 
@@ -124,14 +144,18 @@ export function verificacionSala(cuentas) {
 export function joinGrupo(arrayUsuarios) {
   socket.emit("joinGrupo",arrayUsuarios);
 }
-//0.cuentas
+//{0.cuentas 1.usuario1}
 export function VerificacionGrupo(cuentas) {
   socket.emit("VerificacionGrupo",cuentas);
 }
 
-//0.sala 1.mensaje 2.numeroCuenta
+//{ grupoDestino, mensaje, numeroCuenta }
 export function mensajeGrupo(data) {
   socket.emit("mensajeGrupo",data);
+}
+
+export function verLinea(sala) {
+  socket.emit("verLinea");
 }
 
 
