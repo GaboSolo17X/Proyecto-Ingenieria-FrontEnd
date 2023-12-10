@@ -200,7 +200,7 @@ export default {
                     limpiarInputs();
                   } else {
                     const res = await fetch(
-                      "http://localhost:3030/administrador/actualizarEstadoProceso",
+                      "http://localhost:3000/administrador/actualizarEstadoProceso",
                       {
                         method: "POST",
                         headers: {
@@ -285,7 +285,7 @@ export default {
     const obtenerProcesos = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/administrador/ObtenerEstadoProceso",
+          "http://localhost:3000/administrador/ObtenerEstadoProceso",
           {
             method: "GET",
             headers: {

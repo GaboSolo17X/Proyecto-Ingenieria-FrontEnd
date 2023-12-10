@@ -8,7 +8,16 @@
         <div class="contenido">
           <Encabezado title="Planificación Académica" v-if="trabajador" :datos="trabajador" />
         </div>
+        <v-row>
+          <v-col class="recordatorio">
+            <strong>RECORDATORIO: </strong>
+            <p>El proceso para registro de calificaciones debe tener una duración estricta de 3 días,
+             por favor tenga en consideración que las fechas solo pueden ser asignadas 
+             si ya existe un rango establecido para el proceso de cancelaciones excepcionales .</p>
+          </v-col>
+        </v-row>
         <h1 class="componentesDocentes">
+
           <Calificaciones/>
         </h1>
       </v-col>
@@ -44,6 +53,18 @@ setup(){
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
+
+.recordatorio{
+  background-color: #282832;
+  text-align: center;
+  margin-top: 110px;
+  color: aliceblue;
+  font-family: "Rubik";
+  padding-bottom: 20px;
+  margin-bottom: -5%;
+}
+
 .componentesDocentes{
 margin-top: 100px;
 left: 230px !important;

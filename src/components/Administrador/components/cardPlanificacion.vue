@@ -165,21 +165,33 @@ export default {
               limpiarInputs();
             } else {
               //4. evaluar si ya hay una fecha existente y mostrar alerta
+              console.log(fechaFinProcesoPlanificacion.value)
+              console.log(fechaInicioProcesoPlanificacion.value)
               if (fechaInicioProcesoPlanificacion.value!== null && fechaFinProcesoPlanificacion.value!==null) {
-                var resultado = window.confirm("Ya existe un rango de fechas para el proceso de Planificación académica, "+
+                let resultado = window.confirm("Ya existe un rango de fechas para el proceso de Planificación académica, "+
                 "si continua se reestablecerá la fecha de la planificación y tendrá que establecer nuevamente las fechas para "+
                 "los procesos de matrícula, cancelaciones excepcionales y registro de calificaciones.");
                 if (resultado) {//api de reseteo
-
-                  limpiarInputs();
-                  showAlertSuccess();
+                  const res = await fetch ("http://localhost:3000/administrador/actualizarSolicitudPlanificacion",
+                  {
+                    method: "POST",
+                    headers: {
+                      "Content-Type": "application/json",
+                    },
+                    body: JSON.stringify({
+                      fechaInicio: fechaInicio.value,
+                      fechaFin: fechaFin.value,
+                      idProceso: 4,
+                    }),
+                  } 
+                  ).then( limpiarInputs () ).finally(showAlertSuccess());
                 } else { // no hace nada si presiona cancelar
                   limpiarInputs();
                 }
               } else {
                 //guardado de fecha por default
                 const res = await fetch(
-                  "http://localhost:3030/administrador/actualizarEstadoProceso",
+                  "http://localhost:3000/administrador/actualizarEstadoProceso",
                   {
                     method: "POST",
                     headers: {
@@ -215,7 +227,7 @@ export default {
     const obtenerProcesos = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/administrador/ObtenerEstadoProceso",
+          "http://localhost:3000/administrador/ObtenerEstadoProceso",
           {
             method: "GET",
             headers: {

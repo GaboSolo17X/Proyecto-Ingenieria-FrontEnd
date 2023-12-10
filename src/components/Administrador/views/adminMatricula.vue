@@ -8,7 +8,16 @@
         <div class="contenido">
           <Encabezado title="Activación de proceso de Matrícula" v-if="trabajador" :datos="trabajador" />
         </div>
+        <v-row>
+          <v-col class="recordatorio">
+            <strong>RECORDATORIO: </strong>
+            <p>El proceso de matrícula debe tener una duración estricta de 4 días,
+             por favor tenga en consideración que las fechas solo pueden ser asignadas 
+             si ya existe un rango establecido para el proceso de planificación académica.</p>
+          </v-col>
+        </v-row>
         <div class="componentesDocentes">
+         
           <CardMatricula 
           pregunta="Seleccione las fechas de inicio y finalización para habilitar el proceso de matrícula." 
           />
@@ -47,6 +56,18 @@ setup(){
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
+
+.recordatorio{
+  background-color: #282832;
+  text-align: center;
+  margin-top: 110px;
+  color: aliceblue;
+  font-family: "Rubik";
+  padding-bottom: 20px;
+  margin-bottom: -5%;
+}
+
 .componentesDocentes{
 margin-top: 100px;
 left: 230px !important;

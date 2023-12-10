@@ -8,7 +8,17 @@
         <div class="contenido">
           <Encabezado title="Planificación Académica" v-if="trabajador" :datos="trabajador" />
         </div>
+        <v-row>
+          <v-col class="recordatorio">
+            <strong>RECORDATORIO: </strong>
+            <p>El proceso de planificación académica debe tener una duración estricta de 2 semanas,
+             por favor tenga en consideración que si ya hay fechas establecidas para este proceso  asignar nuevas fechas borrará
+             las fechas ya establecidas en los procesos de matrícula, cancelaciones excepcionales y registro de calificaciones, en consecuencia
+             tendrán que ser asignados nuevamente.</p>
+          </v-col>
+        </v-row>
         <h1 class="componentesDocentes">
+          
           <Planificacion/>
         </h1>
       </v-col>
@@ -44,6 +54,18 @@ setup(){
 </script>
 
 <style scoped>
+@import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
+
+.recordatorio{
+  background-color: #282832;
+  text-align: center;
+  margin-top: 110px;
+  color: aliceblue;
+  font-family: "Rubik";
+  padding-bottom: 20px;
+  margin-bottom: -5%;
+}
+
 .componentesDocentes{
 margin-top: 100px;
 left: 230px !important;
