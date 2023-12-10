@@ -39,7 +39,50 @@ export default {
     };
     onMounted(() => {
       jefeEs();
+      comprobacionEstado();
     });
+
+    const comprobacionEstado = async ( ) =>{
+      try {
+        const res = await fetch('http://localhost:3000/administrador/ObtenerEstadoProceso', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        })
+        const data = await res.json()
+        const {estadoProcesos} = data
+        console.log(estadoProcesos)
+        for(let i = 0; i < estadoProcesos.length; i++){
+          if(estadoProcesos[i].idProceso == 2){
+            if(estadoProcesos[i].estado == false){
+  
+            }else{
+              window.alert("El proceso de matrículas sigue activo, no puede acceder a esta página");
+              window.history.back();
+            }
+          }else{
+
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    
+    const formatearFecha = (fecha) => {
+      let dia = fecha.getDate();
+      let mes = fecha.getMonth() + 1;
+      let anio = fecha.getFullYear();
+      if (mes < 10) {
+        mes = "0" + mes;
+      }
+      if (dia < 10) {
+        dia = "0" + dia;
+      }
+      let fechaString = anio + "-" + mes + "-" + dia;
+      return fechaString;
+    };
     return {
       JefeInfo,
     };
