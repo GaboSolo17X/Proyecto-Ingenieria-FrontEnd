@@ -15,7 +15,7 @@
           <v-card-actions>
             <router-link to="/formulario">
               <v-btn class="btn" rounded>
-              Inscribite Aqui
+              Inscribite Aquí
             </v-btn>
             </router-link>
           </v-card-actions>

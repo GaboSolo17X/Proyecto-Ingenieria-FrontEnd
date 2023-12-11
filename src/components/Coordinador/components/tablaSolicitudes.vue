@@ -490,7 +490,10 @@ export default {
           correo: correo,
           idSolicitud: data.solicitudes[i].idSolicitud,
         });
-      } else {
+      } else if (tipoSolicitud == 'Pago Reposicion'){
+
+      }
+      else {
         this.cancelaciones.push({
           numero: data.solicitudes[i].numeroCuenta,
           nombre: nombreCompleto,

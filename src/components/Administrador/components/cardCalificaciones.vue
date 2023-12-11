@@ -1,14 +1,33 @@
 <template>
-  <v-card class="mx-auto, tarjeta" width="100%">
-    <div class="titulo">
-      <h6>{{ pregunta }}</h6>
-    </div>
+  <v-card class="mx-auto, tarjeta ml-5" width="120%">
+    <v-row class="encabezadoPlanificacion">
+      <v-col style="text-align: center">
+        <router-link
+          to="/adminPlanificacion"
+          active-class="amarillo"
+          class="enlace"
+        >
+          Planificación académica
+        </router-link>
+      </v-col>
+
+      <v-col style="text-align: center" class="linea">
+        <router-link
+          to="/adminCalificaciones"
+          active-class="amarillo"
+          class="enlace"
+        >
+          Registro de calificaciones
+        </router-link>
+      </v-col>
+    </v-row>
+
     <v-form @submit.prevent="onSubmit">
       <v-row class="mt-5 mx-3">
         <v-col cols="12">
-          <v-row style="font-size: 1.5rem">
+          <v-row style="font-size: 1.3rem">
             <v-col> Seleccione la fecha de inicio: </v-col>
-            <v-col cols="5">
+            <v-col cols="4">
               <input
                 type="date"
                 id="fechaInicio"
@@ -19,9 +38,9 @@
           </v-row>
         </v-col>
         <v-col cols="12">
-          <v-row style="font-size: 1.5rem">
+          <v-row style="font-size: 1.3rem">
             <v-col> Seleccione la fecha de finalización: </v-col>
-            <v-col cols="5">
+            <v-col cols="4">
               <input
                 type="date"
                 id="fechaFin"
@@ -34,33 +53,17 @@
       </v-row>
       <div>
         <div class="divBoton">
-          <v-row>
-            <v-col>
-              <v-btn
-                size="large"
-                type="submit"
-                block
-                rounded="xl"
-                class="botones"
-                style="background-color: #53be4e"
-                >Habilitar</v-btn
-              >
-            </v-col>
-            <!-- <v-col cols="2"></v-col> -->
-            <!-- este boton lo tengo sin el submit 
-              porque creo que no hay que enviar na -->
-            <!--<v-col>
-              <v-btn
-                size="large"
-                block
-                rounded="xl"
-                class="botones"
-                style="background-color: #a92727"
-                @click="deshabilitarProcesoCancelaciones"
-                >Deshabilitar</v-btn
-              >
-            </v-col>-->
-          </v-row>
+          <div>
+            <v-btn
+              block
+              size="large"
+              rounded="xl"
+              class="botones"
+              type="submit"
+              style="background-color: #a92727"
+              >GUARDAR</v-btn
+            >
+          </div>
         </div>
       </div>
     </v-form>
@@ -76,9 +79,7 @@ import {
   isWithinInterval,
   parseISO,
 } from "date-fns";
-
 export default {
-  props: { pregunta: String },
   setup() {
     const form = ref({
       fechaInicio: null,
@@ -86,8 +87,8 @@ export default {
     });
     const isFormValid = ref(false);
 
-    const fechaInicioProcesoMatricula = ref(null);
-    const fechaFinProcesoMatricula = ref(null);
+    const fechaInicioProcesoCancelacion = ref(null);
+    const fechaFinProcesoCancelacion = ref(null);
 
     const validateForm = () => {
       if (form.value.fechaInicio && form.value.fechaFin) {
@@ -95,32 +96,34 @@ export default {
       } else {
         isFormValid.value = false;
         window.alert(
-          "Por favor seleccione las fechas de cancelación excepcional "
+          "Por favor seleccione las fechas de registro de calificaciones"
         );
       }
     };
 
     const showAlertSuccess = () => {
       window.alert(
-        "Se han guardado las fechas de cancelación excepcional exitosamente."
+        "Se han guardado las fechas de registro de calificaciones exitosamente."
       );
       window.location.reload();
     };
 
     const showAlertFail = (mensaje) => {
       window.alert(mensaje);
+      //El rango establecido se traslapa con el rango de fechas para el proceso de Planificación académica, por favor ingrese un rango diferente.
     };
 
     const onSubmit = async () => {
       validateForm();
 
       if (isFormValid.value) {
-        habilitarProcesoCancelaciones();
+        //ejecutar la api de envio de fecha
+        guardarFechaCalificaciones();
       }
     };
 
-    // Función para enviar fechas de cancelacion
-    const habilitarProcesoCancelaciones = async () => {
+    // Función para enviar fechas de planificacion
+    const guardarFechaCalificaciones = async () => {
       console.log("Fecha de inicio seleccionada:", fechaInicio.value);
       console.log("Fecha de finalización seleccionada:", fechaFin.value);
       try {
@@ -136,13 +139,13 @@ export default {
         } else {
           //2. si la fecha de inicio seleccionada o la fecha fin coinciden exactamente con las fechas ya existentes en planificacion
           if (
-            fechaInicio.value === fechaInicioProcesoMatricula.value ||
-            fechaFin.value === fechaFinProcesoMatricula.value
+            fechaInicio.value === fechaInicioProcesoCancelacion.value ||
+            fechaFin.value === fechaFinProcesoCancelacion.value
           ) {
             showAlertFail(
-              "La fecha de inicio o fecha de finalización seleccionada coincide con las fechas del proceso de matrícula, por favor seleccione fechas para cancelaciones en un rango máximo de 2 semanas después del " +
-                fechaFinProcesoMatricula.value +
-                " recuerde que el periodo de cancelaciones debe durar estrictamente 11 semanas"
+              "La fecha de inicio o fecha de finalización seleccionada coincide con las fechas del proceso de cancelaciones excepcionales, por favor seleccione fechas para registro de calificaciones en un rango máximo de 2 semanas después del " +
+                fechaFinProcesoCancelacion.value +
+                " recuerde que el periodo de registro de calificaciones debe durar estrictamente 3 días"
             );
             limpiarInputs();
           } else {
@@ -153,10 +156,10 @@ export default {
             );
             if (fechasAnteriores == true) {
               showAlertFail(
-                "Las fechas seleccionadas no pueden ser fechas anteriores al periodo de Matrícula: " +
-                  fechaInicioProcesoMatricula.value +
+                "Las fechas seleccionadas no pueden ser fechas anteriores al periodo de cancelaciones excepcionales : " +
+                  fechaInicioProcesoCancelacion.value +
                   " --> " +
-                  fechaFinProcesoMatricula.value +
+                  fechaFinProcesoCancelacion.value +
                   " por favor seleccione de nuevo"
               );
               limpiarInputs();
@@ -168,9 +171,9 @@ export default {
               );
               if (masDosSemanas == true) {
                 showAlertFail(
-                  "El rango de fechas seleccionadas excede el límite de dos semanas después de la fecha final de matrícula, por favor seleccione un rango que no exceda dos semanas después del " +
-                    fechaFinProcesoMatricula.value +
-                    " recuerde que el periodo de cancelaciones debe durar estrictamente 11 semanas ó 77 días"
+                  "El rango de fechas seleccionadas excede el límite de dos semanas después de la fecha final de cancelaciones excepcionales, por favor seleccione un rango que no exceda dos semanas después del " +
+                    fechaFinProcesoCancelacion.value +
+                    " recuerde que el periodo de registro de calificaciones debe durar estrictamente 3 días"
                 );
                 limpiarInputs();
               } else {
@@ -181,26 +184,24 @@ export default {
                 );
                 if (traslape == true) {
                   showAlertFail(
-                    "El rango de fechas seleccionado se traslapa con las fechas existentes de Matricula: " +
-                      fechaInicioProcesoMatricula.value +
+                    "El rango de fechas seleccionado se traslapa con las fechas existentes de cancelacion excepcional: " +
+                      fechaInicioProcesoCancelacion.value +
                       " --> " +
-                      fechaFinProcesoMatricula.value +
-                      ", por favor seleccione fechas para cancelaciones en un rango máximo de 2 semanas después del " +
-                      fechaFinProcesoMatricula.value +
-                      " recuerde que el periodo de cancelaciones debe durar estrictamente 11 semanas o 77 días"
+                      fechaFinProcesoCancelacion.value +
+                      ", por favor seleccione fechas para registro de calificaciones en un rango máximo de 2 semanas después del " +
+                      fechaFinProcesoCancelacion.value +
+                      " recuerde que el periodo de registro de calificaciones debe durar estrictamente 3 días"
                   );
                   limpiarInputs();
                 } else {
-                  //6.  rango de 11 semanas de cancelaciones= 77 dias
-                 
+                  //6.  rango de 3 dias de calificaciones
                   const rangoDias = calcularRangoDias(
                     fechaInicio.value,
                     fechaFin.value
                   );
-                  
-                  if (rangoDias > 77 || rangoDias < 77) {
+                  if (rangoDias > 3 || rangoDias < 3) {
                     showAlertFail(
-                      "El rango de fechas seleccionado para el proceso de matrícula debe tener estrictamente 11 semanas ó 77 días, " +
+                      "El rango de fechas seleccionado para el proceso de matrícula debe tener estrictamente 3 días, " +
                         " rango actual seleccionado: " +
                         rangoDias +
                         " días"
@@ -217,7 +218,7 @@ export default {
                         body: JSON.stringify({
                           fechaInicio: fechaInicio.value,
                           fechaFin: fechaFin.value,
-                          idProceso: 1,
+                          idProceso: 3,
                         }),
                       }
                     );
@@ -246,8 +247,8 @@ export default {
     const verificarFechasAnteriores = (inicio, fin) => {
       const inicia = parseISO(inicio);
       const termina = parseISO(fin);
-      const inicioProceso = parseISO(fechaInicioProcesoMatricula.value);
-      // const finProceso = parseISO(fechaFinProcesoMatricula.value);
+      const inicioProceso = parseISO(fechaInicioProcesoCancelacion.value);
+      // const finProceso = parseISO(fechaFinProcesoCancelacion.value);
 
       if (isBefore(inicia, inicioProceso) || isBefore(termina, inicioProceso)) {
         return true; //las fechas son anteriores al proceso de planificacion
@@ -257,7 +258,7 @@ export default {
     const verificarDosSemanas = (inicio, fin) => {
       const inicia = parseISO(inicio);
       const termina = parseISO(fin);
-      const finProceso = parseISO(fechaFinProcesoMatricula.value);
+      const finProceso = parseISO(fechaFinProcesoCancelacion.value);
 
       const dosSemanasDespues = add(finProceso, { weeks: 2 });
 
@@ -270,8 +271,8 @@ export default {
     const verificarSuperposicionFechas = (inicio, fin) => {
       const inicia = parseISO(inicio);
       const termina = parseISO(fin);
-      const inicioProceso = parseISO(fechaInicioProcesoMatricula.value);
-      const finProceso = parseISO(fechaFinProcesoMatricula.value);
+      const inicioProceso = parseISO(fechaInicioProcesoCancelacion.value);
+      const finProceso = parseISO(fechaFinProcesoCancelacion.value);
 
       const rangoProcesoPlanificacion = {
         start: inicioProceso,
@@ -304,25 +305,26 @@ export default {
         const data = await res.json();
         const { estadoProcesos } = data;
         for (let i = 0; i < estadoProcesos.length; i++) {
-          if (estadoProcesos[i].idProceso == 2) {
-            fechaInicioProcesoMatricula.value =
+          if (estadoProcesos[i].idProceso == 1) {
+            fechaInicioProcesoCancelacion.value =
               estadoProcesos[i].fechaInicioDelProceso;
-            fechaFinProcesoMatricula.value =
+            fechaFinProcesoCancelacion.value =
               estadoProcesos[i].fechaFinDelProceso;
           }
         }
         console.log(
-          "fecha de matricula inicio: " + fechaInicioProcesoMatricula.value
+          "fecha de cancelaciones inicio: " +
+            fechaInicioProcesoCancelacion.value
         );
         console.log(
-          "fecha de matricula fin: " + fechaFinProcesoMatricula.value
+          "fecha de cancelaciones fin: " + fechaFinProcesoCancelacion.value
         );
         if (
-          fechaInicioProcesoMatricula.value == null &&
-          fechaFinProcesoMatricula.value == null
+          fechaInicioProcesoCancelacion.value == null &&
+          fechaFinProcesoCancelacion.value == null
         ) {
           showAlertFail(
-            "Las fechas para el proceso de Cancelaciones excepcionales, deben ser configuradas solo si ya existen fechas para matrículas, por favor siga el siguiente orden de asignación: Planificación --> Matrícula --> Cancelaciones --> Calificaciones."
+            "Las fechas para el proceso de registro de calificaciones, deben ser configuradas solo si ya existen fechas para cancelaciones excepcionales, por favor siga el siguiente orden de asignación: Planificación --> Matrícula --> Cancelaciones --> Calificaciones."
           );
           window.history.back();
         }
@@ -342,16 +344,17 @@ export default {
 
     return {
       form,
-      habilitarProcesoCancelaciones,
+      guardarFechaCalificaciones,
       onSubmit,
       obtenerProcesos,
     };
   },
 };
 </script>
+
 <style scoped>
 @import url("https://fonts.googleapis.com/css2?family=Rubik:wght@300;500&display=swap");
-
+/* esto para el icono de calendario en chrome y edge */
 input[type="date"]::-webkit-calendar-picker-indicator {
   filter: invert(1);
 }
@@ -359,46 +362,61 @@ input[type="date"]::-webkit-calendar-picker-indicator {
 .inputWhite {
   color: white;
 }
+.enlace {
+  color: white;
+  text-decoration: none !important;
+  font-size: 1.5rem;
+}
+
+.amarillo {
+  color: #fbd411;
+}
+
+.encabezadoPlanificacion {
+  background-color: #a92727;
+  width: 100%;
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.encabezadoPlanificacion v-col {
+  flex: 1;
+  text-align: center;
+  padding: 10px 0;
+}
 
 .divBoton {
   width: 90%;
   display: flex;
   flex-direction: row;
-  justify-content: space-between;
+  justify-content: center;
   margin: 30px;
   align-items: center;
 }
+
 .botones {
   color: white;
   font-family: "Rubik";
   text-align: center;
-  width: 100%;
+  width: 50%;
 }
 
-.titulo {
-  color: white;
-  font-family: "Rubik";
-  font-size: 30px;
-  text-align: center; /* Agrega esta propiedad para centrar horizontalmente */
-  display: flex;
-  flex-direction: column;
-  justify-content: center; /* Elimina align-content y align-items */
-  margin: 30px;
-}
-
-.archivo {
-  width: 90%;
-}
 .tarjeta {
   background-color: #282832;
   color: white;
   font-family: "Rubik";
-  border-radius: 15px;
+  border-radius: 0px;
   display: flex;
   flex-direction: column;
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
   align-content: center;
+}
+
+.linea {
+  border-left: 1px solid white; /* Cambia el color y el grosor según sea necesario */
+  /* Ajusta la altura de la línea según tus necesidades */
+  /* Margen opcional para separar la línea de otros elementos */
 }
 </style>

@@ -120,9 +120,6 @@
           </router-link>
         </v-btn>
       </v-col>
-      <v-col>
-        <v-btn class="botonRegresar" @click="guardar"> Guardar cambios </v-btn>
-      </v-col>
     </v-row>
   </v-card>
 </template>
@@ -150,9 +147,7 @@ export default {
       this.dialogDelete = false;
       this.itemToDelete = null;
     },
-    guardar() {
-      window.alert("guardadito guardadito, no esta, poh");
-    },
+  
     previousPage() {
       if (this.currentPage > 1) {
         this.currentPage--;
@@ -310,7 +305,7 @@ export default {
           hf: horaFormateadaUTCFinal,
           dias: arraySecciones[i].seccion.dias,
           profesor: arraySecciones[i].nombreCompletoProfesor,
-          seccion: seccionHora,
+          seccion: arraySecciones[i].nombreSeccion,
           cupos: arraySecciones[i].seccion.cupos,
           idSeccion: arraySecciones[i].seccion.idSeccion,
         });

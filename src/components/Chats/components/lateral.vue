@@ -462,6 +462,7 @@ export default {
       eliminarCon(cuenta);
       getContactos();
       filterContactos2();
+      window.location.reload()
       searchQuery2.value = "";
     };
 
@@ -504,6 +505,7 @@ export default {
 
     const obtenerEstudiantes = async () => {
       console.log(centro);
+      console.log(cuenta);
       try {
         const res = await fetch(
           "http://localhost:3000/chat/getEstudiantesCentro",
@@ -824,6 +826,7 @@ export default {
         const data = await res.json();
         console.log(data.message);
         getSolicitud();
+        
 
         // if(data.message=='Solicitud enviada'){
 
@@ -835,7 +838,8 @@ export default {
 
     const aceptarSoli = (sender, receive, id) => {
       console.log("Has aceptado a la solicitud " + id);
-      aceptar(sender, receive, id);
+      aceptar(sender, receive, id).then(window.location.reload())
+      
     };
 
     const rechazar = async (sender, receive, id) => {

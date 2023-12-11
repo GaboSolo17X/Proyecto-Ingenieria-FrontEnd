@@ -54,6 +54,10 @@ socket.on("usuariosEnSala", (msg) => {
   console.log(msg)
 });
 
+socket.on("coneccion", (msg) => {
+  console.log(msg)
+});
+
 // socket.on("VerificacionSala", (msg) => {
 //   console.log(msg)
 //   console.log('Mensaje desde el servidor:', msg)

@@ -59,7 +59,7 @@ export default {
       cards: [
         {
           src: require("../assets/solic1.png"),
-          titulo: "CAMBIO DE CARREA",
+          titulo: "CAMBIO DE CARRERA",
           descripcion: "",
           ruta: "/solicitudCarreraEstudiantes",
           altura: "310",

@@ -11,15 +11,14 @@
         <v-row>
           <v-col class="recordatorio">
             <strong>RECORDATORIO: </strong>
-            <p>El proceso de planificación académica debe tener una duración estricta de 2 semanas,
-             por favor tenga en consideración que si ya hay fechas establecidas para este proceso  asignar nuevas fechas borrará
-             las fechas ya establecidas en los procesos de matrícula, cancelaciones excepcionales y registro de calificaciones, en consecuencia
-             tendrán que ser asignados nuevamente.</p>
+            <p>El proceso para registro de calificaciones debe tener una duración estricta de 3 días,
+             por favor tenga en consideración que las fechas solo pueden ser asignadas 
+             si ya existe un rango establecido para el proceso de cancelaciones excepcionales .</p>
           </v-col>
         </v-row>
         <h1 class="componentesDocentes">
-          
-          <Planificacion/>
+
+          <Calificaciones/>
         </h1>
       </v-col>
     </v-row>
@@ -29,11 +28,11 @@
 
 <script>
 import Lateral from '../components/lateral.vue'
-import Planificacion from '../components/cardPlanificacion.vue'
+import Calificaciones from '../components/cardCalificaciones.vue'
 import Encabezado from  '../components/encabezado.vue'
 import { ref,onMounted } from 'vue';
 export default {
-components: {Lateral,Encabezado,Planificacion},
+components: {Lateral,Encabezado,Calificaciones},
 setup(){
       const trabajador=ref()
       const docenteEs = async () => {

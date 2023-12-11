@@ -17,7 +17,7 @@
             required,
           ]"
           class="mb-5"
-          label="Numero de cuenta"
+          label="Número de cuenta"
           hide-details="auto"
           variant="solo-filled"
           rounded

@@ -19,7 +19,7 @@
         </template>
 
         <template v-slot:append>
-            <v-app-bar-title>{{title}}</v-app-bar-title>
+            <span class="titulo">{{title}}</span>
         </template>
       </v-app-bar>
 
@@ -59,6 +59,18 @@ export default {
     font-weight:800;
     font-size: 40px;
 }
+
+.titulo{
+  font-family: 'Rubik', sans-serif;
+    font-weight:800;
+    font-size: 40px;
+    width:800px;
+}
+  
+.titulo :deep(.v-toolbar-title__placeholder){
+  padding: 10px !important;
+}
+
 .v-toolbar__append {
     margin-right: 100px;
 }

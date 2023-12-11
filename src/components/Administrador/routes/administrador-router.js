@@ -39,6 +39,12 @@ const administradorRoutes = [
   
   },
   {
+    path: '/adminCalificaciones',
+    name: 'adminCalificaciones',
+    component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminCalificaciones.vue'),
+  
+  },
+  {
     path: '/adminAspirantes',
     name: 'adminAspirantes',
     component: () => import(/* webpackChunkName: "about" */ '../../../components/Administrador/views/adminAspirantes.vue'),

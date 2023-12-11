@@ -55,7 +55,7 @@ components: {Lateral,Encabezado,TablaDocentes},
 margin-top: 100px;
 /* left: 120px !important; */
 width: calc((100% - 260px) - 0px);
-margin-left: -50px;
+margin-left: 0px;
 }
 
 .rubik{

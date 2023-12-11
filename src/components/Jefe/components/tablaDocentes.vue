@@ -141,7 +141,7 @@ export default {
     const jefe = JSON.parse(window.localStorage.getItem("JefeDep"));
     try {
       const res = await fetch(
-        "http://localhost:3000/jefeDepartamento/obtenerDocente",
+        "http://localhost:3000/jefeDepartamento/obtenerDocentesDepartamento",
         {
           method: "POST",
           headers: {
@@ -153,13 +153,14 @@ export default {
         }
       );
       const data = await res.json();
-      const { secciones } = data;
-      for (let i = 0; i < secciones.length; i++) {
+      console.log(data)
+      const { docenteFound } = data;
+      for (let i = 0; i < docenteFound.length; i++) {
         console.log(data);
         this.filas.push({
-          numero: secciones[i].numero,
-          nombre: secciones[i].nombre,
-          correo: secciones[i].correoDocente,
+          numero: docenteFound[i].numeroEmpleadoDocente,
+          nombre: docenteFound[i].nombres + " " + docenteFound[i].apellidos,
+          correo: docenteFound[i].correo,
         });
       }
     } catch (error) {

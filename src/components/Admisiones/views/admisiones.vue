@@ -1,6 +1,6 @@
 <template>
   <div class="bg">
-    <navbar title="SISTEMA DE ADMISION"/>
+    <navbar title="SISTEMA DE ADMISIÓN"/>
     <mensaje class="msg"/>
   </div>
   <!-- <div>gola</div> -->

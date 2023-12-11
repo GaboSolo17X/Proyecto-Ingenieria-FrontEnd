@@ -50,7 +50,7 @@
   .componentesDocentes{
   margin-top: 100px;
   width: calc((100% - 120px) - 0px);
-  margin-left: -150px;
+  margin-left: -90px;
   }
   
   .rubik{

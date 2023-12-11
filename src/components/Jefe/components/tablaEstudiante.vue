@@ -74,7 +74,7 @@ export default {
         nombre: nombreClase,
         nota: historial[i].calificacion,
         observacion: historial[i].estado,
-        periodo: historial[i].periodo + "-" + "2023",
+        periodo: historial[i].periodo,
       });
     }
   },

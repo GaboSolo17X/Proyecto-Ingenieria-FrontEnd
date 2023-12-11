@@ -161,7 +161,7 @@ setup(){
    
    onMounted(async () => {
       try {
-        const res = await fetch('http://localhost:3030/carreras',{
+        const res = await fetch('http://localhost:3000/carreras',{
           method:'GET',
           headers:{
             'Content-Type':'application/json'
@@ -283,8 +283,8 @@ const validateForm = () => {
  }
 
  const isCardExVisible=ref(false)
-    const isFormVisible=ref(true)
-    const showCardEx = () => {
+ const isFormVisible=ref(true)
+ const showCardEx = () => {
       isCardExVisible.value = true;
       isFormVisible.value=false;
     };
@@ -310,9 +310,9 @@ const validateForm = () => {
 
     if(data.message==="El aspirante ya existe"){
       window.alert(data.message)
-    window.location.reload();
-
-      isCardExVisible.value = false;
+      window.location.reload();
+    }else{
+      showCardEx()
     }
 
   } catch (error) {
@@ -329,8 +329,9 @@ const onSubmit = async () => {
     console.log(form.value);
     getTipoExamen();
     enviarExamen();
-    showCardEx();
     pruebaRegistro();
+    
+    
   }
 };
 

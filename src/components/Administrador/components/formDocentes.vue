@@ -204,6 +204,15 @@ export default {
       body: formData
     });
     const data=await res.json();
+
+
+    if(data.message=='El docente ya existe'){
+      window.alert('El docente ingresado ya existe');
+
+    }else{
+      showAlertSuccess();
+    }
+    
     console.log(data)
   } catch (error) {
     console.log(error)
@@ -212,6 +221,8 @@ export default {
  }
 
     const showAlertSuccess = () => {
+
+    
       window.alert('Se ha guardado el registro correctamente.');
       // Navegar a la ruta 'adminDocentes'
       //router.push({ name: 'adminDocentes' });
@@ -227,7 +238,7 @@ export default {
     const onSubmit = async () => {
     validateForm();
     if (isFormValid.value) {
-        showAlertSuccess();
+        
         pruebaRegistro();
       }// Validar el formulario antes de enviar
     };
