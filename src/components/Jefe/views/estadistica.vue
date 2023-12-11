@@ -33,17 +33,18 @@ import { ref, onMounted } from "vue";
 export default {
   components: { Lateral, Encabezado, Graficas, TabGraficas },
   setup() {
-    const CoordinadorInfo = ref();
-    const coordinadorEs = async () => {
-      CoordinadorInfo.value = JSON.parse(
-        localStorage.getItem("CoordinadorInfo")
-      );
+    const JefeInfo = ref();
+    const jefeEs = async () => {
+      console.log("El jefe es");
+      JefeInfo.value = JSON.parse(localStorage.getItem("JefeInfo"));
+      console.log(JefeInfo);
     };
     onMounted(() => {
-      coordinadorEs();
+      jefeEs();
     });
     return {
-      CoordinadorInfo,
+      JefeInfo,
+      
     };
   },
 };
