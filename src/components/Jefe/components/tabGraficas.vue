@@ -7,9 +7,9 @@
           block
           rounded="xs"
           class="text-none"
-          :class="{ 'active-button': $route.path === '/consultarHorario' }"
+          :class="{ 'active-button': $route.path === '/estadistica' }"
           variant="text"
-          >Matriculadas</v-btn
+          >Índice de evaluaciones</v-btn
         >
       </v-col>
       <v-col cols="12" sm="6" md="4">
@@ -18,9 +18,9 @@
           block
           rounded="xs"
           class="text-none"
-          :class="{ 'active-button': $route.path === '/consultarEspera' }"
+          :class="{ 'active-button': $route.path === '/matricula' }"
           variant="text"
-          >En lista de espera</v-btn
+          >Índice de matricula por clase</v-btn
         >
       </v-col>
 
@@ -30,9 +30,9 @@
           block
           rounded="xs"
           class="text-none"
-          :class="{ 'active-button': $route.path === '/consultarCanceladas' }"
+          :class="{ 'active-button': $route.path === '/espera' }"
           variant="text"
-          >Canceladas</v-btn
+          >Índice de lista de espera</v-btn
         >
       </v-col>
     </v-row>
@@ -42,13 +42,13 @@
 export default {
   methods: {
     verHorario() {
-      this.$router.push("/consultarHorario");
+      this.$router.push("/estadistica");
     },
     verEspera() {
-      this.$router.push("/consultarEspera");
+      this.$router.push("/matricula");
     },
     verCanceladas() {
-      this.$router.push("/consultarCanceladas");
+      this.$router.push("/espera");
     },
   },
 };
@@ -64,7 +64,13 @@ export default {
   border-radius: 15px;
 }
 
-.active-button {
+.v-container {
+  background-color: #77181e;
+  border-top-left-radius: 5px;
+  border-top-right-radius: 5px;
+}
+
+.v-btn {
   background-color: #77181e;
   color: #ffffff;
 }
