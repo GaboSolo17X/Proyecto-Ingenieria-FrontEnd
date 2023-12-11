@@ -113,6 +113,24 @@ const jefeRoutes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/detalleEvaluacion.vue'),
   
   },
+  {
+    path: '/estadistica',
+    name: 'estadistica',
+    component: () => import(/* webpackChunkName: "about" */ '../views/estadistica.vue'),
+  
+  },
+  {
+    path: '/matricula',
+    name: 'matricula',
+    component: () => import(/* webpackChunkName: "about" */ '../views/matricula.vue'),
+  
+  },
+  {
+    path: '/espera',
+    name: 'espera',
+    component: () => import(/* webpackChunkName: "about" */ '../views/espera.vue'),
+  
+  },
   
   
   

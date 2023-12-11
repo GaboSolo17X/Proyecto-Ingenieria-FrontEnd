@@ -60,6 +60,24 @@
               </v-col>
             </v-row>
           </div>
+
+          <div>
+            <v-row>
+              <v-col cols="4" class="iconoscenter">
+                <router-link to="/estadistica" active-class="amarillo" class="enlace">
+                <div class="iconos">
+                  <v-icon icon="fa:fas fa-solid fa-chart-column"></v-icon>
+                </div></router-link>
+              </v-col>
+              <v-col>
+                <div>
+                  <router-link to="/estadistica" active-class="amarillo" class="enlace">
+                    <v-list-item title="Estadistica"> </v-list-item
+                  ></router-link>
+                </div>
+              </v-col>
+            </v-row>
+          </div>
         </v-list>
 
         <template v-slot:append>
