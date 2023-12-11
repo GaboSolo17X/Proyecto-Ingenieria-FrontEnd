@@ -93,7 +93,7 @@ export default {
     const getEspera = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/graficos/indiceListaEspera",
+          "http://localhost:3000/graficos/indiceListaEspera",
           {
             method: "POST",
             headers: {

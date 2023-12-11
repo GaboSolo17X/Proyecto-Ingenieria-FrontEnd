@@ -117,7 +117,7 @@ setTimeout(() => {
     const getEvaluacion = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/graficos/indiceEvaluacionesDocente",
+          "http://localhost:3000/graficos/indiceEvaluacionesDocente",
           {
             method: "POST",
             headers: {

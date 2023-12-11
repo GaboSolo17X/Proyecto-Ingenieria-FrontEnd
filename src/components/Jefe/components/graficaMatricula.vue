@@ -110,7 +110,7 @@ export default {
     const getMatriculas = async () => {
       try {
         const res = await fetch(
-          "http://localhost:3030/graficos/indiceMatriculaClase",
+          "http://localhost:3000/graficos/indiceMatriculaClase",
           {
             method: "POST",
             headers: {
