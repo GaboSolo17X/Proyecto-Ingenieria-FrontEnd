@@ -80,7 +80,7 @@
             </v-row>
             <!-- <v-row>
               <v-col cols=""></v-col>
-              
+
               <v-col cols=""></v-col>
             </v-row> -->
           </div>
@@ -146,9 +146,118 @@ export default {
     };
     onMounted(() => {
       estudianteEs();
-      getCarreras();
-      getIndice();
+      getIndice();    
+      estadoMatricula();
+  
+      //getCarreras();
+      
     });
+
+    const estadoMatricula = async () => {
+      try {
+        let Indice
+        const res2 = await fetch(
+          "http://localhost:3000/estudiante/getIndiceAcademico",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              cuentaEstudiante: estudiante.value.numeroCuenta,
+            }),
+          }
+        );
+        const data2 = await res2.json();
+        const { indiceAcademico } = data2;
+        Indice = indiceAcademico;
+        console.log('El indice es: ', indiceAcadem.value)
+
+
+
+
+        const res = await fetch('http://localhost:3000/administrador/ObtenerEstadoProceso', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        })
+        const data = await res.json();
+        const {estadoProcesos} = data;
+        for( let i = 0; i < estadoProcesos.length; i++){
+          if(estadoProcesos[i].nombreProceso == "Matrícula"){
+            if(estadoProcesos[i].estado == true){
+              let fechaInicio = new Date(estadoProcesos[i].fechaInicioDelProceso);
+              let fechaFin = new Date(estadoProcesos[i].fechaFinDelProceso);
+              fechaInicio.setDate(fechaInicio.getDate() + 1);
+              fechaFin.setDate(fechaFin.getDate() + 1);
+              let intervaloDeFecha = [];
+              for (let i = fechaInicio; i <= fechaFin; i.setDate(i.getDate() + 1)) {
+                let fechaString = formatearFecha(new Date(i));
+                intervaloDeFecha.push(fechaString);
+              }
+              //obtener el dia actual
+              let fechaActual = formatearFecha(new Date());
+            
+
+
+              if ( Indice >= 82 && Indice <= 100) {
+               if( fechaActual == intervaloDeFecha[0]){
+               }else{
+                window.alert("Tu proceso de matricula aún no está activo");
+                window.history.back();
+               }
+              }
+
+              if ( Indice >= 80 && Indice <= 81) {
+               if( fechaActual == intervaloDeFecha[1]){
+               }else{
+                window.alert("Tu proceso de matricula aún no está activo");
+                window.history.back();
+               }
+              }
+
+              if ( Indice >= 70 && Indice <= 79) {
+               if( fechaActual == intervaloDeFecha[2]){
+               }else{
+                window.alert("Tu proceso de matricula aún no está activo");
+                window.history.back();
+               }
+              }
+
+              if ( Indice >= 0 && Indice <= 69) {
+               if( fechaActual == intervaloDeFecha[3]){
+               }else{
+                window.alert("Tu proceso de matricula aún no está activo");
+                window.history.back();
+               }
+              }
+
+            }else{
+              window.alert("El proceso de matrícula aún no está activo");
+              window.history.back();
+            }
+          }
+        }
+
+      } catch (error) {
+        console.log("Error al cargar el estado de la matricula", error)
+      }
+    }
+
+    const formatearFecha = (fecha) => {
+      let dia = fecha.getDate();
+      let mes = fecha.getMonth() + 1;
+      let anio = fecha.getFullYear();
+      if (mes < 10) {
+        mes = "0" + mes;
+      }
+      if (dia < 10) {
+        dia = "0" + dia;
+      }
+      let fechaString = anio + "-" + mes + "-" + dia;
+      return fechaString;
+    };
 
     const getIndice = async () => {
       try {
@@ -165,28 +274,10 @@ export default {
           }
         );
         const data = await res.json();
-        console.log(data);
-        indiceAcadem.value = data.indiceAcademico;
-        console.log(indiceAcadem);
-        if (indiceAcadem.value >= 84 && indiceAcadem.value <= 100) {
-          // Rango 84-100
-        } else if (indiceAcadem.value >= 78 && indiceAcadem.value <= 83) {
-          // Rango 78-83
-          window.alert("El proceso de matrícula para su índice actual: "+indiceAcadem.value+" aún no está activo");
-          window.history.back();
-        } else if (indiceAcadem.value >= 73 && indiceAcadem.value <= 77) {
-          // Rango 73-77
-         window.alert("El proceso de matrícula para su índice actual: "+indiceAcadem.value+" aún no está activo");
-         window.history.back();
-        } else if (indiceAcadem.value >= 66 && indiceAcadem.value <= 72) {
-          // Rango 66-72
-          window.alert("El proceso de matrícula para su índice actual: "+indiceAcadem.value+" aún no está activo");
-          window.history.back();
-        } else if (indiceAcadem.value >= 0 && indiceAcadem.value <= 65) {
-          // Rango 0-65
-          window.alert("El proceso de matrícula para su índice actual: "+indiceAcadem.value+" aún no está activo");
-          window.history.back();
-        } 
+        const { indiceAcademico } = data;
+        indiceAcadem.value = indiceAcademico;
+        console.log('El indice es: ', indiceAcadem.value)
+
       } catch (error) {
         console.error("Error al cargar el indice del estudiante", error);
       }

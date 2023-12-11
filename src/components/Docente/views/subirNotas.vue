@@ -185,7 +185,79 @@ setup(){
     
     onMounted(() => {
       docenteEs();
+      comprobacionEstado()
     });
+
+    const comprobacionEstado = async ( ) =>{
+      try {
+        const res = await fetch('http://localhost:3000/administrador/ObtenerEstadoProceso', {
+          method: 'GET',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+        })
+        const data = await res.json()
+        const {estadoProcesos} = data
+        console.log(estadoProcesos)
+        for(let i = 0; i < estadoProcesos.length; i++){
+          if(estadoProcesos[i].idProceso == 3){
+            if(estadoProcesos[i].estado == true){
+              if(estadoProcesos[i].fechaInicioDelProceso == null || estadoProcesos[i].fechaFinDelProceso == null){
+                window.alert("El proceso de calificaciones no está activo");
+                window.history.back();
+              }else{
+              let fechaInicio = new Date(estadoProcesos[i].fechaInicioDelProceso);
+              let fechaFin = new Date(estadoProcesos[i].fechaFinDelProceso);
+              fechaInicio.setDate(fechaInicio.getDate() + 1);
+              fechaFin.setDate(fechaFin.getDate() + 1);
+              let intervaloDeFecha = [];
+              for (let i = fechaInicio; i <= fechaFin; i.setDate(i.getDate() + 1)) {
+                let fechaString = formatearFecha(new Date(i));
+                intervaloDeFecha.push(fechaString);
+              }
+              //obtener el dia actual
+              let fechaActual = formatearFecha(new Date());
+              console.log(fechaActual);
+
+              //comprobar si el dia actual esta dentro del intervalo de fechas
+              let comprobacion = intervaloDeFecha.includes(fechaActual);
+              if(comprobacion == true){
+                console.log("El proceso de calificaciones está activo");
+              }else{
+                window.alert("El proceso de calificaciones no está activo");
+                window.history.back();
+              }
+
+              }
+
+
+            
+            }else{
+              window.alert("El proceso de calificaciones no está activo");
+              window.history.back();
+            }
+          }else{
+
+          }
+        }
+      } catch (error) {
+        console.log(error)
+      }
+    }
+    
+    const formatearFecha = (fecha) => {
+      let dia = fecha.getDate();
+      let mes = fecha.getMonth() + 1;
+      let anio = fecha.getFullYear();
+      if (mes < 10) {
+        mes = "0" + mes;
+      }
+      if (dia < 10) {
+        dia = "0" + dia;
+      }
+      let fechaString = anio + "-" + mes + "-" + dia;
+      return fechaString;
+    }; 
 
   return{
     docente,
