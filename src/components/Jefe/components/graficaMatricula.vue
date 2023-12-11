@@ -13,49 +13,49 @@
 </template>
 
 <script>
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 import Chart from "chart.js/auto";
 
 export default {
   setup() {
+    const asignaturas = ref([]);
+    const valores = ref([]);
+    const jefe = ref();
+    jefe.value = JSON.parse(localStorage.getItem("JefeInfo"));
     onMounted(() => {
-      const ctx = document.getElementById("myChart");
+      getMatriculas();
+    });
+
+
+    const grafico = (a,b)=>{
+
+      console.log(a)
+      console.log(b)
+      console.log("Haciendo grafico")
+        const ctx = document.getElementById("myChart");
+
+      console.log(asignaturas.value)
       const myChart = new Chart(ctx, {
+
         type: "bar",
         data: {
-          labels: [
-            "Ingenieria del software",
-            "Bases de Datos I",
-            "Redes de datos I",
-            "Introduccion a la ingenieria en sistemas",
-            "Seguridad Informatica",
-            "Sistemas de Informacion",
-            "Auditoria Informatica",
-            "Arquitectura de computadoras",
-            "Ingles I",
-            "Sistemas Operativos I",
-            "Inteligencia Artificial",
-            "Lenguajes de programación",
-            "Ingenieria del software",
-            "Bases de Datos I",
-            "Redes de datos I",
-            "Introduccion a la ingenieria en sistemas",
-            "Seguridad Informatica",
-            "Sistemas de Informacion",
-            "Auditoria Informatica",
-            "Arquitectura de computadoras",
-            "Ingles I",
-            "Sistemas Operativos I",
-            "Inteligencia Artificial",
-            "Lenguajes de programación",
-          ],
+          labels: a,
+          // [
+          //   // "Ingenieria del software",
+          //   // "Bases de Datos I",
+          //   // "Redes de datos I",
+          //   //...
+          // ],
           datasets: [
             {
               label: "Matriculados en el periodo",
-              data: [
-                12, 19, 20, 25, 12, 23, 13, 15, 30, 18, 16, 27, 12, 19, 20, 25,
-                12, 23, 13, 15, 30, 18, 16, 27,
-              ],
+              data: b,
+              // [
+              //   valores.value,
+              //   // 12, 19, 20, 25, 12, 23, 13, 15, 30, 18, 16, 27, 12, 19, 20, 25,
+              //   // 12, 23, 13, 15, 30, 18, 16, 27,
+              // ],
+
               backgroundColor: [
                 "rgba(255, 99, 132, 0.2)",
                 "rgba(54, 162, 235, 0.2)",
@@ -88,6 +88,7 @@ export default {
             },
           ],
         },
+
         options: {
           maintainAspectRatio: false,
           scales: {
@@ -104,7 +105,33 @@ export default {
         const newWidth = 700 + (total - 6) * 50;
         containerBody.style.width = `${newWidth}px`;
       }
-    });
+      }
+
+    const getMatriculas = async () => {
+      try {
+        const res = await fetch(
+          "http://localhost:3000/graficos/indiceMatriculaClase",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+            },
+            body: JSON.stringify({
+              nombreCarrera: jefe.value.nombreCarrera,
+            }),
+          }
+        );
+        const data = await res.json();
+        console.log(data);
+        asignaturas.value = data.labels;
+        valores.value = data.data;
+        console.log(asignaturas.value);
+        console.log(valores.value);
+        grafico(data.labels,data.data)
+      } catch (error) {
+        console.error("Error al cargar los indices de matricula", error);
+      }
+    };
 
     const getAnioYMes = () => {
       const fechaActual = new Date();
@@ -116,6 +143,11 @@ export default {
     };
 
     // ... (other setup logic if needed)
+    return {
+      jefe,
+      asignaturas,
+      valores,
+    };
   },
 };
 </script>
